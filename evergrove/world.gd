@@ -217,8 +217,6 @@ func check_visible_tiles(force: bool = false):
 	if (!force && current_visible_rect == visible_rect):
 		return
 
-	print("zoom: %f, %f" % [zoom.x, zoom.y])
-
 	visible_rect = current_visible_rect
 
 	# Berechne die sichtbaren Kacheln in der TileMap
@@ -232,7 +230,6 @@ func check_visible_tiles(force: bool = false):
 		for y in range(start_y, end_y):
 			var chunk = Vector2i(x, y)
 			if (tile_maps_chunks[visible_tile_map].has(chunk)):
-				#print("skip %d, %d" % [chunk.x, chunk.y])
 				continue
 			tile_maps_chunks[visible_tile_map][chunk] = true
 			for chunk_x in range(-HALF_CHUNK_SIZE, HALF_CHUNK_SIZE):
