@@ -1,4 +1,4 @@
-class_name AI_GLOBALS
+extends Node
 
 # list of available AI agents with different behavior
 enum AGENT_TYPE {

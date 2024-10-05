@@ -10,7 +10,9 @@ var agents = []
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# subscribe to events
-	connect("AGENT_CREATED", _on_agent_created)
+	ai_globals.connect("AGENT_CREATED", _on_agent_created)
+	add_child(AI_Timer.new())
+	print("AI hivemind ready")
 
 func _on_agent_created(agent: Agent):
 	print("Registered agent " + str(agent.name) + " at hivemind")
