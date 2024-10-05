@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"godotTools.formatter.denseFunctionParameters": true,
+		"godotTools.inlayHints.gdscript": true,
+		"godotTools.lsp.headless": true,
+		"editor.formatOnSave": true
+	},
+	"extensions": {
+		"recommendations": [
+			"gruntfuggly.todo-tree",
+			"mhutchie.git-graph",
+			"nhoizey.gremlins",
+			"oderwat.indent-rainbow",
+			"yzhang.markdown-all-in-one",
+			"davidanson.vscode-markdownlint",
+			"shardulm94.trailing-spaces",
+			"eamodio.gitlens",
+			"ionutvmi.path-autocomplete"
+		]
+	}
+}
