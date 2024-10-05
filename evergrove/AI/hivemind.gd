@@ -12,8 +12,7 @@ func _ready() -> void:
 	# subscribe to events
 	ai_globals.connect("AGENT_CREATED", _on_agent_created)
 	add_child(AI_Timer.new())
-	print("Created AI hivemind")
-	add_child(Agent.create())
+	print("AI hivemind ready")
 
 func _on_agent_created(agent: Agent):
 	print("Registered agent " + str(agent.name) + " at hivemind")
