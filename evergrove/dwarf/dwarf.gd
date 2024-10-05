@@ -14,3 +14,5 @@ func _ready():
 	# this is just an example how to call animations
 	var animated_sprite = self.get_child(1)
 	animated_sprite.play("walk_front")
+	# instantiate AI controller
+	add_child(Agent.create())
