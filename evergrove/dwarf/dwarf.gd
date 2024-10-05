@@ -1,14 +1,16 @@
 extends Node2D
 
-var speed = 10
-
 var current_dungeon_layer
 
-# Called when the node enters the scene tree for the first time.
+enum WalkingDirection {
+	FRONT,
+	BACK,
+	LEFT,
+	RIGHT
+}
+
 func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+	# TODO retrieve walking direction and call play on animated sprite
+	# this is just an example how to call animations
+	var animated_sprite = self.get_child(1)
+	animated_sprite.play("walk_front")
