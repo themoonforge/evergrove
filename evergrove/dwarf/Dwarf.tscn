@@ -1,12 +1,80 @@
-[gd_scene load_steps=3 format=3 uid="uid://b5heo41rpqdo0"]
+[gd_scene load_steps=12 format=3 uid="uid://b5heo41rpqdo0"]
 
 [ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
 [ext_resource type="Texture2D" uid="uid://d1jiavfxbpic1" path="res://dwarf/dwarf.png" id="2_7ed72"]
+[ext_resource type="Texture2D" uid="uid://c3qug34soco3i" path="res://dwarf/back_0.png" id="3_5rjk2"]
+[ext_resource type="Texture2D" uid="uid://boei8s4qktt6w" path="res://dwarf/back_1.png" id="4_4wrki"]
+[ext_resource type="Texture2D" uid="uid://dfvoiyf1hxiwt" path="res://dwarf/front_0.png" id="5_jsqe2"]
+[ext_resource type="Texture2D" uid="uid://bnmbfb0f5uip8" path="res://dwarf/front_1.png" id="6_7lq7b"]
+[ext_resource type="Texture2D" uid="uid://by0gpmxu2jh1i" path="res://dwarf/left_0.png" id="7_525k3"]
+[ext_resource type="Texture2D" uid="uid://cr2plkw5xnbi3" path="res://dwarf/left_1.png" id="8_0vncw"]
+[ext_resource type="Texture2D" uid="uid://bibahjkkw2ys6" path="res://dwarf/right_0.png" id="9_5vjde"]
+[ext_resource type="Texture2D" uid="uid://srptwyredqai" path="res://dwarf/right_1.png" id="10_fsbmi"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rwkfb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_7ed72")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_5rjk2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4wrki")
+}],
+"loop": true,
+"name": &"walk_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_jsqe2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_7lq7b")
+}],
+"loop": true,
+"name": &"walk_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_525k3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_0vncw")
+}],
+"loop": true,
+"name": &"walk_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_5vjde")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_fsbmi")
+}],
+"loop": true,
+"name": &"walk_right",
+"speed": 5.0
+}]
 
 [node name="Dwarf" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_c3sis")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(0, -8)
 texture = ExtResource("2_7ed72")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -9)
+sprite_frames = SubResource("SpriteFrames_rwkfb")

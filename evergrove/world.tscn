@@ -11,7 +11,6 @@ script = ExtResource("1_acbsa")
 
 [node name="GUI" type="CanvasLayer" parent="."]
 script = ExtResource("2_n34sk")
-spawn_position = Vector2i(2, 2)
 
 [node name="VFlowContainer" type="VFlowContainer" parent="GUI"]
 offset_right = 153.0
