@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://b5heo41rpqdo0"]
+
+[ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
+[ext_resource type="Texture2D" uid="uid://d1jiavfxbpic1" path="res://dwarf/dwarf.png" id="2_7ed72"]
+
+[node name="Dwarf" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1_c3sis")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = ExtResource("2_7ed72")

@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2bvps5riuaiy"]
+
+[ext_resource type="Script" path="res://map/dungeon_layer.gd" id="1_ayeb1"]
+
+[node name="DungeonLayer" type="TileMap"]
+format = 2
+script = ExtResource("1_ayeb1")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+
+[node name="DwarfContainer" type="Node2D" parent="."]
+
+[node name="HubContainer" type="Node2D" parent="."]

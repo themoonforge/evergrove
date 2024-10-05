@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bg0bvcv1syb6l"]
+
+[ext_resource type="Texture2D" uid="uid://r0w6xdm2g5uy" path="res://hubs/energy_hub.png" id="1_b0o8b"]
+
+[node name="EnergyHub" type="Node2D"]
+texture_filter = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_b0o8b")

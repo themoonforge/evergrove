@@ -1,14 +1,39 @@
-[gd_scene load_steps=4 format=3 uid="uid://dtjpof14r0bcb"]
+[gd_scene load_steps=6 format=3 uid="uid://dtjpof14r0bcb"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_2rb77"]
 [ext_resource type="Script" path="res://game.gd" id="1_acbsa"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="1_bwmuh"]
+[ext_resource type="Script" path="res://gui.gd" id="2_n34sk"]
+[ext_resource type="Script" path="res://factory.gd" id="5_8o8h7"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_acbsa")
+
+[node name="GUI" type="CanvasLayer" parent="."]
+script = ExtResource("2_n34sk")
+spawn_position = Vector2i(2, 2)
+
+[node name="VFlowContainer" type="VFlowContainer" parent="GUI"]
+offset_right = 153.0
+offset_bottom = 295.0
+
+[node name="SpawnDwarfButton" type="Button" parent="GUI/VFlowContainer"]
+layout_mode = 2
+text = "Spawn Dawrf"
+
+[node name="SpawnEnergyHubButton" type="Button" parent="GUI/VFlowContainer"]
+layout_mode = 2
+text = "Spawn Energy Hub"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("1_bwmuh")
 
 [node name="World" type="Node2D" parent="."]
+texture_filter = 1
 script = ExtResource("1_2rb77")
+
+[node name="Factory" type="Node2D" parent="."]
+script = ExtResource("5_8o8h7")
+
+[connection signal="pressed" from="GUI/VFlowContainer/SpawnDwarfButton" to="GUI" method="_on_spawn_dwarf_button_pressed"]
+[connection signal="pressed" from="GUI/VFlowContainer/SpawnEnergyHubButton" to="GUI" method="_on_spawn_energy_hub_button_pressed"]
