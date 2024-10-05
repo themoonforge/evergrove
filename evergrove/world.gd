@@ -26,6 +26,7 @@ enum TileType {
 
 @onready var camera: Camera2D = $"/root/Game/Camera2D"
 @onready var game_state: GameState = $"/root/Game/GameState"
+@onready var tile_cursor: Sprite2D = $"./TileCursor"
 
 @export var visible_tile_map: DungeonLayer
 @export var visible_level: int
@@ -208,6 +209,10 @@ func check_visible_tiles(force: bool = false):
 			#generate_tile(visible_tile_map, Vector2i(x, y))
 
 func _input(event):
+	if event is InputEventMouseMotion:
+		var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
+		tile_cursor.position = visible_tile_map.map_to_local(tile_position)
+	
 	if event is InputEventKey:
 		if event.pressed:
 			if event.keycode == KEY_Q:

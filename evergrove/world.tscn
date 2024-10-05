@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://dtjpof14r0bcb"]
+[gd_scene load_steps=9 format=3 uid="uid://dtjpof14r0bcb"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_2rb77"]
 [ext_resource type="Script" path="res://game.gd" id="1_acbsa"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="1_bwmuh"]
 [ext_resource type="Script" path="res://game_state.gd" id="2_8uhg5"]
 [ext_resource type="Script" path="res://gui.gd" id="2_n34sk"]
+[ext_resource type="Texture2D" uid="uid://cfnlugthi7dgl" path="res://tile_cursor.png" id="4_0fr7v"]
 [ext_resource type="Script" path="res://AI/hivemind.gd" id="4_g3tpu"]
 [ext_resource type="Script" path="res://factory.gd" id="5_8o8h7"]
 
@@ -62,6 +63,11 @@ script = ExtResource("1_bwmuh")
 [node name="World" type="Node2D" parent="."]
 texture_filter = 1
 script = ExtResource("1_2rb77")
+
+[node name="TileCursor" type="Sprite2D" parent="World"]
+z_index = 1000
+y_sort_enabled = true
+texture = ExtResource("4_0fr7v")
 
 [node name="Factory" type="Node2D" parent="."]
 script = ExtResource("5_8o8h7")

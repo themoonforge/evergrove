@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-@onready var world = $/root/Game/World
+@onready var world: World = $/root/Game/World
 @onready var factory = $/root/Game/Factory
 
 @export var spawn_position:Vector2i
@@ -15,22 +15,19 @@ extends CanvasLayer
 @onready var dwarf_label: Label = $"./VFlowContainer/DwarfLabel"
 @onready var level_label: Label = $"./VFlowContainer/LevelLabel"
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
-
 func _on_spawn_dwarf_button_pressed():
 	var dungeon_layer_index = 0 # TODO use correct dungeon  layer
 	var position = spawn_position # TODO use correct position
 	
-	var dungeon_layer = world.get_child(dungeon_layer_index)
+	var dungeon_layer = world.tile_maps[dungeon_layer_index]
 	var dwarf_container = dungeon_layer.dwarf_container
 	
 	var dwarf = preload("res://dwarf/Dwarf.tscn").instantiate()
