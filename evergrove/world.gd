@@ -284,6 +284,7 @@ func update_astarGrid(tile_map: TileMap, level: int, pos: Vector2i):
 
 func mine_tile(pos: Vector2i):
 	var resource = visible_tile_map.get_cell_tile_data(0, pos)
+	# TODO
 
 func get_unique_id(pos: Vector2i, level: int, read_only: bool = false) -> int:
 	var vector = Vector3i(pos.x, pos.y, level)
