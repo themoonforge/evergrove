@@ -13,6 +13,7 @@ extends CanvasLayer
 @onready var micel_label: Label = $"./VFlowContainer/MicelLabel"
 @onready var water_label: Label = $"./VFlowContainer/WaterLabel"
 @onready var dwarf_label: Label = $"./VFlowContainer/DwarfLabel"
+@onready var level_label: Label = $"./VFlowContainer/LevelLabel"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -73,3 +74,6 @@ func set_label_micel(value: String) -> void:
 
 func set_label_dwarf(value: String) -> void:
 	dwarf_label.text = "Dwarf: %s" % [value]
+
+func set_lavel_current_level(value: String) -> void:
+	dwarf_label.text = "Level: %s" % [value]

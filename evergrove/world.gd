@@ -6,8 +6,6 @@ const TILE_SIZE = 16
 const HALF_CHUNK_SIZE = 64
 const CHUNK_SIZE = HALF_CHUNK_SIZE * 2
 const GLOBAL_SEED = 12345
-const SCALE = 64.0
-const ORE_SCALE = 32.0
 const LAYERS = 5
 
 enum TileType {
@@ -29,17 +27,10 @@ enum TileType {
 @onready var camera: Camera2D = $"/root/Game/Camera2D"
 @onready var game_state: GameState = $"/root/Game/GameState"
 
-@export var visible_tile_map: TileMap
+@export var visible_tile_map: DungeonLayer
 @export var visible_level: int
 
 @export var tile_maps: Dictionary = {}
-@export var tile_maps_level: Dictionary = {}
-@export var tile_maps_ladder: Dictionary = {}
-@export var tile_maps_chunks: Dictionary = {}
-@export var tile_maps_terrain_noise: Dictionary = {}
-@export var tile_maps_ore_noise: Dictionary = {}
-@export var tile_maps_cave_noise: Dictionary = {}
-@export var tile_maps_river_noise: Dictionary = {}
 @export var tile_type_to_id: Dictionary = {}
 
 @export var tile_set: TileSet
@@ -47,31 +38,9 @@ enum TileType {
 
 @export var point_dicrionary: Dictionary = {}
 
-var astarGrid: AStar3D
+var astar: AStar3D
 
 var sprite_texture = preload("res://cross.png")
-
-func init_noise(tile_map: TileMap, my_seed: int): 
-	var terrain_noise = FastNoiseLite.new()
-	terrain_noise.seed = my_seed
-	terrain_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
-	terrain_noise.frequency = 1.0 / SCALE
-	terrain_noise.fractal_type = FastNoiseLite.FRACTAL_FBM
-	terrain_noise.fractal_octaves = 4
-	terrain_noise.fractal_gain = 0.5
-	terrain_noise.fractal_lacunarity = 2.0
-
-	var ore_noise = FastNoiseLite.new()
-	ore_noise.seed = my_seed + 1
-	ore_noise.noise_type = FastNoiseLite.TYPE_PERLIN
-	ore_noise.frequency = 1.0 / ORE_SCALE
-	ore_noise.fractal_type = FastNoiseLite.FRACTAL_FBM
-	ore_noise.fractal_octaves = 4
-	ore_noise.fractal_gain = 0.5
-	ore_noise.fractal_lacunarity = 2.0
-
-	tile_maps_terrain_noise[tile_map] = terrain_noise
-	tile_maps_ore_noise[tile_map] = ore_noise
 
 func _ready():
 	tile_set = preload("res://tile_set.tres")
@@ -79,22 +48,20 @@ func _ready():
 		var tile_id = tile_type  # Verwende die Position im Enum als Tile-ID
 		tile_type_to_id[tile_type] = tile_id
 
-	astarGrid = AStar3D.new()
+	astar = AStar3D.new()
 
 	for layer in range(LAYERS):
 		#var tile_map = TileMap.new()
 		#tile_map.tile_set = tile_set
 		
-		var tile_map = preload("res://map/DungeonLayer.tscn").instantiate()
+		var tile_map : DungeonLayer  = preload("res://map/DungeonLayer.tscn").instantiate()
 		tile_map.tile_set = tile_set
 		
-		tile_maps[layer] = tile_map
-		tile_maps_level[tile_map] = layer
-		tile_maps_chunks[tile_map] = {}
-		tile_maps_ladder[tile_map] = {}
+		tile_map.init(GLOBAL_SEED + 25 * layer, layer)
 
+		tile_maps[layer] = tile_map
+		
 		add_child(tile_map)
-		init_noise(tile_map, GLOBAL_SEED + layer * 20)
 		# Generiere initiale Chunks
 		# generate_tile(tile_map, Vector2i(0, 0))
 
@@ -107,7 +74,7 @@ func _ready():
 	# var start_key = get_unique_id(Vector2i(20, 20), 0)
 	# var end_key = get_unique_id(Vector2i(-20, -20), 0)
 	
-	# var path = astarGrid.get_point_path(start_key, end_key)
+	# var path = astar.get_point_path(start_key, end_key)
 	
 	# for point in path:
 	# 	var sprite = Sprite2D.new()
@@ -126,18 +93,8 @@ func set_active_level(level: int):
 		tile_maps[layer].visible = false
 	visible_tile_map.visible = true
 	visible_level = level
+	game_state.set_current_level(level)
 	check_visible_tiles(true)
-	
-func distance_beween_tiles(pos1: Vector2i, pos2: Vector2i):
-	return sqrt(pow(pos1.x - pos2.x, 2) + pow(pos1.y - pos2.y, 2))
-
-func min_distance_to_ladder(pos: Vector2i, tile_map: TileMap):
-	var min_distance = 1000000
-	for ladder_pos in tile_maps_ladder[tile_map].keys():
-		var distance = distance_beween_tiles(pos, ladder_pos)
-		if distance < min_distance:
-			min_distance = distance
-	return min_distance
 
 func set_air_around_tile(tile_map: TileMap, pos: Vector2i, skip_center: bool = true):
 	for x in range(-1, 2):
@@ -148,12 +105,12 @@ func set_air_around_tile(tile_map: TileMap, pos: Vector2i, skip_center: bool = t
 			if tile_map.get_cell_source_id(0, new_pos) == -1:
 				tile_map.set_cell(0, new_pos, 0, Vector2i(0, TileType.AIR))
 
-func generate_tile(tile_map: TileMap, pos: Vector2i):
+func generate_tile(tile_map: DungeonLayer, pos: Vector2i):
 	if tile_map.get_cell_source_id(0, pos) != -1:
 		return
 
-	var terrain_noise = tile_maps_terrain_noise[tile_map]
-	var ore_noise = tile_maps_ore_noise[tile_map]
+	var terrain_noise = tile_map.terrain_noise
+	var ore_noise = tile_map.ore_noise
 	#var height = int(terrain_noise.get_noise_2d(global_x, global_y) * 10) + 10
 	var tile_type = TileType.AIR
 	var terrain_noise_value = terrain_noise.get_noise_2d(pos.x, pos.y)
@@ -163,16 +120,16 @@ func generate_tile(tile_map: TileMap, pos: Vector2i):
 	elif terrain_noise_value < -0.55:
 		tile_type = TileType.AIR
 		if (randf() < 0.05):
-			var curr_layer = tile_maps_level[tile_map]
+			var curr_layer = tile_map.level
 			if (tile_maps[curr_layer + 1]):
 				var below_map = tile_maps[curr_layer + 1]
 				if (below_map.get_cell_source_id(0, pos) == -1):
-					var distance = min_distance_to_ladder(pos, tile_map)
+					var distance = tile_map.min_distance_to_ladder(pos)
 					if (distance > 25):
 						below_map.set_cell(0, pos, 0, Vector2i(0, TileType.LADDER_UP))
 						set_air_around_tile(below_map, pos)
 						tile_type = TileType.LADDER_DOWN
-						tile_maps_ladder[tile_map][pos] = true
+						tile_map.ladder[pos] = true
 	else:
 		tile_type = TileType.STONE
 		var ore_value = ore_noise.get_noise_2d(pos.x, pos.y)
@@ -240,9 +197,9 @@ func check_visible_tiles(force: bool = false):
 	for x in range(start_x, end_x):
 		for y in range(start_y, end_y):
 			var chunk = Vector2i(x, y)
-			if (tile_maps_chunks[visible_tile_map].has(chunk)):
+			if visible_tile_map.chunks.has(chunk):
 				continue
-			tile_maps_chunks[visible_tile_map][chunk] = true
+			visible_tile_map.chunks[chunk] = true
 			for chunk_x in range(-HALF_CHUNK_SIZE, HALF_CHUNK_SIZE):
 				for chunk_y in range(-HALF_CHUNK_SIZE, HALF_CHUNK_SIZE):
 					var pos = Vector2i(x * CHUNK_SIZE + chunk_x, y * CHUNK_SIZE + chunk_y)
@@ -263,16 +220,10 @@ func _input(event):
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var selected_dwarf = game_state.selected_dwarf
 			if selected_dwarf:
-				var dwarf_pos = selected_dwarf.current_position
-				var dwarf_level = selected_dwarf.current_level
-				var dwarf_pos_key = get_unique_id(dwarf_pos, dwarf_level)
-
 				var target_pos = visible_tile_map.local_to_map(get_global_mouse_position())
-				var target_pos_key = get_unique_id(target_pos, visible_level)
 
-				var path = astarGrid.get_point_path(dwarf_pos_key, target_pos_key)	
-				selected_dwarf.walking_path = path
-
+				selected_dwarf.walk_to(target_pos, visible_level)
+		
 				#for point in path:
 				#	var sprite = Sprite2D.new()
 				#	sprite.texture = sprite_texture
@@ -286,8 +237,8 @@ func _input(event):
 
 func create_poit(pos: Vector2i, level: int, cost: float):
 	var key = get_unique_id(pos, level)
-	if (!astarGrid.has_point(key)):
-		astarGrid.add_point(key, Vector3(pos.x, pos.y, level), cost)
+	if (!astar.has_point(key)):
+		astar.add_point(key, Vector3(pos.x, pos.y, level), cost)
 
 func connect_adjacent_tiles(pos: Vector2i, level: int):
 	var directions = [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]
@@ -295,8 +246,8 @@ func connect_adjacent_tiles(pos: Vector2i, level: int):
 	for direction in directions:
 		var new_pos = pos + direction
 		var new_key = get_unique_id(new_pos, level, true)
-		if new_key > 0 && astarGrid.has_point(new_key):
-			astarGrid.connect_points(key, new_key)
+		if new_key > 0 && astar.has_point(new_key):
+			astar.connect_points(key, new_key)
 
 func update_astarGrid(tile_map: TileMap, level: int, pos: Vector2i):
 	var data: TileData = tile_map.get_cell_tile_data(0, pos)
@@ -311,11 +262,11 @@ func update_astarGrid(tile_map: TileMap, level: int, pos: Vector2i):
 	if connect_up:
 		if level > 0:
 			create_poit(pos, level - 1, cost)
-			astarGrid.connect_points(get_unique_id(pos, level), get_unique_id(pos, level - 1))
+			astar.connect_points(get_unique_id(pos, level), get_unique_id(pos, level - 1))
 	if connect_down:
 		if level < LAYERS - 1:
 			create_poit(pos, level + 1, cost)
-			astarGrid.connect_points(get_unique_id(pos, level), get_unique_id(pos, level + 1))
+			astar.connect_points(get_unique_id(pos, level), get_unique_id(pos, level + 1))
 
 func mine_tile(pos: Vector2i, level: int):
 	var tile_map = tile_maps[level]
@@ -363,6 +314,10 @@ func get_unique_id(pos: Vector2i, level: int, read_only: bool = false) -> int:
 		return point_dicrionary[vector]
 	if read_only:
 		return -1
-	var id = astarGrid.get_available_point_id()
+	var id = astar.get_available_point_id()
 	point_dicrionary[vector] = id
 	return id
+
+func get_tile_data(pos: Vector2i, level: int) -> TileData:
+	var tile_map = tile_maps[level]
+	return tile_map.get_cell_tile_data(0, pos)

@@ -17,6 +17,8 @@ class_name GameState
 
 @export var wealth = 0
 
+@export var current_level = 0
+
 @export var silver_factor = 1
 @export var gold_factor = 10
 @export var gem_factor = 100
@@ -66,6 +68,10 @@ func set_micel(value: int) -> void:
 func set_wealth(value: int) -> void:
 	wealth = value
 	gui.set_label_wealth(str(wealth))
+
+func set_current_level(value: int) -> void:
+	current_level = value
+	gui.set_lavel_current_level(str(current_level))
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

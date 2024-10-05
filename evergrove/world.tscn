@@ -29,6 +29,9 @@ text = "Spawn Dawrf"
 layout_mode = 2
 text = "Spawn Energy Hub"
 
+[node name="LevelLabel" type="Label" parent="GUI/VFlowContainer"]
+layout_mode = 2
+
 [node name="DirtLabel" type="Label" parent="GUI/VFlowContainer"]
 layout_mode = 2
 
