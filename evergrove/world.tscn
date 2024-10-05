@@ -1,17 +1,20 @@
-[gd_scene load_steps=6 format=3 uid="uid://dtjpof14r0bcb"]
+[gd_scene load_steps=7 format=3 uid="uid://dtjpof14r0bcb"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_2rb77"]
 [ext_resource type="Script" path="res://game.gd" id="1_acbsa"]
 [ext_resource type="Script" path="res://camera_2d.gd" id="1_bwmuh"]
+[ext_resource type="Script" path="res://game_state.gd" id="2_8uhg5"]
 [ext_resource type="Script" path="res://gui.gd" id="2_n34sk"]
 [ext_resource type="Script" path="res://factory.gd" id="5_8o8h7"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_acbsa")
 
+[node name="GameState" type="Node" parent="."]
+script = ExtResource("2_8uhg5")
+
 [node name="GUI" type="CanvasLayer" parent="."]
 script = ExtResource("2_n34sk")
-spawn_position = Vector2i(2, 2)
 
 [node name="VFlowContainer" type="VFlowContainer" parent="GUI"]
 offset_right = 153.0
@@ -24,6 +27,30 @@ text = "Spawn Dawrf"
 [node name="SpawnEnergyHubButton" type="Button" parent="GUI/VFlowContainer"]
 layout_mode = 2
 text = "Spawn Energy Hub"
+
+[node name="DirtLabel" type="Label" parent="GUI/VFlowContainer"]
+layout_mode = 2
+
+[node name="StoneLabel" type="Label" parent="GUI/VFlowContainer"]
+layout_mode = 2
+
+[node name="IronLabel" type="Label" parent="GUI/VFlowContainer"]
+layout_mode = 2
+
+[node name="CopperLabel" type="Label" parent="GUI/VFlowContainer"]
+layout_mode = 2
+
+[node name="WealthLabel" type="Label" parent="GUI/VFlowContainer"]
+layout_mode = 2
+
+[node name="MicelLabel" type="Label" parent="GUI/VFlowContainer"]
+layout_mode = 2
+
+[node name="WaterLabel" type="Label" parent="GUI/VFlowContainer"]
+layout_mode = 2
+
+[node name="DwarfLabel" type="Label" parent="GUI/VFlowContainer"]
+layout_mode = 2
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("1_bwmuh")

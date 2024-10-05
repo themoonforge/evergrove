@@ -26,7 +26,8 @@ enum TileType {
 	MICEL 		= 12,
 }
 
-@onready var camera: Camera2D = $"../Camera2D"
+@onready var camera: Camera2D = $"/root/Game/Camera2D"
+@onready var game_state: GameState = $"/root/Game/GameState"
 
 @export var visible_tile_map: TileMap
 @export var visible_level: int
@@ -48,9 +49,9 @@ enum TileType {
 
 var astarGrid: AStar3D
 
-func init_noise(tile_map: TileMap, seed: int): 
+func init_noise(tile_map: TileMap, my_seed: int): 
 	var terrain_noise = FastNoiseLite.new()
-	terrain_noise.seed = seed
+	terrain_noise.seed = my_seed
 	terrain_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	terrain_noise.frequency = 1.0 / SCALE
 	terrain_noise.fractal_type = FastNoiseLite.FRACTAL_FBM
@@ -59,7 +60,7 @@ func init_noise(tile_map: TileMap, seed: int):
 	terrain_noise.fractal_lacunarity = 2.0
 
 	var ore_noise = FastNoiseLite.new()
-	ore_noise.seed = seed + 1
+	ore_noise.seed = my_seed + 1
 	ore_noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	ore_noise.frequency = 1.0 / ORE_SCALE
 	ore_noise.fractal_type = FastNoiseLite.FRACTAL_FBM
@@ -90,12 +91,13 @@ func _ready():
 		tile_maps_chunks[tile_map] = {}
 		tile_maps_ladder[tile_map] = {}
 
-
-
 		add_child(tile_map)
 		init_noise(tile_map, GLOBAL_SEED + layer * 20)
 		# Generiere initiale Chunks
 		# generate_tile(tile_map, Vector2i(0, 0))
+
+	var start_map = tile_maps[0]
+	set_air_around_tile(start_map, Vector2i(0, 0), false)
 	set_active_level(0)
 
 	# var sprite_texture = preload("res://cross.png")
@@ -135,11 +137,11 @@ func min_distance_to_ladder(pos: Vector2i, tile_map: TileMap):
 			min_distance = distance
 	return min_distance
 
-func set_air_around_tile(tile_map: TileMap, pos: Vector2i):
+func set_air_around_tile(tile_map: TileMap, pos: Vector2i, skip_center: bool = true):
 	for x in range(-1, 2):
 		for y in range(-1, 2):
 			var new_pos = pos + Vector2i(x, y)
-			if (new_pos == pos):
+			if (skip_center && new_pos == pos):
 				continue
 			if tile_map.get_cell_source_id(0, new_pos) == -1:
 				tile_map.set_cell(0, new_pos, 0, Vector2i(0, TileType.AIR))
@@ -254,6 +256,12 @@ func _input(event):
 			elif event.keycode == KEY_E:
 				set_active_level(visible_level + 1)
 
+	# TODO just for testing
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			var pos = visible_tile_map.local_to_map(get_global_mouse_position())
+			mine_tile(pos, visible_level)
+
 func create_poit(pos: Vector2i, level: int, cost: float):
 	var key = get_unique_id(pos, level)
 	if (!astarGrid.has_point(key)):
@@ -266,8 +274,6 @@ func connect_adjacent_tiles(pos: Vector2i, level: int):
 		var new_pos = pos + direction
 		var new_key = get_unique_id(new_pos, level, true)
 		if new_key > 0 && astarGrid.has_point(new_key):
-			if key == new_key:
-				var a = 42
 			astarGrid.connect_points(key, new_key)
 
 func update_astarGrid(tile_map: TileMap, level: int, pos: Vector2i):
@@ -289,9 +295,45 @@ func update_astarGrid(tile_map: TileMap, level: int, pos: Vector2i):
 			create_poit(pos, level + 1, cost)
 			astarGrid.connect_points(get_unique_id(pos, level), get_unique_id(pos, level + 1))
 
-func mine_tile(pos: Vector2i):
-	var resource = visible_tile_map.get_cell_tile_data(0, pos)
-	# TODO
+func mine_tile(pos: Vector2i, level: int):
+	var tile_map = tile_maps[level]
+	var data: TileData = tile_map.get_cell_tile_data(0, pos)
+	if !data:
+		return
+	var has_resource = data.get_custom_data("has_resource")
+	var resource_type = data.get_custom_data("resource_type")
+	var min_resource = data.get_custom_data("min_resource")
+	var max_resource = data.get_custom_data("max_resource")
+	
+	var consumed = data.get_custom_data("consumed")
+
+	if has_resource:
+		var resource = randi() % (max_resource - min_resource) + min_resource
+		if resource > 0:
+			match resource_type:
+				TileType.DIRT:
+					game_state.set_dirt(game_state.dirt + resource)
+				TileType.STONE:
+					game_state.set_stone(game_state.stone + resource)
+				TileType.COAL:
+					game_state.set_coal(game_state.coal + resource)
+				TileType.IRON:
+					game_state.set_iron(game_state.iron + resource)
+				TileType.COPPER:
+					game_state.set_copper(game_state.copper + resource)
+				TileType.SILVER:
+					game_state.set_silver(game_state.silver + resource)
+				TileType.GOLD:
+					game_state.set_gold(game_state.gold + resource)
+				TileType.GEM:
+					game_state.set_gem(game_state.gem + resource)
+				TileType.WATER:
+					game_state.set_water(game_state.water + resource)
+				TileType.MICEL:
+					game_state.set_micel(game_state.micel + resource)
+		if consumed:
+			tile_map.set_cell(0, pos, 0, Vector2i(0, TileType.AIR))
+			update_astarGrid(tile_map, level, pos)
 
 func get_unique_id(pos: Vector2i, level: int, read_only: bool = false) -> int:
 	var vector = Vector3i(pos.x, pos.y, level)
