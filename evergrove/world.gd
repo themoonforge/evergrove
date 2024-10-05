@@ -40,9 +40,13 @@ enum TileType {
 @export var tile_maps_cave_noise: Dictionary = {}
 @export var tile_maps_river_noise: Dictionary = {}
 @export var tile_type_to_id: Dictionary = {}
-var tile_set: TileSet
 
+@export var tile_set: TileSet
 @export var visible_rect: Rect2
+
+@export var point_dicrionary: Dictionary = {}
+
+var astarGrid: AStar3D
 
 func init_noise(tile_map: TileMap, seed: int): 
 	var terrain_noise = FastNoiseLite.new()
@@ -64,13 +68,15 @@ func init_noise(tile_map: TileMap, seed: int):
 	ore_noise.fractal_lacunarity = 2.0
 
 	tile_maps_terrain_noise[tile_map] = terrain_noise
-	tile_maps_ore_noise[tile_map] = ore_noise		
+	tile_maps_ore_noise[tile_map] = ore_noise
 
 func _ready():
 	tile_set = preload("res://tile_set.tres")
 	for tile_type in TileType.values():
 		var tile_id = tile_type  # Verwende die Position im Enum als Tile-ID
 		tile_type_to_id[tile_type] = tile_id
+
+	astarGrid = AStar3D.new()
 
 	for layer in range(LAYERS):
 		var tile_map = TileMap.new()
@@ -82,8 +88,23 @@ func _ready():
 		add_child(tile_map)
 		init_noise(tile_map, GLOBAL_SEED + layer * 20)
 		# Generiere initiale Chunks
-		#generate_tile(tile_map, Vector2i(0, 0))
+		# generate_tile(tile_map, Vector2i(0, 0))
 	set_active_level(0)
+
+	# var sprite_texture = preload("res://cross.png")
+	#
+	# var start_key = get_unique_id(Vector2i(20, 20), 0)
+	# var end_key = get_unique_id(Vector2i(-20, -20), 0)
+	
+	# var path = astarGrid.get_point_path(start_key, end_key)
+	
+	# for point in path:
+	# 	var sprite = Sprite2D.new()
+	# 	sprite.texture = sprite_texture
+	# 	add_child(sprite)
+	# 	sprite.z_index = 100
+	# 	sprite.position = visible_tile_map.map_to_local(Vector2i(point.x, point.y))
+		
 	
 func set_active_level(level: int):
 	print("set active layer: %d" % [level])
@@ -165,7 +186,7 @@ func generate_tile(tile_map: TileMap, pos: Vector2i):
 		elif ore_value > 0.2:
 			tile_type = TileType.STONE
 		elif ore_value > 0.18:
-			tile_type = TileType.COAL
+			tile_type = TileType.MICEL
 		elif ore_value > 0.1:
 			tile_type = TileType.STONE
 		elif ore_value > 0.07:
@@ -216,7 +237,9 @@ func check_visible_tiles(force: bool = false):
 			tile_maps_chunks[visible_tile_map][chunk] = true
 			for chunk_x in range(-HALF_CHUNK_SIZE, HALF_CHUNK_SIZE):
 				for chunk_y in range(-HALF_CHUNK_SIZE, HALF_CHUNK_SIZE):
-					generate_tile(visible_tile_map, Vector2i(x * CHUNK_SIZE + chunk_x, y * CHUNK_SIZE + chunk_y))
+					var pos = Vector2i(x * CHUNK_SIZE + chunk_x, y * CHUNK_SIZE + chunk_y)
+					generate_tile(visible_tile_map, pos)
+					update_astarGrid(visible_tile_map, visible_level, pos)
 			#generate_tile(visible_tile_map, Vector2i(x, y))
 
 func _input(event):
@@ -226,3 +249,51 @@ func _input(event):
 				set_active_level(visible_level - 1)
 			elif event.keycode == KEY_E:
 				set_active_level(visible_level + 1)
+
+func create_poit(pos: Vector2i, level: int, cost: float):
+	var key = get_unique_id(pos, level)
+	if (!astarGrid.has_point(key)):
+		astarGrid.add_point(key, Vector3(pos.x, pos.y, level), cost)
+
+func connect_adjacent_tiles(pos: Vector2i, level: int):
+	var directions = [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]
+	var key = get_unique_id(pos, level)
+	for direction in directions:
+		var new_pos = pos + direction
+		var new_key = get_unique_id(new_pos, level, true)
+		if new_key > 0 && astarGrid.has_point(new_key):
+			if key == new_key:
+				var a = 42
+			astarGrid.connect_points(key, new_key)
+
+func update_astarGrid(tile_map: TileMap, level: int, pos: Vector2i):
+	var data: TileData = tile_map.get_cell_tile_data(0, pos)
+	if !data:
+		return
+
+	var cost: float = data.get_custom_data("cost")
+	var connect_up: bool = data.get_custom_data("connect_up")
+	var connect_down: bool = data.get_custom_data("connect_down")
+	create_poit(pos, level, cost)
+	connect_adjacent_tiles(pos, level)
+	if connect_up:
+		if level > 0:
+			create_poit(pos, level - 1, cost)
+			astarGrid.connect_points(get_unique_id(pos, level), get_unique_id(pos, level - 1))
+	if connect_down:
+		if level < LAYERS - 1:
+			create_poit(pos, level + 1, cost)
+			astarGrid.connect_points(get_unique_id(pos, level), get_unique_id(pos, level + 1))
+
+func mine_tile(pos: Vector2i):
+	var resource = visible_tile_map.get_cell_tile_data(0, pos)
+
+func get_unique_id(pos: Vector2i, level: int, read_only: bool = false) -> int:
+	var vector = Vector3i(pos.x, pos.y, level)
+	if point_dicrionary.has(vector):
+		return point_dicrionary[vector]
+	if read_only:
+		return -1
+	var id = astarGrid.get_available_point_id()
+	point_dicrionary[vector] = id
+	return id
