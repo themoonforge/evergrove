@@ -79,12 +79,19 @@ func _ready():
 	astarGrid = AStar3D.new()
 
 	for layer in range(LAYERS):
-		var tile_map = TileMap.new()
+		#var tile_map = TileMap.new()
+		#tile_map.tile_set = tile_set
+		
+		var tile_map = preload("res://map/DungeonLayer.tscn").instantiate()
 		tile_map.tile_set = tile_set
+		
 		tile_maps[layer] = tile_map
 		tile_maps_level[tile_map] = layer
 		tile_maps_chunks[tile_map] = {}
 		tile_maps_ladder[tile_map] = {}
+
+
+
 		add_child(tile_map)
 		init_noise(tile_map, GLOBAL_SEED + layer * 20)
 		# Generiere initiale Chunks
