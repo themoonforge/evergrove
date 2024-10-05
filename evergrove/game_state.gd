@@ -21,6 +21,8 @@ class_name GameState
 @export var gold_factor = 10
 @export var gem_factor = 100
 
+@export var selected_dwarf: Dwarf
+
 # Setter methods
 func set_dirt(value: int) -> void:
 	dirt = value

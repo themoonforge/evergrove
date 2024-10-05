@@ -49,6 +49,8 @@ enum TileType {
 
 var astarGrid: AStar3D
 
+var sprite_texture = preload("res://cross.png")
+
 func init_noise(tile_map: TileMap, my_seed: int): 
 	var terrain_noise = FastNoiseLite.new()
 	terrain_noise.seed = my_seed
@@ -100,7 +102,7 @@ func _ready():
 	set_air_around_tile(start_map, Vector2i(0, 0), false)
 	set_active_level(0)
 
-	# var sprite_texture = preload("res://cross.png")
+	# 
 	#
 	# var start_key = get_unique_id(Vector2i(20, 20), 0)
 	# var end_key = get_unique_id(Vector2i(-20, -20), 0)
@@ -259,8 +261,28 @@ func _input(event):
 	# TODO just for testing
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var pos = visible_tile_map.local_to_map(get_global_mouse_position())
-			mine_tile(pos, visible_level)
+			var selected_dwarf = game_state.selected_dwarf
+			if selected_dwarf:
+				var dwarf_pos = selected_dwarf.current_position
+				var dwarf_level = selected_dwarf.current_level
+				var dwarf_pos_key = get_unique_id(dwarf_pos, dwarf_level)
+
+				var target_pos = visible_tile_map.local_to_map(get_global_mouse_position())
+				var target_pos_key = get_unique_id(target_pos, visible_level)
+
+				var path = astarGrid.get_point_path(dwarf_pos_key, target_pos_key)	
+				selected_dwarf.walking_path = path
+
+				#for point in path:
+				#	var sprite = Sprite2D.new()
+				#	sprite.texture = sprite_texture
+				#	add_child(sprite)
+				#	sprite.z_index = 100
+				#	sprite.position = visible_tile_map.map_to_local(Vector2i(point.x, point.y))
+
+			else:
+				var pos = visible_tile_map.local_to_map(get_global_mouse_position())
+				mine_tile(pos, visible_level)
 
 func create_poit(pos: Vector2i, level: int, cost: float):
 	var key = get_unique_id(pos, level)
