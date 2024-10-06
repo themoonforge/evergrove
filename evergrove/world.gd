@@ -2,7 +2,8 @@ extends Node2D
 
 class_name World
 
-const TILE_SIZE = 16
+const Utils = preload("./Utils.gd")
+
 const HALF_CHUNK_SIZE = 64
 const CHUNK_SIZE = HALF_CHUNK_SIZE * 2
 const LAYERS = 5
@@ -27,7 +28,8 @@ enum TileType {
 
 @onready var camera: Camera2D = $"/root/Game/Camera2D"
 @onready var game_state: GameState = $"/root/Game/GameState"
-@onready var tile_cursor: Sprite2D = $"./TileCursor"
+@onready var select_cursor: Sprite2D = $"./TileCursor"
+@onready var build_cursor: BuildingCursor = $"./BuildingCursor"
 
 @export var visible_tile_map: DungeonLayer
 @export var visible_level: int
@@ -46,6 +48,14 @@ enum TileType {
 var astar: AStar3D
 
 var sprite_texture = preload("res://cross.png")
+
+enum CursorType {
+	SELECT,
+	BUILD,
+}
+
+@export var cursor_type: CursorType = CursorType.SELECT
+@export var build_type: Utils.BuildingType = Utils.BuildingType.BEER
 
 func _ready():
 	tile_set = preload("res://tile_set.tres")
@@ -73,6 +83,7 @@ func _ready():
 	var start_map = tile_maps[0]
 	set_air_around_tile(start_map, Vector2i(0, 0), false)
 	set_active_level(0)
+	set_cursor_type(CursorType.SELECT)
 
 	# 
 	#
@@ -197,10 +208,10 @@ func check_visible_tiles(force: bool = false):
 	visible_rect = current_visible_rect
 
 	# Berechne die sichtbaren Kacheln in der TileMap
-	var start_x = int(floor(visible_rect.position.x / (TILE_SIZE * CHUNK_SIZE)))
-	var start_y = int(floor(visible_rect.position.y / (TILE_SIZE * CHUNK_SIZE)))
-	var end_x = int(ceil((visible_rect.position.x + visible_rect.size.x) / (TILE_SIZE * CHUNK_SIZE))) + 1
-	var end_y = int(ceil((visible_rect.position.y + visible_rect.size.y) / (TILE_SIZE * CHUNK_SIZE))) + 1
+	var start_x = int(floor(visible_rect.position.x / (Utils.TILE_SIZE * CHUNK_SIZE)))
+	var start_y = int(floor(visible_rect.position.y / (Utils.TILE_SIZE * CHUNK_SIZE)))
+	var end_x = int(ceil((visible_rect.position.x + visible_rect.size.x) / (Utils.TILE_SIZE * CHUNK_SIZE))) + 1
+	var end_y = int(ceil((visible_rect.position.y + visible_rect.size.y) / (Utils.TILE_SIZE * CHUNK_SIZE))) + 1
 
 	# Überprüfe und generiere die Chunks für die sichtbaren Kacheln
 	for x in range(start_x, end_x):
@@ -217,10 +228,24 @@ func check_visible_tiles(force: bool = false):
 					update_astarGrid(visible_tile_map, visible_level, pos)
 			#generate_tile(visible_tile_map, Vector2i(x, y))
 
+func set_cursor_type(type: CursorType, build_type: Utils.BuildingType = Utils.BuildingType.BEER):
+	cursor_type = type
+	build_cursor.set_building_type(build_type)
+	select_cursor.visible = cursor_type == CursorType.SELECT
+	build_cursor.visible = cursor_type == CursorType.BUILD
+
+func handle_cursor():
+	match cursor_type:
+		CursorType.SELECT:
+			var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
+			select_cursor.position = visible_tile_map.map_to_local(tile_position)
+		CursorType.BUILD:
+			var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
+			build_cursor.set_tile(tile_position)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
-		var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
-		tile_cursor.position = visible_tile_map.map_to_local(tile_position)
+		handle_cursor()
 	
 	if event is InputEventKey:
 		if event.pressed:
@@ -228,6 +253,14 @@ func _unhandled_input(event: InputEvent) -> void:
 				set_active_level(visible_level - 1)
 			elif event.keycode == KEY_E:
 				set_active_level(visible_level + 1)
+			elif event.keycode == KEY_C:
+				set_cursor_type(CursorType.SELECT)
+			elif event.keycode == KEY_F:
+				set_cursor_type(CursorType.BUILD, Utils.BuildingType.FOOD)
+			elif event.keycode == KEY_B:
+				set_cursor_type(CursorType.BUILD, Utils.BuildingType.BEER)
+			elif event.keycode == KEY_P:
+				set_cursor_type(CursorType.BUILD, Utils.BuildingType.ENERGY)
 
 	if is_active_debug_input && event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -322,6 +355,14 @@ func get_unique_id(pos: Vector2i, level: int, read_only: bool = false) -> int:
 	point_dicrionary[vector] = id
 	return id
 
-func get_tile_data(pos: Vector2i, level: int) -> TileData:
+func get_tile_data(pos: Vector2i, level: int = visible_level) -> TileData:
 	var tile_map = tile_maps[level]
 	return tile_map.get_cell_tile_data(0, pos)
+
+func is_free_space(pos: Vector2i, level: int = visible_level) -> bool:
+	var tile_map: DungeonLayer = tile_maps[level]
+	var data = tile_map.get_cell_tile_data(0, pos)
+	var blocked = tile_map.blocked_space.has(pos)
+	var free_space: bool = data.get_custom_data("is_free_space")
+
+	return free_space && !blocked

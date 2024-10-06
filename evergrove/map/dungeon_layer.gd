@@ -13,6 +13,8 @@ var ore_noise: FastNoiseLite
 @export var ladder: Dictionary = {}
 @export var chunks: Dictionary = {}
 
+@export var blocked_space = {}
+
 const SCALE = 64.0
 const ORE_SCALE = 32.0
 
