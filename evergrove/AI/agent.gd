@@ -94,12 +94,12 @@ func _on_ai_tick():
 				task.location.layer = movement_target.z
 				print("Agent "+str(self)+" moving to task location "+str(task.location))
 				working_on_task = true
-			else:
-				if task.has_callback:
-					task.callback.call()
-				tasks.pop_front()
-				print("Agent "+str(self)+" reached task location")
-				working_on_task = false
+			elif Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) < 1.0 and  working_on_task:
+					if task.has_callback:
+						task.callback.call()
+					tasks.pop_front()
+					print("Agent "+str(self)+" reached task location")
+					working_on_task = false
 		ai_globals.TASK_TYPE.SLEEP:
 			if task.location.invalid:
 				print("Agent "+str(self)+" unable to do sleep task, target invalid (probably no energy hub exists)")
@@ -111,7 +111,7 @@ func _on_ai_tick():
 				task.location.layer = movement_target.z
 				print("Agent "+str(self)+" moving to task location "+str(task.location))
 				working_on_task = true
-			else:
+			elif Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) < 1.0 and working_on_task:
 				if task.has_callback:
 					task.callback.call()
 				tasks.pop_front()
