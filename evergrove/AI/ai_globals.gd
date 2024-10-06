@@ -20,10 +20,12 @@ enum TASK_TYPE {
 }
 
 class Location:
-	var layer:int
 	var coordinates:Vector2i
-	static func create(coordinates:Vector2i, layer:int) -> Location:
+	var layer:int
+	var invalid:bool
+	static func create(coordinates:Vector2i, layer:int, invalid:bool=false) -> Location:
 		var instance = Location.new()
 		instance.coordinates = coordinates
-		instance.layer - layer
+		instance.layer = layer
+		instance.invalid = invalid
 		return instance

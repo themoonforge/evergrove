@@ -49,7 +49,6 @@ func _on_ai_tick():
 	#print(str(self.name) + " energy is now " + str(energy))
 	if energy <= 30 and not recharge_energy_queued:
 		print(str(self.name) + " has low energy, queueing sleep task")
-		# TODO: get closest free bed position from hivemind
 		var task:Task = Task.create(ai_globals.TASK_TYPE.SLEEP, "Sleep to recharge energy", 0, ai_globals.hivemind.get_nearest_energy_hub_location(ai_globals.Location.create(Vector2i(self.get_parent().current_position.x,self.get_parent().current_position.y), self.get_parent().current_level)))
 		# TODO: check if task queue is full, if yes send last task back to hivemind and add new sleep task
 		if tasks.size() == MAX_TASKS:
@@ -87,7 +86,10 @@ func _on_ai_tick():
 		ai_globals.TASK_TYPE.MOVE_TO:
 			# TODO: do not use Vec3 distance or +- 1 layer might falsely trigger target reached
 			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y, tasks.front().location.layer)) > 1.0 and not working_on_task:
-				self.get_parent().walk_to(Vector2(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y), tasks.front().location.layer)
+				var movement_target:Vector3i = self.get_parent().walk_to(Vector2(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y), tasks.front().location.layer)
+				tasks.front().location.coordinates.x = movement_target.x
+				tasks.front().location.coordinates.y = movement_target.y
+				tasks.front().location.layer = movement_target.z
 				print("Agent "+str(self)+" moving to task location "+str(tasks.front().location))
 				working_on_task = true
 			else:
@@ -95,8 +97,14 @@ func _on_ai_tick():
 				print("Agent "+str(self)+" reached task location")
 				working_on_task = false
 		ai_globals.TASK_TYPE.SLEEP:
+			if tasks.front().location.invalid:
+				print("Agent "+str(self)+" unable to do sleep task, target invalid (probably no energy hub exists)")
+				return
 			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y, tasks.front().location.layer)) > 1.0 and not working_on_task:
-				self.get_parent().walk_to(Vector2(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y), tasks.front().location.layer)
+				var movement_target:Vector3i = self.get_parent().walk_to(Vector2(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y), tasks.front().location.layer)
+				tasks.front().location.coordinates.x = movement_target.x
+				tasks.front().location.coordinates.y = movement_target.y
+				tasks.front().location.layer = movement_target.z
 				print("Agent "+str(self)+" moving to task location "+str(tasks.front().location))
 				working_on_task = true
 			else:
@@ -104,6 +112,7 @@ func _on_ai_tick():
 				print("Agent "+str(self)+" reached task location")
 				energy = DEFAULT_ENERGY
 				recharge_energy_queued = false
+				# TODO: recharge energy over time and trigger corresponding animation
 				print("Agent "+str(self)+" instant sleep refilled energy")
 				working_on_task = false
 				accepting_tasks = true
