@@ -37,7 +37,6 @@ enum TileType {
 @export var tile_maps: Dictionary = {}
 @export var tile_type_to_id: Dictionary = {}
 
-@export var tile_set: TileSet
 @export var visible_rect: Rect2
 
 @export var point_dicrionary: Dictionary = {}
@@ -53,19 +52,14 @@ var sprite_texture = preload("res://cross.png")
 @export var build_type: Utils.BuildingType = Utils.BuildingType.BEER
 
 func _ready():
-	tile_set = preload("res://tile_set.tres")
 	for tile_type in TileType.values():
 		var tile_id = tile_type  # Verwende die Position im Enum als Tile-ID
 		tile_type_to_id[tile_type] = tile_id
 
 	astar = AStar3D.new()
 
-	for layer in range(LAYERS):
-		#var tile_map = TileMap.new()
-		#tile_map.tile_set = tile_set
-		
+	for layer in range(LAYERS):		
 		var tile_map : DungeonLayer  = preload("res://map/DungeonLayer.tscn").instantiate()
-		tile_map.tile_set = tile_set
 		
 		tile_map.init(GLOBAL_SEED + 25 * layer, layer)
 

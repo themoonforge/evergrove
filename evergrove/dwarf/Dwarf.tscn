@@ -549,6 +549,7 @@ shadow_color = Color(0, 0, 0, 0.741176)
 texture = ExtResource("51_d1oub")
 
 [node name="ActionEffectAnimator" type="AnimatedSprite2D" parent="."]
+visible = false
 z_index = 1
 position = Vector2(1, 27)
 sprite_frames = SubResource("SpriteFrames_nmf58")
