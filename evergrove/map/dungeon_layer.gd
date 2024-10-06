@@ -95,5 +95,5 @@ func build_building(building_type: Utils.BuildingType, my_position: Vector2, til
 		print("callback!!!!")
 		building.set_is_build(true)
 
-	var task: Task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "", 0, ai_globals.Location.create(tiles.keys()[0], level), build_callback)
+	var task: Task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "", 0, ai_globals.Location.create(tiles.keys()[4], level), build_callback)
 	ai_globals.hivemind.add_task(task)
