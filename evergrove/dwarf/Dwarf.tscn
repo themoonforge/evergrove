@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://b5heo41rpqdo0"]
+[gd_scene load_steps=59 format=3 uid="uid://b5heo41rpqdo0"]
 
 [ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
 [ext_resource type="Texture2D" uid="uid://d1jiavfxbpic1" path="res://dwarf/dwarf.png" id="2_7ed72"]
@@ -50,6 +50,9 @@
 [ext_resource type="Texture2D" uid="uid://damfdrvwgguem" path="res://dwarf/thin/hair/pigtails_base_left2.png" id="48_1k3m5"]
 [ext_resource type="Texture2D" uid="uid://c0obw7pa2kehk" path="res://dwarf/thin/hair/pigtails_base_right1.png" id="49_bv2bn"]
 [ext_resource type="Texture2D" uid="uid://dg4s7vsbkqcbi" path="res://dwarf/thin/hair/pigtails_base_right2.png" id="50_bnb1r"]
+[ext_resource type="Texture2D" uid="uid://inm3k1w0cnk" path="res://dwarf/dust/dust1.png" id="51_odk3u"]
+[ext_resource type="Texture2D" uid="uid://bisjwwocnk0ic" path="res://dwarf/dust/dust2.png" id="52_hp4v7"]
+[ext_resource type="Texture2D" uid="uid://wlufure3rfcb" path="res://dwarf/dust/dust3.png" id="53_v265o"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_rwkfb"]
 animations = [{
@@ -380,11 +383,56 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_cignr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_odk3u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_hp4v7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_v265o")
+}],
+"loop": true,
+"name": &"eating_effect",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_odk3u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_hp4v7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_v265o")
+}],
+"loop": true,
+"name": &"mining_effect",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_odk3u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_hp4v7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_v265o")
+}],
+"loop": true,
+"name": &"sleeping_effect",
+"speed": 5.0
+}]
+
 [node name="Dwarf" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_c3sis")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="CharacterAnimator" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_rwkfb")
 
@@ -416,3 +464,10 @@ visible = false
 [node name="Clothing" type="AnimatedSprite2D" parent="ThiccBase"]
 
 [node name="Body" type="AnimatedSprite2D" parent="ThiccBase"]
+
+[node name="EffectAnimator" type="AnimatedSprite2D" parent="."]
+visible = false
+z_index = 1
+position = Vector2(0, -17)
+sprite_frames = SubResource("SpriteFrames_cignr")
+animation = &"sleeping_effect"
