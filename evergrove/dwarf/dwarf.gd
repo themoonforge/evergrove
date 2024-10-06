@@ -167,9 +167,9 @@ func play_effect(animation: String) -> void:
 
 	match walking_direction:
 		Utils.WalkingDirection.FRONT:
-			action_effect_animator.position = action_effect_animator_position + Vector2(0, -Utils.TILE_SIZE_HALF)
-		Utils.WalkingDirection.BACK:
 			action_effect_animator.position = action_effect_animator_position + Vector2(0, Utils.TILE_SIZE_HALF)
+		Utils.WalkingDirection.BACK:
+			action_effect_animator.position = action_effect_animator_position + Vector2(0, -Utils.TILE_SIZE)
 		Utils.WalkingDirection.LEFT:
 			action_effect_animator.position = action_effect_animator_position + Vector2(-Utils.TILE_SIZE_HALF, 0)
 		Utils.WalkingDirection.RIGHT:

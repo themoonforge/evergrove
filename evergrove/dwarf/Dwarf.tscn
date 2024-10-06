@@ -547,9 +547,8 @@ range_z_max = 100
 texture = ExtResource("51_d1oub")
 
 [node name="ActionEffectAnimator" type="AnimatedSprite2D" parent="."]
-visible = false
 z_index = 1
-position = Vector2(1, 22)
+position = Vector2(1, 27)
 sprite_frames = SubResource("SpriteFrames_nmf58")
 animation = &"mining_effect"
 offset = Vector2(0, -27)
