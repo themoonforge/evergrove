@@ -68,7 +68,7 @@ func get_nearest_energy_hub_location(agent_location:ai_globals.Location)->ai_glo
 	# return agent's own location if no energy hub was found as movement target
 	if vec2_or_null == null:
 		print("No energy hub found, returning agent's own location")
-		return agent_location
+		return ai_globals.Location.create(Vector2i.ZERO, 0, true)
 		
 	var energyhub_location:ai_globals.Location
 	var vec2:Vector2 = vec2_or_null
