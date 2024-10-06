@@ -1,12 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://b2bvps5riuaiy"]
+[gd_scene load_steps=3 format=3 uid="uid://b2bvps5riuaiy"]
 
 [ext_resource type="Script" path="res://map/dungeon_layer.gd" id="1_ayeb1"]
+[ext_resource type="TileSet" uid="uid://cnwuemdxstgvl" path="res://tile_set.tres" id="1_pydub"]
 
 [node name="DungeonLayer" type="TileMap"]
+tile_set = ExtResource("1_pydub")
 format = 2
 script = ExtResource("1_ayeb1")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("1_pydub")
 
 [node name="DwarfContainer" type="Node2D" parent="."]
 
