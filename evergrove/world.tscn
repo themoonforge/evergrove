@@ -101,6 +101,7 @@ script = ExtResource("1_bwmuh")
 
 [node name="World" type="Node2D" parent="."]
 modulate = Color(0.75969, 0.742505, 0.772522, 1)
+y_sort_enabled = true
 texture_filter = 1
 script = ExtResource("1_2rb77")
 

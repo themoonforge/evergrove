@@ -444,6 +444,7 @@ animations = [{
 }]
 
 [node name="Dwarf" type="Node2D"]
+y_sort_enabled = true
 texture_filter = 1
 script = ExtResource("1_c3sis")
 
@@ -457,17 +458,23 @@ position = Vector2(0, -9)
 
 [node name="Body" type="AnimatedSprite2D" parent="ThinBase"]
 y_sort_enabled = true
+position = Vector2(0, 9)
 sprite_frames = SubResource("SpriteFrames_04c1a")
 animation = &"medium_idle"
+offset = Vector2(0, -9)
 
 [node name="Clothing" type="AnimatedSprite2D" parent="ThinBase"]
 y_sort_enabled = true
+position = Vector2(0, 9)
 sprite_frames = SubResource("SpriteFrames_aelkk")
 animation = &"idle"
+offset = Vector2(0, -9)
 
 [node name="Hair" type="AnimatedSprite2D" parent="ThinBase"]
 y_sort_enabled = true
+position = Vector2(0, 9)
 sprite_frames = SubResource("SpriteFrames_gi7fk")
+offset = Vector2(0, -9)
 
 [node name="ThiccBase" type="Node2D" parent="."]
 visible = false
@@ -481,9 +488,9 @@ visible = false
 [node name="EffectAnimator" type="AnimatedSprite2D" parent="."]
 visible = false
 z_index = 1
-position = Vector2(0, -27)
 sprite_frames = SubResource("SpriteFrames_cignr")
 animation = &"drinking_effect"
+offset = Vector2(0, -27)
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 physics_interpolation_mode = 1
