@@ -13,4 +13,4 @@ func _ready() -> void:
 
 func _on_timer_timeout() -> void:
 	ai_globals.PROCESS_TICK.emit()
-	print("AI tick")
+	#print("AI tick")

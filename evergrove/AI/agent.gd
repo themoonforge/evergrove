@@ -46,7 +46,7 @@ func _on_ai_tick():
 	#print(str(self.name) + " received AI tick event")
 	if energy > 0:
 		energy -= 1
-	print(str(self.name) + " energy is now " + str(energy))
+	#print(str(self.name) + " energy is now " + str(energy))
 	if energy <= 30 and not recharge_energy_queued:
 		print(str(self.name) + " has low energy, queueing sleep task")
 		# TODO: get closest free bed position from hivemind
@@ -78,7 +78,7 @@ func _on_ai_tick():
 	
 	# get task if agent queue is empty
 	if tasks.is_empty():
-		print("Agent "+str(self)+" task queue empty")
+		#print("Agent "+str(self)+" task queue empty")
 		ai_globals.AGENT_WITHOUT_TASK.emit(self)
 		registered_as_taskless = true
 		return

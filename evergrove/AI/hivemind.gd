@@ -1,10 +1,12 @@
 # Global AI controller layer between the player/game and individual agents
 class_name Hivemind extends Node
 
+@onready var world: World = $"/root/Game/World"
+const Utils = preload("../Utils.gd")
+
 var task_queue: Array[Task]
 var agents:Array[Agent]
 var taskless_agents:Array[Agent]
-var energyhubs:Array[EnergyHub]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -12,7 +14,6 @@ func _ready() -> void:
 	ai_globals.connect("AGENT_CREATED", _on_agent_created)
 	ai_globals.connect("AGENT_WITHOUT_TASK", _on_agent_without_task)
 	ai_globals.connect("AGENT_NO_LONGER_TASKLESS", _remove_taskless_agent)
-	ai_globals.connect("ENERGY_HUB_SPAWNED", _add_energy_hub)
 	add_child(AI_Timer.new())
 	ai_globals.hivemind = self
 	print("AI hivemind ready")
@@ -41,12 +42,6 @@ func _remove_taskless_agent(agent:Agent):
 	taskless_agents.erase(agent)
 	print("Removed "+str(agent)+" from taskless registry")
 
-func _add_energy_hub(hub:EnergyHub):
-	assert(hub not in energyhubs, "State mismatch. Energy hub already known by hivemind.")
-	assert(hub.location != null, "Energy hub is missing a location")
-	energyhubs.append(hub)
-	print("Hivemind registered new energy hub "+str(hub))
-
 func transfer_task_to_agent(task: Task, agent: Agent) -> bool:
 	if not agent.assign_task(task):
 		print("Can't transfert task " + str(task.name) + " to agent " + str(agent.name) + ". Task not accepted by agent.")
@@ -68,9 +63,14 @@ func get_agent_without_task() -> Agent:
 	return null
 
 func get_nearest_energy_hub_location(agent_location:ai_globals.Location)->ai_globals.Location:
-	# if no energy hub exists, return map origin
-	if energyhubs.is_empty():
-		return ai_globals.Location.create(Vector2i.ZERO, 0)
+	var vec2_or_null = world.get_nearest_building(Utils.BuildingType.ENERGY,agent_location.coordinates, agent_location.layer)
+	
+	# return agent's own location if no energy hub was found as movement target
+	if vec2_or_null == null:
+		print("No energy hub found, returning agent's own location")
+		return agent_location
 		
-	# TODO: implement finding the nearest one
-	return energyhubs.front().location
+	var energyhub_location:ai_globals.Location
+	var vec2:Vector2 = vec2_or_null
+	# TODO: search only queries one layer, extend search to multiple layers
+	return ai_globals.Location.create(vec2, agent_location.layer)
