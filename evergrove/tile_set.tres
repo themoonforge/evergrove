@@ -99,6 +99,7 @@ texture = ExtResource("1_elc6h")
 0:11/0/custom_data_6 = 2
 0:11/0/custom_data_7 = true
 0:11/0/custom_data_9 = 0.1
+0:11/0/custom_data_10 = true
 0:12/0 = 0
 0:12/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8, -8, -8)
 0:12/0/custom_data_1 = 30.0
@@ -115,7 +116,7 @@ texture = ExtResource("2_e8asl")
 
 [resource]
 physics_layer_0/collision_layer = 1
-custom_data_layer_0/name = "walkable"
+custom_data_layer_0/name = "is_walkable"
 custom_data_layer_0/type = 1
 custom_data_layer_1/name = "cost"
 custom_data_layer_1/type = 3
@@ -135,5 +136,7 @@ custom_data_layer_8/name = "consumed"
 custom_data_layer_8/type = 1
 custom_data_layer_9/name = "walking_speed_factor"
 custom_data_layer_9/type = 3
+custom_data_layer_10/name = "is_water"
+custom_data_layer_10/type = 1
 sources/0 = SubResource("TileSetAtlasSource_c0m51")
 sources/1 = SubResource("TileSetAtlasSource_e65jy")
