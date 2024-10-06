@@ -28,6 +28,7 @@ const idle_animation = "idle"
 const sleeping_animation = idle_animation
 const eating_animation = idle_animation
 const drinking_animation = idle_animation
+const building_animation = idle_animation
 
 const walking_front_animation = "front"
 const walking_back_animation = "back"
@@ -51,6 +52,7 @@ const mining_effect = "mining_effect"
 const eating_effect = "eating_effect"
 const drinking_effect = "drinking_effect"
 const sleeping_effect = "sleeping_effect"
+const building_effect = "building_effect"
 
 @export var type: DwarfType
 @export var skin: DwarfSkin
@@ -264,7 +266,24 @@ func set_animation(my_behaviour: Utils.Behaviour, my_walking_direction: Utils.Wa
 		Utils.Behaviour.DRINKING:
 			play_effect(drinking_effect)
 			play_character_animation(drinking_animation)
+		Utils.Behaviour.BUILDING:
+			play_effect(building_effect)
+			play_character_animation(building_animation)
 
+func set_sleeping():
+	set_animation(Utils.Behaviour.SLEEPING, Utils.WalkingDirection.DEFAULT)
+
+func set_eating():
+	set_animation(Utils.Behaviour.EATING, Utils.WalkingDirection.DEFAULT)
+
+func set_drinking():
+	set_animation(Utils.Behaviour.DRINKING, Utils.WalkingDirection.DEFAULT)
+
+func set_normal():
+	set_animation(Utils.Behaviour.IDLE, Utils.WalkingDirection.DEFAULT)
+
+func set_building():
+	set_animation(Utils.Behaviour.BUILDING, Utils.WalkingDirection.DEFAULT)
 
 func set_behaviour(my_behaviour: Utils.Behaviour) -> void:
 	set_animation(my_behaviour, walking_direction)

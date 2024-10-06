@@ -23,6 +23,7 @@ enum Behaviour {
 	SLEEPING,
 	EATING,
 	DRINKING,
+	BUILDING,
 }
 
 enum CursorType {

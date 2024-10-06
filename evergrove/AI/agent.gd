@@ -87,7 +87,7 @@ func _on_ai_tick():
 		registered_as_taskless = true
 		return
 	
-	var task = tasks.front()
+	var task: Task = tasks.front()
 	
 	match task.type:
 		ai_globals.TASK_TYPE.MOVE_TO:
@@ -100,11 +100,17 @@ func _on_ai_tick():
 				print("Agent "+str(self)+" moving to task location "+str(task.location))
 				working_on_task = true
 			elif Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) < 1.0 and  working_on_task:
-					if task.has_callback:
-						task.callback.call()
-					tasks.pop_front()
-					print("Agent "+str(self)+" reached task location")
-					working_on_task = false
+					if task.waiting_time <= 0:
+						if task.has_callback:
+							task.callback.call(self.get_parent())
+						tasks.pop_front()
+						print("Agent "+str(self)+" reached task location")
+						working_on_task = false
+					elif !task.running: 
+						task.running = true
+						task.waining_callback.call(self.get_parent())
+					else:
+						task.waiting_time -= 1
 		ai_globals.TASK_TYPE.SLEEP:
 			if task.location.invalid:
 				print("Agent "+str(self)+" unable to do sleep task, target invalid (probably no energy hub exists)")
@@ -119,14 +125,16 @@ func _on_ai_tick():
 			elif Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) < 1.0 and working_on_task:
 				#print("Agent "+str(self)+" reached task location")
 				if energy < DEFAULT_ENERGY:
+					self.get_parent().set_sleeping()
 					if energy + ENERGY_RECHARGE_PER_TICK >= DEFAULT_ENERGY:
 						energy = DEFAULT_ENERGY
 						if task.has_callback:
-							task.callback.call()
+							task.callback.call(self.get_parent())
 						tasks.pop_front()
 						recharge_energy_queued = false
 						working_on_task = false
 						accepting_tasks = true
 						zero_energy_mode = false
+						self.get_parent().set_normal()
 					else:
 						energy += ENERGY_RECHARGE_PER_TICK

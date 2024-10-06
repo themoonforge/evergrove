@@ -237,7 +237,7 @@ func handle_cursor(event: InputEvent):
 					marker.z_index = 100
 					marker.position = select_cursor.position
 
-					var remove_callback: Callable = func ():
+					var remove_callback: Callable = func (dwarf):
 						print("callback!!!!")
 						marker.queue_free()
 

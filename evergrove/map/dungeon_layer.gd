@@ -91,9 +91,13 @@ func build_building(building_type: Utils.BuildingType, my_position: Vector2, til
 	for tile in tiles.keys():
 		blocked_space[tile] = true
 	
-	var build_callback: Callable = func ():
+	var build_callback: Callable = func (dwarf):
 		print("callback!!!!")
 		building.set_is_build(true)
+		dwarf.set_normal()
 
-	var task: Task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "", 0, ai_globals.Location.create(tiles.keys()[4], level), build_callback)
+	var waiting_callback: Callable = func (dwarf):
+		dwarf.set_building()
+
+	var task: Task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "", 0, ai_globals.Location.create(tiles.keys()[4], level), build_callback, waiting_callback, 4)
 	ai_globals.hivemind.add_task(task, true)
