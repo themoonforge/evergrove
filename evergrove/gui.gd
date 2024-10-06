@@ -40,7 +40,7 @@ func _on_spawn_energy_hub_button_pressed():
 	var dungeon_layer_index = 0 # TODO use correct dungeon  layer
 	var position = spawn_position # TODO use correct position
 	
-	var dungeon_layer = world.get_child(dungeon_layer_index)
+	var dungeon_layer = world.tile_maps[dungeon_layer_index]
 	var hub_container = dungeon_layer.hub_container
 	
 	var energy_hub = preload("res://hubs/EnergyHub.tscn").instantiate()
