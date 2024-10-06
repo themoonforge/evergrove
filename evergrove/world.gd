@@ -249,6 +249,13 @@ func handle_cursor(event: InputEvent):
 					else:
 						var pos = visible_tile_map.local_to_map(get_global_mouse_position())
 						mine_tile(pos, visible_level)
+			if is_active_debug_input && event is InputEventKey:
+				if event.pressed:
+					if event.keycode == KEY_G:
+						var dwarf = game_state.selected_dwarf
+						var next_point: Vector2 = get_nearest_building(Utils.BuildingType.FOOD, dwarf.current_position, dwarf.current_level)
+						if next_point:
+							dwarf.walk_to(Vector2i(next_point.x, next_point.y))
 		CursorType.BUILD:
 			var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
 			build_cursor.set_tile(tile_position)
@@ -379,6 +386,8 @@ func build_building(building_type: Utils.BuildingType, my_position: Vector2, til
 	for tile in tiles.keys():
 		var key = get_unique_id(tile, level)
 		astar.remove_point(key)
+
+	set_cursor_type(CursorType.SELECT)
 
 func get_nearest_building(type: Utils.BuildingType, pos: Vector2i, level: int = visible_level):
 	var tile_map = tile_maps[level]

@@ -303,11 +303,17 @@ func _process(delta):
 			if walking_path.size() == 0:
 				set_animation(Utils.Behaviour.IDLE, Utils.WalkingDirection.DEFAULT)
 
-func walk_to(target: Vector2, level: int) -> void:
+func walk_to(target: Vector2, level: int = current_level) -> Vector3i:
 	print("walk_to")
 	if (walking_path.size() > 0):
 		print("Already walking")
+
+	var id = world.astar.get_closest_point(Vector3(target.x, target.y, level))
+	var target_point: Vector3 = world.astar.get_point_position(id)
+
 	var current_key = world.get_unique_id(current_position, current_level)
-	var target_key = world.get_unique_id(target, level)
+	var target_key = world.get_unique_id(Vector2(target_point.x, target_point.y), target_point.z)
 	var path = world.astar.get_point_path(current_key, target_key)
 	walking_path = path
+
+	return Vector3i(target_point.x, target_point.y, target_point.z)
