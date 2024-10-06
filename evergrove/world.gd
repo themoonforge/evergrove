@@ -286,6 +286,8 @@ func create_poit(pos: Vector2i, level: int, cost: float):
 	var key = get_unique_id(pos, level)
 	if (!astar.has_point(key)):
 		astar.add_point(key, Vector3(pos.x, pos.y, level), cost)
+	else :
+		astar.set_point_weight_scale(key, cost)
 
 func connect_adjacent_tiles(pos: Vector2i, level: int):
 	var directions = [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]

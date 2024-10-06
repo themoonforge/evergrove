@@ -74,7 +74,6 @@ script = ExtResource("1_bwmuh")
 [node name="World" type="Node2D" parent="."]
 texture_filter = 1
 script = ExtResource("1_2rb77")
-is_generating_fog_of_war = false
 
 [node name="TileCursor" type="Sprite2D" parent="World"]
 visible = false
