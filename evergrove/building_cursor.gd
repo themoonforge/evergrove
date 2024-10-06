@@ -71,6 +71,7 @@ func set_tile(pos: Vector2i) -> void:
 	var new_coords = world.visible_tile_map.map_to_local(new_pos)
 	var offset = Vector2(-Utils.TILE_SIZE_HALF, -Utils.TILE_SIZE_HALF)
 	position = new_coords + offset
+	tiles = my_tiles
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
