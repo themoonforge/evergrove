@@ -6,8 +6,11 @@ const Utils = preload("../Utils.gd")
 
 @export var current_dungeon_layer: DungeonLayer
 
-@onready var character_animator: AnimatedSprite2D = $"./CharacterAnimator"
 @onready var effect_animator: AnimatedSprite2D = $"./EffectAnimator"
+
+var body_animator: AnimatedSprite2D
+var clothing_animator: AnimatedSprite2D
+var hair_animator: AnimatedSprite2D
 
 @onready var game_state: GameState = $"/root/Game/GameState"
 @onready var world: World = $"/root/Game/World"
@@ -20,15 +23,16 @@ const Utils = preload("../Utils.gd")
 @export var current_position: Vector2i = Vector2i(0, 0)
 @export var view_range: int = 3
 
-const idle_animation = "default"
+const idle_animation = "idle"
 const sleeping_animation = idle_animation
 const eating_animation = idle_animation
+const drinking_animation = idle_animation
 
-const walking_front_animation = "walk_front"
-const walking_back_animation = "walk_back"
-const walking_left_animation = "walk_left"
-const walking_right_animation = "walk_right"
-const walking_default_animation = "default"
+const walking_front_animation = "front"
+const walking_back_animation = "back"
+const walking_left_animation = "left"
+const walking_right_animation = "right"
+const walking_default_animation = "idle"
 
 const swiming_front_animation = walking_front_animation
 const swiming_back_animation = walking_back_animation
@@ -44,28 +48,12 @@ const mining_default_animation = walking_default_animation
 
 const mining_effect = "mining_effect"
 const eating_effect = "eating_effect"
+const drinking_effect = "drinking_effect"
 const sleeping_effect = "sleeping_effect"
 
-enum WalkingDirection {
-	FRONT,
-	BACK,
-	LEFT,
-	RIGHT,
-	DEFAULT
-}
-
-enum Behaviour {
-	IDLE,
-	WALKING,
-	SWIMMING,
-	MINING,
-	SLEEPING,
-	EATING,
-}
-
-var typ: DwarfType
-var skin: DwarfSkin
-var hair: DwarfType
+@export var type: DwarfType
+@export var skin: DwarfSkin
+@export var hair: DwarfHair
 
 enum DwarfType {
 	THICC,
@@ -81,7 +69,7 @@ enum DwarfSkin {
 enum DwarfHair {
 	NONE,
 	PIGTAILS,
-	IRO
+	#IRO
 }
 
 func set_current_position(my_position: Vector2i, level: int, force: bool = false) -> void:
@@ -92,6 +80,50 @@ func set_current_position(my_position: Vector2i, level: int, force: bool = false
 	current_dungeon_layer.clear_fow(my_position, view_range)
 
 func _ready():
+	var rng = RandomNumberGenerator.new()
+	rng.randi_range(0, 1)
+	#var random_type = rng.randi_range(0, 1)
+	var random_type = 1
+	match random_type:
+		0:
+			type = DwarfType.THICC
+		1:
+			type = DwarfType.THIN
+	
+	var random_skin = rng.randi_range(0, 2)
+	match random_skin:
+		0:
+			skin = DwarfSkin.LIGHT
+		1:
+			skin = DwarfSkin.MEDIUM
+		2:
+			skin = DwarfSkin.DARK	
+	
+	var random_hair = rng.randi_range(0, 1)
+	match random_hair:
+		0:
+			hair = DwarfHair.NONE
+		1:
+			hair = DwarfHair.PIGTAILS
+		#2:
+		#	hair = DwarfHair.IRO	
+
+	match type:
+		DwarfType.THICC:
+			walking_speed = 75.0
+			var base = $"./ThiccBase"
+			base.visible = true
+			hair_animator = $"./ThiccBase/Hair"
+			body_animator = $"./ThiccBase/Body"
+			clothing_animator = $"./ThiccBase/Clothing"
+		DwarfType.THIN:
+			walking_speed = 100.0
+			var base = $"./ThinBase"
+			base.visible = true
+			hair_animator = $"./ThinBase/Hair"
+			body_animator = $"./ThinBase/Body"
+			clothing_animator = $"./ThinBase/Clothing"
+
 	# TODO retrieve walking direction and call play on animated sprite
 	# this is just an example how to call animations
 	# instantiate AI controller
@@ -110,6 +142,30 @@ func stop_animation(animator: AnimatedSprite2D) -> void:
 		animator.stop()
 		animator.visible = false
 
+func play_character_animation(animation: String) -> void:
+	var body_animation_name = ""
+	match skin:
+		DwarfSkin.LIGHT:
+			body_animation_name = "light_%s" % [animation]
+		DwarfSkin.MEDIUM:
+			body_animation_name = "medium_%s" % [animation]
+		DwarfSkin.DARK:
+			body_animation_name = "dark_%s" % [animation]
+
+	var clothing_animation_name = animation
+
+	var hair_animation_name = ""
+
+	match hair:
+		DwarfHair.NONE:
+			hair_animation_name = "none_%s" % [animation]
+		DwarfHair.PIGTAILS:
+			hair_animation_name = "pigtails_base_%s" % [animation]
+	
+	play_animation(body_animator, body_animation_name)
+	play_animation(clothing_animator, clothing_animation_name)
+	play_animation(hair_animator, hair_animation_name)
+
 func set_animation(my_behaviour: Utils.Behaviour, my_walking_direction: Utils.WalkingDirection) -> void:
 	if behaviour == my_behaviour && walking_direction == my_walking_direction:
 		return	
@@ -119,53 +175,56 @@ func set_animation(my_behaviour: Utils.Behaviour, my_walking_direction: Utils.Wa
 	
 	match behaviour:
 		Utils.Behaviour.IDLE:
-			play_animation(character_animator, idle_animation)
+			play_character_animation(idle_animation)
 			stop_animation(effect_animator)
 		Utils.Behaviour.WALKING:
 			stop_animation(effect_animator)
 			match walking_direction:
 				Utils.WalkingDirection.FRONT:
-					play_animation(character_animator, walking_front_animation)
+					play_character_animation(walking_front_animation)
 				Utils.WalkingDirection.BACK:
-					play_animation(character_animator, walking_back_animation)
+					play_character_animation(walking_back_animation)
 				Utils.WalkingDirection.LEFT:
-					play_animation(character_animator, walking_left_animation)
+					play_character_animation(walking_left_animation)
 				Utils.WalkingDirection.RIGHT:
-					play_animation(character_animator, walking_right_animation)
+					play_character_animation(walking_right_animation)
 				Utils.WalkingDirection.DEFAULT:
-					play_animation(character_animator, walking_default_animation)
+					play_character_animation(walking_default_animation)
 		Utils.Behaviour.SWIMMING:
 			stop_animation(effect_animator)
 			match walking_direction:
 				Utils.WalkingDirection.FRONT:
-					play_animation(character_animator, swiming_front_animation)
+					play_character_animation(swiming_front_animation)
 				Utils.WalkingDirection.BACK:
-					play_animation(character_animator, swiming_back_animation)
+					play_character_animation(swiming_back_animation)
 				Utils.WalkingDirection.LEFT:
-					play_animation(character_animator, swiming_left_animation)
+					play_character_animation(swiming_left_animation)
 				Utils.WalkingDirection.RIGHT:
-					play_animation(character_animator, swiming_right_animation)
+					play_character_animation(swiming_right_animation)
 				Utils.WalkingDirection.DEFAULT:
-					play_animation(character_animator, swiming_default_animation)
+					play_character_animation(swiming_default_animation)
 		Utils.Behaviour.MINING:
 			play_animation(effect_animator, mining_effect)
 			match walking_direction:
 				Utils.WalkingDirection.FRONT:
-					play_animation(character_animator, mining_front_animation)
+					play_character_animation(mining_front_animation)
 				Utils.WalkingDirection.BACK:
-					play_animation(character_animator, mining_back_animation)
+					play_character_animation(mining_back_animation)
 				Utils.WalkingDirection.LEFT:
-					play_animation(character_animator, mining_left_animation)
+					play_character_animation(mining_left_animation)
 				Utils.WalkingDirection.RIGHT:
-					play_animation(character_animator, mining_right_animation)
+					play_character_animation(mining_right_animation)
 				Utils.WalkingDirection.DEFAULT:
-					play_animation(character_animator, mining_default_animation)
+					play_character_animation(mining_default_animation)
 		Utils.Behaviour.SLEEPING:
 			play_animation(effect_animator, sleeping_effect)
-			play_animation(character_animator, sleeping_animation)
+			play_character_animation(sleeping_animation)
 		Utils.Behaviour.EATING:
 			play_animation(effect_animator, eating_effect)
-			play_animation(character_animator, eating_animation)
+			play_character_animation(eating_animation)
+		Utils.Behaviour.DRINKING:
+			play_animation(effect_animator, drinking_effect)
+			play_character_animation(drinking_animation)
 
 
 func set_behaviour(my_behaviour: Utils.Behaviour) -> void:

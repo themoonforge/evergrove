@@ -1,15 +1,6 @@
-[gd_scene load_steps=59 format=3 uid="uid://b5heo41rpqdo0"]
+[gd_scene load_steps=54 format=3 uid="uid://b5heo41rpqdo0"]
 
 [ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
-[ext_resource type="Texture2D" uid="uid://d1jiavfxbpic1" path="res://dwarf/dwarf.png" id="2_7ed72"]
-[ext_resource type="Texture2D" uid="uid://c3qug34soco3i" path="res://dwarf/back_0.png" id="3_5rjk2"]
-[ext_resource type="Texture2D" uid="uid://boei8s4qktt6w" path="res://dwarf/back_1.png" id="4_4wrki"]
-[ext_resource type="Texture2D" uid="uid://dfvoiyf1hxiwt" path="res://dwarf/front_0.png" id="5_jsqe2"]
-[ext_resource type="Texture2D" uid="uid://bnmbfb0f5uip8" path="res://dwarf/front_1.png" id="6_7lq7b"]
-[ext_resource type="Texture2D" uid="uid://by0gpmxu2jh1i" path="res://dwarf/left_0.png" id="7_525k3"]
-[ext_resource type="Texture2D" uid="uid://cr2plkw5xnbi3" path="res://dwarf/left_1.png" id="8_0vncw"]
-[ext_resource type="Texture2D" uid="uid://bibahjkkw2ys6" path="res://dwarf/right_0.png" id="9_5vjde"]
-[ext_resource type="Texture2D" uid="uid://srptwyredqai" path="res://dwarf/right_1.png" id="10_fsbmi"]
 [ext_resource type="Texture2D" uid="uid://b8jxq8w84erhi" path="res://dwarf/thin/body/dark/skin_dark_back1.png" id="11_ij5fv"]
 [ext_resource type="Texture2D" uid="uid://dgkess8617lsv" path="res://dwarf/thin/body/dark/skin_dark_back2.png" id="12_gqev8"]
 [ext_resource type="Texture2D" uid="uid://dy0cswxix762c" path="res://dwarf/thin/body/dark/skin_dark_front1.png" id="13_0tbkm"]
@@ -50,64 +41,14 @@
 [ext_resource type="Texture2D" uid="uid://damfdrvwgguem" path="res://dwarf/thin/hair/pigtails_base_left2.png" id="48_1k3m5"]
 [ext_resource type="Texture2D" uid="uid://c0obw7pa2kehk" path="res://dwarf/thin/hair/pigtails_base_right1.png" id="49_bv2bn"]
 [ext_resource type="Texture2D" uid="uid://dg4s7vsbkqcbi" path="res://dwarf/thin/hair/pigtails_base_right2.png" id="50_bnb1r"]
-[ext_resource type="Texture2D" uid="uid://inm3k1w0cnk" path="res://dwarf/dust/dust1.png" id="51_odk3u"]
-[ext_resource type="Texture2D" uid="uid://bisjwwocnk0ic" path="res://dwarf/dust/dust2.png" id="52_hp4v7"]
-[ext_resource type="Texture2D" uid="uid://wlufure3rfcb" path="res://dwarf/dust/dust3.png" id="53_v265o"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_rwkfb"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_7ed72")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_5rjk2")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_4wrki")
-}],
-"loop": true,
-"name": &"walk_back",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("5_jsqe2")
-}, {
-"duration": 1.0,
-"texture": ExtResource("6_7lq7b")
-}],
-"loop": true,
-"name": &"walk_front",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("7_525k3")
-}, {
-"duration": 1.0,
-"texture": ExtResource("8_0vncw")
-}],
-"loop": true,
-"name": &"walk_left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("9_5vjde")
-}, {
-"duration": 1.0,
-"texture": ExtResource("10_fsbmi")
-}],
-"loop": true,
-"name": &"walk_right",
-"speed": 5.0
-}]
+[ext_resource type="Texture2D" uid="uid://jp56uc3l0g6q" path="res://dwarf/beer/beer1.png" id="51_epq61"]
+[ext_resource type="Texture2D" uid="uid://dtp6gtdaufklt" path="res://dwarf/beer/beer2.png" id="52_8lj4m"]
+[ext_resource type="Texture2D" uid="uid://b6jkkm4lent4" path="res://dwarf/food/food1.png" id="53_tupv2"]
+[ext_resource type="Texture2D" uid="uid://cocq3eyna4ea7" path="res://dwarf/food/food2.png" id="54_2ggct"]
+[ext_resource type="Texture2D" uid="uid://bh5ikmwcyi8c7" path="res://dwarf/pickaxe/pickaxe1.png" id="55_qm2om"]
+[ext_resource type="Texture2D" uid="uid://qebsctgxrso0" path="res://dwarf/pickaxe/pickaxe2.png" id="56_rfcbn"]
+[ext_resource type="Texture2D" uid="uid://dg7gg5ic02bg8" path="res://dwarf/energy/energy1.png" id="57_vldmd"]
+[ext_resource type="Texture2D" uid="uid://dkm4b0l610pc3" path="res://dwarf/energy/energy2.png" id="58_uco67"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_04c1a"]
 animations = [{
@@ -133,7 +74,13 @@ animations = [{
 "name": &"dark_front",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_0tbkm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_6gxbi")
+}],
 "loop": true,
 "name": &"dark_idle",
 "speed": 5.0
@@ -184,6 +131,17 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("21_cboyo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_2ysa2")
+}],
+"loop": true,
+"name": &"light_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("23_vt0gu")
 }, {
 "duration": 1.0,
@@ -224,6 +182,17 @@ animations = [{
 }],
 "loop": true,
 "name": &"medium_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_itxlu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_xbgxf")
+}],
+"loop": true,
+"name": &"medium_idle",
 "speed": 5.0
 }, {
 "frames": [{
@@ -273,7 +242,13 @@ animations = [{
 "name": &"front",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_3dyp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_px4bl")
+}],
 "loop": true,
 "name": &"idle",
 "speed": 5.0
@@ -323,6 +298,31 @@ animations = [{
 "name": &"iro_grey",
 "speed": 5.0
 }, {
+"frames": [],
+"loop": true,
+"name": &"none_back",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"none_front",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"none_idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"none_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"none_right",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("43_0po0j")
@@ -343,6 +343,17 @@ animations = [{
 }],
 "loop": true,
 "name": &"pigtails_base_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_ksf8u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_10qqo")
+}],
+"loop": true,
+"name": &"pigtails_base_idle",
 "speed": 5.0
 }, {
 "frames": [{
@@ -387,13 +398,21 @@ animations = [{
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("51_odk3u")
+"texture": ExtResource("51_epq61")
 }, {
 "duration": 1.0,
-"texture": ExtResource("52_hp4v7")
+"texture": ExtResource("52_8lj4m")
+}],
+"loop": true,
+"name": &"drinking_effect",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("53_tupv2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("53_v265o")
+"texture": ExtResource("54_2ggct")
 }],
 "loop": true,
 "name": &"eating_effect",
@@ -401,13 +420,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("51_odk3u")
+"texture": ExtResource("55_qm2om")
 }, {
 "duration": 1.0,
-"texture": ExtResource("52_hp4v7")
-}, {
-"duration": 1.0,
-"texture": ExtResource("53_v265o")
+"texture": ExtResource("56_rfcbn")
 }],
 "loop": true,
 "name": &"mining_effect",
@@ -415,13 +431,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("51_odk3u")
+"texture": ExtResource("57_vldmd")
 }, {
 "duration": 1.0,
-"texture": ExtResource("52_hp4v7")
-}, {
-"duration": 1.0,
-"texture": ExtResource("53_v265o")
+"texture": ExtResource("58_uco67")
 }],
 "loop": true,
 "name": &"sleeping_effect",
@@ -432,10 +445,6 @@ animations = [{
 texture_filter = 1
 script = ExtResource("1_c3sis")
 
-[node name="CharacterAnimator" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -9)
-sprite_frames = SubResource("SpriteFrames_rwkfb")
-
 [node name="ThinBase" type="Node2D" parent="."]
 visible = false
 y_sort_enabled = true
@@ -444,17 +453,17 @@ position = Vector2(0, -9)
 [node name="Body" type="AnimatedSprite2D" parent="ThinBase"]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_04c1a")
-animation = &"medium_right"
+animation = &"medium_idle"
 
 [node name="Clothing" type="AnimatedSprite2D" parent="ThinBase"]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_aelkk")
-animation = &"right"
+animation = &"idle"
 
 [node name="Hair" type="AnimatedSprite2D" parent="ThinBase"]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_gi7fk")
-animation = &"pigtails_base_right"
+animation = &"none_right"
 
 [node name="ThiccBase" type="Node2D" parent="."]
 visible = false
@@ -468,6 +477,6 @@ visible = false
 [node name="EffectAnimator" type="AnimatedSprite2D" parent="."]
 visible = false
 z_index = 1
-position = Vector2(0, -17)
+position = Vector2(0, -27)
 sprite_frames = SubResource("SpriteFrames_cignr")
-animation = &"sleeping_effect"
+animation = &"drinking_effect"

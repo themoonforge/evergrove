@@ -22,4 +22,5 @@ enum Behaviour {
 	MINING,
 	SLEEPING,
 	EATING,
+	DRINKING,
 }
