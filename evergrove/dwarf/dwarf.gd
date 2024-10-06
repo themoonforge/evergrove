@@ -7,6 +7,7 @@ const Utils = preload("../Utils.gd")
 @export var current_dungeon_layer: DungeonLayer
 
 @onready var effect_animator: AnimatedSprite2D = $"./EffectAnimator"
+@onready var action_effect_animator: AnimatedSprite2D = $"./ActionEffectAnimator"
 
 var body_animator: AnimatedSprite2D
 var clothing_animator: AnimatedSprite2D
@@ -72,6 +73,8 @@ enum DwarfHair {
 	#IRO
 }
 
+@export var action_effect_animator_position: Vector2
+
 func set_current_position(my_position: Vector2i, level: int, force: bool = false) -> void:
 	if !force && current_position == my_position && current_level == level:
 		return
@@ -80,6 +83,7 @@ func set_current_position(my_position: Vector2i, level: int, force: bool = false
 	current_dungeon_layer.clear_fow(my_position, view_range)
 
 func _ready():
+	action_effect_animator_position = action_effect_animator.position
 	var rng = RandomNumberGenerator.new()
 	rng.randi_range(0, 1)
 	#var random_type = rng.randi_range(0, 1)
@@ -157,6 +161,26 @@ func stop_animation(animator: AnimatedSprite2D) -> void:
 		animator.stop()
 		animator.visible = false
 
+func play_effect(animation: String) -> void:
+	play_animation(effect_animator, animation)
+	play_animation(action_effect_animator, animation)
+
+	match walking_direction:
+		Utils.WalkingDirection.FRONT:
+			action_effect_animator.position = action_effect_animator_position + Vector2(0, -Utils.TILE_SIZE_HALF)
+		Utils.WalkingDirection.BACK:
+			action_effect_animator.position = action_effect_animator_position + Vector2(0, Utils.TILE_SIZE_HALF)
+		Utils.WalkingDirection.LEFT:
+			action_effect_animator.position = action_effect_animator_position + Vector2(-Utils.TILE_SIZE_HALF, 0)
+		Utils.WalkingDirection.RIGHT:
+			action_effect_animator.position = action_effect_animator_position + Vector2(Utils.TILE_SIZE_HALF, 0)
+		Utils.WalkingDirection.DEFAULT:
+			action_effect_animator.position = action_effect_animator_position
+
+func stop_effect() -> void:
+	stop_animation(effect_animator)
+	stop_animation(action_effect_animator)
+
 func play_character_animation(animation: String) -> void:
 	var body_animation_name = ""
 	match skin:
@@ -191,9 +215,9 @@ func set_animation(my_behaviour: Utils.Behaviour, my_walking_direction: Utils.Wa
 	match behaviour:
 		Utils.Behaviour.IDLE:
 			play_character_animation(idle_animation)
-			stop_animation(effect_animator)
+			stop_effect()
 		Utils.Behaviour.WALKING:
-			stop_animation(effect_animator)
+			stop_effect()
 			match walking_direction:
 				Utils.WalkingDirection.FRONT:
 					play_character_animation(walking_front_animation)
@@ -206,7 +230,7 @@ func set_animation(my_behaviour: Utils.Behaviour, my_walking_direction: Utils.Wa
 				Utils.WalkingDirection.DEFAULT:
 					play_character_animation(walking_default_animation)
 		Utils.Behaviour.SWIMMING:
-			stop_animation(effect_animator)
+			stop_effect()
 			match walking_direction:
 				Utils.WalkingDirection.FRONT:
 					play_character_animation(swiming_front_animation)
@@ -219,7 +243,7 @@ func set_animation(my_behaviour: Utils.Behaviour, my_walking_direction: Utils.Wa
 				Utils.WalkingDirection.DEFAULT:
 					play_character_animation(swiming_default_animation)
 		Utils.Behaviour.MINING:
-			play_animation(effect_animator, mining_effect)
+			play_effect(mining_effect)
 			match walking_direction:
 				Utils.WalkingDirection.FRONT:
 					play_character_animation(mining_front_animation)
@@ -232,13 +256,13 @@ func set_animation(my_behaviour: Utils.Behaviour, my_walking_direction: Utils.Wa
 				Utils.WalkingDirection.DEFAULT:
 					play_character_animation(mining_default_animation)
 		Utils.Behaviour.SLEEPING:
-			play_animation(effect_animator, sleeping_effect)
+			play_effect(sleeping_effect)
 			play_character_animation(sleeping_animation)
 		Utils.Behaviour.EATING:
-			play_animation(effect_animator, eating_effect)
+			play_effect(eating_effect)
 			play_character_animation(eating_animation)
 		Utils.Behaviour.DRINKING:
-			play_animation(effect_animator, drinking_effect)
+			play_effect(drinking_effect)
 			play_character_animation(drinking_animation)
 
 

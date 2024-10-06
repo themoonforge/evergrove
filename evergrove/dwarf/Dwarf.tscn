@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://b5heo41rpqdo0"]
+[gd_scene load_steps=60 format=3 uid="uid://b5heo41rpqdo0"]
 
 [ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
 [ext_resource type="Texture2D" uid="uid://cl6nkkxoir3uu" path="res://dwarf/shadow.png" id="2_jrrhj"]
@@ -44,8 +44,11 @@
 [ext_resource type="Texture2D" uid="uid://dg4s7vsbkqcbi" path="res://dwarf/thin/hair/pigtails_base_right2.png" id="50_bnb1r"]
 [ext_resource type="Texture2D" uid="uid://h1idmsb2ertm" path="res://dwarf/light.png" id="51_d1oub"]
 [ext_resource type="Texture2D" uid="uid://jp56uc3l0g6q" path="res://dwarf/beer/beer1.png" id="51_epq61"]
+[ext_resource type="Texture2D" uid="uid://inm3k1w0cnk" path="res://dwarf/dust/dust1.png" id="51_odk3u"]
 [ext_resource type="Texture2D" uid="uid://dtp6gtdaufklt" path="res://dwarf/beer/beer2.png" id="52_8lj4m"]
+[ext_resource type="Texture2D" uid="uid://bisjwwocnk0ic" path="res://dwarf/dust/dust2.png" id="52_hp4v7"]
 [ext_resource type="Texture2D" uid="uid://b6jkkm4lent4" path="res://dwarf/food/food1.png" id="53_tupv2"]
+[ext_resource type="Texture2D" uid="uid://wlufure3rfcb" path="res://dwarf/dust/dust3.png" id="53_v265o"]
 [ext_resource type="Texture2D" uid="uid://cocq3eyna4ea7" path="res://dwarf/food/food2.png" id="54_2ggct"]
 [ext_resource type="Texture2D" uid="uid://bh5ikmwcyi8c7" path="res://dwarf/pickaxe/pickaxe1.png" id="55_qm2om"]
 [ext_resource type="Texture2D" uid="uid://qebsctgxrso0" path="res://dwarf/pickaxe/pickaxe2.png" id="56_rfcbn"]
@@ -398,6 +401,11 @@ animations = [{
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_cignr"]
 animations = [{
+"frames": [],
+"loop": true,
+"name": &"building_effect",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("51_epq61")
@@ -438,6 +446,43 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("58_uco67")
 }],
+"loop": true,
+"name": &"sleeping_effect",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nmf58"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"building_effect",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"drinking_effect",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"eating_effect",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_odk3u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_hp4v7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_v265o")
+}],
+"loop": true,
+"name": &"mining_effect",
+"speed": 5.0
+}, {
+"frames": [],
 "loop": true,
 "name": &"sleeping_effect",
 "speed": 5.0
@@ -487,9 +532,9 @@ visible = false
 
 [node name="EffectAnimator" type="AnimatedSprite2D" parent="."]
 visible = false
-z_index = 1
+z_index = 2
 sprite_frames = SubResource("SpriteFrames_cignr")
-animation = &"drinking_effect"
+animation = &"building_effect"
 offset = Vector2(0, -27)
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
@@ -500,3 +545,11 @@ energy = 0.64
 range_z_min = -1023
 range_z_max = 100
 texture = ExtResource("51_d1oub")
+
+[node name="ActionEffectAnimator" type="AnimatedSprite2D" parent="."]
+visible = false
+z_index = 1
+position = Vector2(1, 22)
+sprite_frames = SubResource("SpriteFrames_nmf58")
+animation = &"mining_effect"
+offset = Vector2(0, -27)
