@@ -5,6 +5,7 @@ extends CanvasLayer
 
 @export var spawn_position:Vector2i
 
+@onready var level_label: Label = $"./VFlowContainer/LevelLabel"
 @onready var dirt_label: Label = $"./VFlowContainer/DirtLabel"
 @onready var stone_label: Label = $"./VFlowContainer/StoneLabel"
 @onready var iron_label: Label = $"./VFlowContainer/IronLabel"
@@ -13,7 +14,6 @@ extends CanvasLayer
 @onready var micel_label: Label = $"./VFlowContainer/MicelLabel"
 @onready var water_label: Label = $"./VFlowContainer/WaterLabel"
 @onready var dwarf_label: Label = $"./VFlowContainer/DwarfLabel"
-@onready var level_label: Label = $"./VFlowContainer/LevelLabel"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -73,5 +73,5 @@ func set_label_micel(value: String) -> void:
 func set_label_dwarf(value: String) -> void:
 	dwarf_label.text = "Dwarf: %s" % [value]
 
-func set_lavel_current_level(value: String) -> void:
-	dwarf_label.text = "Level: %s" % [value]
+func set_label_current_level(value: String) -> void:
+	level_label.text = "Level: %s" % [value]

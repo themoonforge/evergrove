@@ -15,6 +15,8 @@ class_name GameState
 @export var water = 0
 @export var micel = 0
 
+@export var dwarfs = 0
+
 @export var wealth = 0
 
 @export var current_level = 0
@@ -71,7 +73,11 @@ func set_wealth(value: int) -> void:
 
 func set_current_level(value: int) -> void:
 	current_level = value
-	gui.set_lavel_current_level(str(current_level))
+	gui.set_label_current_level(str(current_level))
+
+func set_dwarfs(value: int) -> void:
+	dwarfs = value
+	gui.set_label_dwarf(str(dwarfs))
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -85,7 +91,7 @@ func _ready() -> void:
 	set_water(0)
 	set_micel(0)
 	set_iron(0)
-	pass # Replace with function body.
+	set_dwarfs(0)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

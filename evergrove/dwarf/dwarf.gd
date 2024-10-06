@@ -37,6 +37,7 @@ func _ready():
 	# instantiate AI controller
 	add_child(Agent.create())
 	game_state.selected_dwarf = self
+	game_state.set_dwarfs(game_state.dwarfs + 1)
 
 func set_walking_direction(direction: WalkingDirection) -> void:
 	if walking_direction == direction:
