@@ -46,7 +46,7 @@ const Utils = preload("./Utils.gd")
 
 func set_building_type(type: Utils.BuildingType) -> void:
 	building_type = type
-	hub.init(type)
+	hub.init(type, {}, null)
 
 func set_tile(pos: Vector2i) -> void:
 	indicator.clear()

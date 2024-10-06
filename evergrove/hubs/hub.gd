@@ -12,7 +12,29 @@ const Utils = preload("../Utils.gd")
 
 @export var tiles: Dictionary
 
-func init(my_type: Utils.BuildingType, my_tiles: Dictionary = {}): 
+@export var is_build: bool = false
+
+@export var tile_map: DungeonLayer
+
+func set_is_build(my_is_build: bool) -> void:
+	is_build = my_is_build
+
+	if is_build:
+		self.modulate.a = 1
+
+		for tile in tiles.keys():
+			var key = tile_map.world.get_unique_id(tile, tile_map.level)
+			match type:
+				Utils.BuildingType.BEER:
+					tile_map.beer_astar.add_point(key, tile)
+				Utils.BuildingType.ENERGY:
+					tile_map.energy_astar.add_point(key, tile)
+				Utils.BuildingType.FOOD:
+					tile_map.food_astar.add_point(key, tile)
+	else:
+		self.modulate.a = 0.35
+
+func init(my_type: Utils.BuildingType, my_tiles: Dictionary, my_tile_map): 
 	type = my_type
 	tiles = my_tiles
 	match type:
@@ -37,6 +59,11 @@ func init(my_type: Utils.BuildingType, my_tiles: Dictionary = {}):
 			beer.stop()
 			energy.stop()
 			food.play("default")
+	
+	tile_map = my_tile_map
+	
+	if tile_map:
+		set_is_build(false)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

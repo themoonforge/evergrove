@@ -86,16 +86,14 @@ func build_building(building_type: Utils.BuildingType, my_position: Vector2, til
 	var building: Hub = preload("res://hubs/Hub.tscn").instantiate()
 	hub_container.add_child(building)
 	building.position = my_position
-	building.init(building_type, tiles)
+	building.init(building_type, tiles, self)
 	
 	for tile in tiles.keys():
 		blocked_space[tile] = true
-		var key = world.get_unique_id(tile, level)
-		match building_type:
-			Utils.BuildingType.BEER:
-				beer_astar.add_point(key, tile)
-			Utils.BuildingType.ENERGY:
-				energy_astar.add_point(key, tile)
-			Utils.BuildingType.FOOD:
-				food_astar.add_point(key, tile)
 	
+	var build_callback: Callable = func ():
+		print("callback!!!!")
+		building.set_is_build(true)
+
+	var task: Task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "", 0, ai_globals.Location.create(tiles.keys()[0], level), build_callback)
+	ai_globals.hivemind.add_task(task)
