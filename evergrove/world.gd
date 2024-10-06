@@ -49,12 +49,7 @@ var astar: AStar3D
 
 var sprite_texture = preload("res://cross.png")
 
-enum CursorType {
-	SELECT,
-	BUILD,
-}
-
-@export var cursor_type: CursorType = CursorType.SELECT
+@export var cursor_type: Utils.CursorType = Utils.CursorType.SELECT
 @export var build_type: Utils.BuildingType = Utils.BuildingType.BEER
 
 func _ready():
@@ -83,7 +78,7 @@ func _ready():
 	var start_map = tile_maps[0]
 	set_air_around_tile(start_map, Vector2i(0, 0), false)
 	set_active_level(0)
-	set_cursor_type(CursorType.SELECT)
+	set_cursor_type(Utils.CursorType.SELECT)
 
 	# 
 	#
@@ -228,15 +223,15 @@ func check_visible_tiles(force: bool = false):
 					update_astarGrid(visible_tile_map, visible_level, pos)
 			#generate_tile(visible_tile_map, Vector2i(x, y))
 
-func set_cursor_type(type: CursorType, build_type: Utils.BuildingType = Utils.BuildingType.BEER):
+func set_cursor_type(type: Utils.CursorType, build_type: Utils.BuildingType = Utils.BuildingType.BEER):
 	cursor_type = type
 	build_cursor.set_building_type(build_type)
-	select_cursor.visible = cursor_type == CursorType.SELECT
-	build_cursor.visible = cursor_type == CursorType.BUILD
+	select_cursor.visible = cursor_type == Utils.CursorType.SELECT
+	build_cursor.visible = cursor_type == Utils.CursorType.BUILD
 
 func handle_cursor(event: InputEvent):
 	match cursor_type:
-		CursorType.SELECT:
+		Utils.CursorType.SELECT:
 			var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
 			select_cursor.position = visible_tile_map.map_to_local(tile_position)
 
@@ -256,7 +251,7 @@ func handle_cursor(event: InputEvent):
 						var next_point: Vector2 = get_nearest_building(Utils.BuildingType.FOOD, dwarf.current_position, dwarf.current_level)
 						if next_point:
 							dwarf.walk_to(Vector2i(next_point.x, next_point.y))
-		CursorType.BUILD:
+		Utils.CursorType.BUILD:
 			var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
 			build_cursor.set_tile(tile_position)
 			if event is InputEventMouseButton:
@@ -274,13 +269,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			elif event.keycode == KEY_E:
 				set_active_level(visible_level + 1)
 			elif event.keycode == KEY_C:
-				set_cursor_type(CursorType.SELECT)
-			elif event.keycode == KEY_F:
-				set_cursor_type(CursorType.BUILD, Utils.BuildingType.FOOD)
-			elif event.keycode == KEY_B:
-				set_cursor_type(CursorType.BUILD, Utils.BuildingType.BEER)
-			elif event.keycode == KEY_P:
-				set_cursor_type(CursorType.BUILD, Utils.BuildingType.ENERGY)
+				set_cursor_type(Utils.CursorType.SELECT)
+			#elif event.keycode == KEY_F:
+				#set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.FOOD)
+			#elif event.keycode == KEY_B:
+				#set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.BEER)
+			#lif event.keycode == KEY_P:
+				#set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.ENERGY)
 
 func create_poit(pos: Vector2i, level: int, cost: float):
 	var key = get_unique_id(pos, level)
@@ -387,7 +382,7 @@ func build_building(building_type: Utils.BuildingType, my_position: Vector2, til
 		var key = get_unique_id(tile, level)
 		astar.remove_point(key)
 
-	set_cursor_type(CursorType.SELECT)
+	set_cursor_type(Utils.CursorType.SELECT)
 
 func get_nearest_building(type: Utils.BuildingType, pos: Vector2i, level: int = visible_level):
 	var tile_map = tile_maps[level]

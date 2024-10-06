@@ -24,3 +24,8 @@ enum Behaviour {
 	EATING,
 	DRINKING,
 }
+
+enum CursorType {
+	SELECT,
+	BUILD,
+}
