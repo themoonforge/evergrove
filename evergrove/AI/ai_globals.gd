@@ -7,3 +7,11 @@ enum AGENT_TYPE {
 
 signal AGENT_CREATED(agent: Agent)
 signal PROCESS_TICK()
+signal AGENT_WITHOUT_TASK(agent:Agent)
+
+enum TASK_TYPE {
+	MOVE_TO,
+	MINE,
+	EAT,
+	SLEEP
+}

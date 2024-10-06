@@ -74,6 +74,7 @@ texture = ExtResource("4_0fr7v")
 script = ExtResource("5_8o8h7")
 
 [node name="AI" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("4_g3tpu")
 
 [connection signal="pressed" from="GUI/VFlowContainer/SpawnDwarfButton" to="GUI" method="_on_spawn_dwarf_button_pressed"]
