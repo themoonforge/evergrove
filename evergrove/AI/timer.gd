@@ -1,6 +1,6 @@
 class_name AI_Timer extends Node
 
-var time_between_ticks_in_seconds: float = 5.0
+var time_between_ticks_in_seconds: float = 0.5
 var timer: Timer = Timer.new()
 
 func _ready() -> void:
