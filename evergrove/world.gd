@@ -215,7 +215,7 @@ func check_visible_tiles(force: bool = false):
 					update_astarGrid(visible_tile_map, visible_level, pos)
 			#generate_tile(visible_tile_map, Vector2i(x, y))
 
-func _input(event):
+func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
 		tile_cursor.position = visible_tile_map.map_to_local(tile_position)

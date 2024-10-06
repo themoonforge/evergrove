@@ -75,6 +75,16 @@ func set_current_level(value: int) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	set_coal(0)
+	set_copper(0)
+	set_dirt(0)
+	set_gem(0)
+	set_gold(0)
+	set_stone(0)
+	set_silver(0)
+	set_water(0)
+	set_micel(0)
+	set_iron(0)
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -12,10 +12,8 @@
 [node name="Game" type="Node2D"]
 script = ExtResource("1_acbsa")
 
-[node name="GameState" type="Node" parent="."]
-script = ExtResource("2_8uhg5")
-
 [node name="GUI" type="CanvasLayer" parent="."]
+process_priority = 1
 script = ExtResource("2_n34sk")
 
 [node name="VFlowContainer" type="VFlowContainer" parent="GUI"]
@@ -56,6 +54,9 @@ layout_mode = 2
 
 [node name="DwarfLabel" type="Label" parent="GUI/VFlowContainer"]
 layout_mode = 2
+
+[node name="GameState" type="Node" parent="."]
+script = ExtResource("2_8uhg5")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("1_bwmuh")

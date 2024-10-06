@@ -27,7 +27,7 @@ func _process(delta):
 		set_my_zoom(zoom.x + zoom_speed)
 		#zoom += Vector2(zoom_speed, zoom_speed)
 
-func _input(event):
+func _unhandled_input(event):
 	# Zoomen der Kamera mit dem Mausrad
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
