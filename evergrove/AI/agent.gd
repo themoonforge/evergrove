@@ -85,8 +85,9 @@ func _on_ai_tick():
 	
 	match tasks.front().type:
 		ai_globals.TASK_TYPE.MOVE_TO:
+			# TODO: do not use Vec3 distance or +- 1 layer might falsely trigger target reached
 			print("Distance to target "+str(Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(tasks.front().location)))
-			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(tasks.front().location) > 1.0:
+			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(tasks.front().location) > 1.0 and not working_on_task:
 				self.get_parent().walk_to(Vector2(tasks.front().location.x, tasks.front().location.y), tasks.front().location.z)
 				print("Agent "+str(self)+" moving to task location "+str(tasks.front().location))
 				working_on_task = true
@@ -95,7 +96,7 @@ func _on_ai_tick():
 				print("Agent "+str(self)+" reached task location")
 				working_on_task = false
 		ai_globals.TASK_TYPE.SLEEP:
-			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(tasks.front().location) > 1.0:
+			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(tasks.front().location) > 1.0 and not working_on_task:
 				self.get_parent().walk_to(Vector2(tasks.front().location.x, tasks.front().location.y), tasks.front().location.z)
 				print("Agent "+str(self)+" moving to task location "+str(tasks.front().location))
 				working_on_task = true
