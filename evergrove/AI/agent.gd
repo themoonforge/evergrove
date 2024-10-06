@@ -87,12 +87,12 @@ func _on_ai_tick():
 	match task.type:
 		ai_globals.TASK_TYPE.MOVE_TO:
 			# TODO: do not use Vec3 distance or +- 1 layer might falsely trigger target reached
-			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y, tasks.front().location.layer)) > 1.0 and not working_on_task:
-				var movement_target:Vector3i = self.get_parent().walk_to(Vector2(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y), tasks.front().location.layer)
-				tasks.front().location.coordinates.x = movement_target.x
-				tasks.front().location.coordinates.y = movement_target.y
-				tasks.front().location.layer = movement_target.z
-				print("Agent "+str(self)+" moving to task location "+str(tasks.front().location))
+			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) > 1.0 and not working_on_task:
+				var movement_target:Vector3i = self.get_parent().walk_to(Vector2(task.location.coordinates.x, task.location.coordinates.y), task.location.layer)
+				task.location.coordinates.x = movement_target.x
+				task.location.coordinates.y = movement_target.y
+				task.location.layer = movement_target.z
+				print("Agent "+str(self)+" moving to task location "+str(task.location))
 				working_on_task = true
 			else:
 				if task.has_callback:
@@ -101,15 +101,15 @@ func _on_ai_tick():
 				print("Agent "+str(self)+" reached task location")
 				working_on_task = false
 		ai_globals.TASK_TYPE.SLEEP:
-			if tasks.front().location.invalid:
+			if task.location.invalid:
 				print("Agent "+str(self)+" unable to do sleep task, target invalid (probably no energy hub exists)")
 				return
-			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y, tasks.front().location.layer)) > 1.0 and not working_on_task:
-				var movement_target:Vector3i = self.get_parent().walk_to(Vector2(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y), tasks.front().location.layer)
-				tasks.front().location.coordinates.x = movement_target.x
-				tasks.front().location.coordinates.y = movement_target.y
-				tasks.front().location.layer = movement_target.z
-				print("Agent "+str(self)+" moving to task location "+str(tasks.front().location))
+			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) > 1.0 and not working_on_task:
+				var movement_target:Vector3i = self.get_parent().walk_to(Vector2(task.location.coordinates.x, task.location.coordinates.y), task.location.layer)
+				task.location.coordinates.x = movement_target.x
+				task.location.coordinates.y = movement_target.y
+				task.location.layer = movement_target.z
+				print("Agent "+str(self)+" moving to task location "+str(task.location))
 				working_on_task = true
 			else:
 				if task.has_callback:
