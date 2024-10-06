@@ -7,7 +7,7 @@ var zoom_speed := 0.1
 
 func _process(delta):
 	# Bewegung der Kamera mit WASD
-	var direction := Vector2.ZERO
+	var direction : Vector2 = Vector2.ZERO
 	if Input.is_action_pressed("ui_up"):
 		direction.y -= 1
 	if Input.is_action_pressed("ui_down"):
@@ -44,5 +44,5 @@ func _unhandled_input(event):
 
 		
 func set_my_zoom(my_zoom: float):
-	var curr_zoom = min(max(my_zoom, 0.5), 10.0)
+	var curr_zoom = min(max(my_zoom, 0.5), 5.0)
 	zoom = Vector2(curr_zoom, curr_zoom)
