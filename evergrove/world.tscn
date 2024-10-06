@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dtjpof14r0bcb"]
+[gd_scene load_steps=14 format=3 uid="uid://dtjpof14r0bcb"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_2rb77"]
 [ext_resource type="Script" path="res://game.gd" id="1_acbsa"]
@@ -9,13 +9,8 @@
 [ext_resource type="Script" path="res://AI/hivemind.gd" id="4_g3tpu"]
 [ext_resource type="Script" path="res://factory.gd" id="5_8o8h7"]
 [ext_resource type="Texture2D" uid="uid://6ybn737h53wy" path="res://blocked_cursor.png" id="7_6qi8k"]
-[ext_resource type="Texture2D" uid="uid://btx6pcq8h7lqt" path="res://hubs/beer_hub/beer_hub1.png" id="7_g58se"]
 [ext_resource type="Script" path="res://building_cursor.gd" id="7_sp6ne"]
-[ext_resource type="Texture2D" uid="uid://c37wje6ikep2c" path="res://hubs/beer_hub/beer_hub2.png" id="8_gqlsa"]
-[ext_resource type="Texture2D" uid="uid://c8l0t3mbc4atn" path="res://hubs/energy_hub/energy_hub1.png" id="9_ssxo7"]
-[ext_resource type="Texture2D" uid="uid://il6pnwplvdy" path="res://hubs/energy_hub/energy_hub2.png" id="10_62d0k"]
-[ext_resource type="Texture2D" uid="uid://dtnmcje85qhw" path="res://hubs/food_hub/food_hub1.png" id="11_ag38c"]
-[ext_resource type="Texture2D" uid="uid://d30syauf7qb6t" path="res://hubs/food_hub/food_hub2.png" id="12_avoce"]
+[ext_resource type="PackedScene" uid="uid://b5dlil4rdalx3" path="res://hubs/Hub.tscn" id="9_0qbd5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_55trl"]
 texture = ExtResource("7_6qi8k")
@@ -23,48 +18,6 @@ texture = ExtResource("7_6qi8k")
 
 [sub_resource type="TileSet" id="TileSet_orqen"]
 sources/0 = SubResource("TileSetAtlasSource_55trl")
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_fnxof"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("7_g58se")
-}, {
-"duration": 1.0,
-"texture": ExtResource("8_gqlsa")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_byq5e"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("9_ssxo7")
-}, {
-"duration": 1.0,
-"texture": ExtResource("10_62d0k")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_hlmuf"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("11_ag38c")
-}, {
-"duration": 1.0,
-"texture": ExtResource("12_avoce")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_acbsa")
@@ -139,26 +92,8 @@ tile_set = SubResource("TileSet_orqen")
 format = 2
 layer_0/tile_data = PackedInt32Array(0, 0, 0, 1, 0, 0, 2, 0, 0, 65538, 0, 0, 65537, 0, 0, 65536, 0, 0, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0)
 
-[node name="Blueprint_beer" type="AnimatedSprite2D" parent="World/BuildingCursor"]
-visible = false
+[node name="Hub" parent="World/BuildingCursor" instance=ExtResource("9_0qbd5")]
 modulate = Color(1, 1, 1, 0.498039)
-z_index = 1
-position = Vector2(23, 18)
-sprite_frames = SubResource("SpriteFrames_fnxof")
-
-[node name="Blueprint_energy" type="AnimatedSprite2D" parent="World/BuildingCursor"]
-visible = false
-modulate = Color(1, 1, 1, 0.498039)
-z_index = 1
-position = Vector2(24, 22)
-sprite_frames = SubResource("SpriteFrames_byq5e")
-
-[node name="Blueprint_food" type="AnimatedSprite2D" parent="World/BuildingCursor"]
-visible = false
-modulate = Color(1, 1, 1, 0.498039)
-z_index = 1
-position = Vector2(23, 24)
-sprite_frames = SubResource("SpriteFrames_hlmuf")
 
 [node name="Factory" type="Node2D" parent="."]
 script = ExtResource("5_8o8h7")

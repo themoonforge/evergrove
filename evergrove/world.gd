@@ -234,18 +234,31 @@ func set_cursor_type(type: CursorType, build_type: Utils.BuildingType = Utils.Bu
 	select_cursor.visible = cursor_type == CursorType.SELECT
 	build_cursor.visible = cursor_type == CursorType.BUILD
 
-func handle_cursor():
+func handle_cursor(event: InputEvent):
 	match cursor_type:
 		CursorType.SELECT:
 			var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
 			select_cursor.position = visible_tile_map.map_to_local(tile_position)
+
+			if is_active_debug_input && event is InputEventMouseButton:
+				if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+					var selected_dwarf = game_state.selected_dwarf
+					if selected_dwarf:
+						var target_pos = visible_tile_map.local_to_map(get_global_mouse_position())
+						selected_dwarf.walk_to(target_pos, visible_level)
+					else:
+						var pos = visible_tile_map.local_to_map(get_global_mouse_position())
+						mine_tile(pos, visible_level)
 		CursorType.BUILD:
 			var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
 			build_cursor.set_tile(tile_position)
+			if event is InputEventMouseButton:
+				if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+					build_cursor.build()
+
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		handle_cursor()
+	handle_cursor(event)
 	
 	if event is InputEventKey:
 		if event.pressed:
@@ -261,16 +274,6 @@ func _unhandled_input(event: InputEvent) -> void:
 				set_cursor_type(CursorType.BUILD, Utils.BuildingType.BEER)
 			elif event.keycode == KEY_P:
 				set_cursor_type(CursorType.BUILD, Utils.BuildingType.ENERGY)
-
-	if is_active_debug_input && event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var selected_dwarf = game_state.selected_dwarf
-			if selected_dwarf:
-				var target_pos = visible_tile_map.local_to_map(get_global_mouse_position())
-				selected_dwarf.walk_to(target_pos, visible_level)
-			else:
-				var pos = visible_tile_map.local_to_map(get_global_mouse_position())
-				mine_tile(pos, visible_level)
 
 func create_poit(pos: Vector2i, level: int, cost: float):
 	var key = get_unique_id(pos, level)
@@ -366,3 +369,8 @@ func is_free_space(pos: Vector2i, level: int = visible_level) -> bool:
 	var free_space: bool = data.get_custom_data("is_free_space")
 
 	return free_space && !blocked
+
+func build_building(building_type: Utils.BuildingType, my_position: Vector2, tiles: Dictionary, level: int = visible_level):
+	var tile_map = tile_maps[level]
+	
+	tile_map.build_building(building_type, my_position, tiles)

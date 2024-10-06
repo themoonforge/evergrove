@@ -1,7 +1,7 @@
 enum BuildingType{
 	BEER,
 	ENERGY,
-	FOOD
+	FOOD,
 }
 
 const TILE_SIZE_HALF = 8
@@ -12,7 +12,7 @@ enum WalkingDirection {
 	BACK,
 	LEFT,
 	RIGHT,
-	DEFAULT
+	DEFAULT,
 }
 
 enum Behaviour {

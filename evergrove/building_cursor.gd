@@ -8,9 +8,7 @@ const Utils = preload("./Utils.gd")
 @onready var world: World = $"/root/Game/World"
 
 @onready var indicator: TileMap = $"./IndicatorMap"
-@onready var blueprint_beer: AnimatedSprite2D = $"./Blueprint_beer"
-@onready var blueprint_energy: AnimatedSprite2D = $"./Blueprint_energy"
-@onready var blueprint_food: AnimatedSprite2D = $"./Blueprint_food"
+@onready var hub: Hub = $"./Hub"
 
 @export var building_type: Utils.BuildingType = Utils.BuildingType.BEER
 
@@ -42,11 +40,13 @@ const Utils = preload("./Utils.gd")
 @export var beer_cost_micel = 0
 @export var beer_cost_wealth = 0
 
+@export var ignore_recource_costs: bool = true
+
+@export var tiles: Dictionary = {}
+
 func set_building_type(type: Utils.BuildingType) -> void:
 	building_type = type
-	blueprint_beer.visible = building_type == Utils.BuildingType.BEER
-	blueprint_energy.visible = building_type == Utils.BuildingType.ENERGY
-	blueprint_food.visible = building_type == Utils.BuildingType.FOOD
+	hub.init(type)
 
 func set_tile(pos: Vector2i) -> void:
 	indicator.clear()
@@ -54,10 +54,14 @@ func set_tile(pos: Vector2i) -> void:
 	
 	var is_free: bool = true
 
+	var my_tiles = {}
+
 	for x in range(0, 3):
 		for y in range(0, 3):
 			var incidator_offset = Vector2i(x, y)
-			var free = world.is_free_space(new_pos + incidator_offset)
+			var tile = new_pos + incidator_offset
+			my_tiles[tile] = true
+			var free = world.is_free_space(tile)
 			if !free:
 				is_free = false
 				indicator.set_cell(0, incidator_offset, 0, Vector2i(0, 0))
@@ -78,18 +82,14 @@ func _process(delta: float) -> void:
 	set_can_build(evaluate_has_resouces())
 
 func set_can_build(my_has_resouces: bool, my_space_is_free: bool = space_is_free) -> void:
-	has_resources = my_has_resouces
+	has_resources = my_has_resouces || ignore_recource_costs
 	space_is_free = my_space_is_free
 	can_build = has_resources and space_is_free
 
 	if can_build:
-		blueprint_beer.modulate.r = 1
-		blueprint_energy.modulate.r = 1
-		blueprint_food.modulate.r = 1
+		hub.modulate.r = 1
 	else:
-		blueprint_beer.modulate.r = 10
-		blueprint_energy.modulate.r = 10
-		blueprint_food.modulate.r = 10
+		hub.modulate.r = 10
 	
 func evaluate_has_resouces() -> bool:
 	match building_type:
@@ -119,3 +119,35 @@ func evaluate_has_resouces() -> bool:
 				game_state.wealth >= beer_cost_wealth
 		_:
 			return false
+
+func build() -> void:
+	if can_build:
+		match building_type:
+			Utils.BuildingType.ENERGY:
+				game_state.dec_dirt(energy_cost_dirt)
+				game_state.dec_stone(energy_cost_stone)
+				game_state.dec_iron(energy_cost_iron)
+				game_state.dec_copper(energy_cost_copper)
+				game_state.dec_water(energy_cost_water)
+				game_state.dec_micel(energy_cost_micel)
+				game_state.dec_wealth(energy_cost_wealth)
+			Utils.BuildingType.FOOD:
+				game_state.dec_dirt(food_cost_dirt)
+				game_state.dec_stone(food_cost_stone)
+				game_state.dec_iron(food_cost_iron)
+				game_state.dec_copper(food_cost_copper)
+				game_state.dec_water(food_cost_water)
+				game_state.dec_micel(food_cost_micel)
+				game_state.dec_wealth(food_cost_wealth)
+			Utils.BuildingType.BEER:
+				game_state.dec_dirt(beer_cost_dirt)
+				game_state.dec_stone(beer_cost_stone)
+				game_state.dec_iron(beer_cost_iron)
+				game_state.dec_copper(beer_cost_copper)
+				game_state.dec_water(beer_cost_water)
+				game_state.dec_micel(beer_cost_micel)
+				game_state.dec_wealth(beer_cost_wealth)
+			_:
+				pass
+
+		world.build_building(building_type, position, tiles)

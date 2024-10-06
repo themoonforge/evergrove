@@ -2,6 +2,8 @@ extends TileMap
 
 class_name DungeonLayer
 
+const Utils = preload("../Utils.gd")
+
 @onready var dwarf_container = $DwarfContainer
 @onready var hub_container = $HubContainer
 
@@ -66,3 +68,10 @@ func clear_fow(pos: Vector2i, radius: int):
 		for y in range(-radius, radius):
 			var tile_pos = Vector2i(pos.x + x, pos.y + y)
 			erase_cell(1, tile_pos)
+
+func build_building(building_type: Utils.BuildingType, my_position: Vector2, tiles: Dictionary):
+	var building: Hub = preload("res://hubs/Hub.tscn").instantiate()
+	hub_container.add_child(building)
+	building.position = my_position
+	building.init(building_type, tiles)
+	
