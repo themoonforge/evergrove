@@ -544,6 +544,8 @@ color = Color(0.362829, 0.362829, 0.362829, 1)
 energy = 0.64
 range_z_min = -1023
 range_z_max = 100
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.741176)
 texture = ExtResource("51_d1oub")
 
 [node name="ActionEffectAnimator" type="AnimatedSprite2D" parent="."]
