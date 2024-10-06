@@ -401,12 +401,12 @@ func get_nearest_building(type: Utils.BuildingType, pos: Vector2i, level: int = 
 				return null
 			return tile_map.food_astar.get_point_position(key)
 		Utils.BuildingType.BEER:
-			var key = tile_map.food_astar.get_closest_point(pos)
+			var key = tile_map.beer_astar.get_closest_point(pos)
 			if key < 0:
 				return null
-			return tile_map.food_astar.get_point_position(key)
+			return tile_map.beer_astar.get_point_position(key)
 		Utils.BuildingType.ENERGY:
-			var key = tile_map.food_astar.get_closest_point(pos)
+			var key = tile_map.energy_astar.get_closest_point(pos)
 			if key < 0:
 				return null
-			return tile_map.food_astar.get_point_position(key)
+			return tile_map.energy_astar.get_point_position(key)
