@@ -123,6 +123,21 @@ func _ready():
 			hair_animator = $"./ThinBase/Hair"
 			body_animator = $"./ThinBase/Body"
 			clothing_animator = $"./ThinBase/Clothing"
+		
+	var selected_color = rng.randi_range(0, 3)
+	if selected_color <= 1:
+		# ginger
+		hair_animator.modulate = Color8(rng.randi_range(120, 234), 	rng.randi_range(50, 110), 	rng.randi_range(7, 40))
+	elif selected_color <= 2:
+		# brown
+		hair_animator.modulate = Color8(rng.randi_range(102, 107), 	rng.randi_range(57, 103), 	rng.randi_range(25, 54))
+	elif selected_color <= 3:
+		# blonde
+		hair_animator.modulate = Color8(rng.randi_range(175, 255), 	rng.randi_range(120, 193), 	rng.randi_range(0, 95))
+		
+	clothing_animator.modulate = Color8(rng.randi_range(80, 140), 	rng.randi_range(80, 140), 	rng.randi_range(80, 140))
+
+
 
 	# TODO retrieve walking direction and call play on animated sprite
 	# this is just an example how to call animations
