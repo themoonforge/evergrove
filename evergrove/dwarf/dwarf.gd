@@ -22,6 +22,27 @@ enum WalkingDirection {
 	RIGHT
 }
 
+var typ: DwarfType
+var skin: DwarfSkin
+var hair: DwarfType
+
+enum DwarfType {
+	THICC,
+	THIN
+}
+
+enum DwarfSkin {
+	LIGHT,
+	MEDIUM,
+	DARK
+}
+
+enum DwarfHair {
+	NONE,
+	PIGTAILS,
+	IRO
+}
+
 func set_current_position(my_position: Vector2i, level: int, force: bool = false) -> void:
 	if !force && current_position == my_position && current_level == level:
 		return
