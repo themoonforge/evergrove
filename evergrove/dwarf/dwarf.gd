@@ -74,7 +74,7 @@ func _ready():
 	# instantiate AI controller
 	add_child(Agent.create())
 	game_state.selected_dwarf = self
-	game_state.set_dwarfs(game_state.dwarfs + 1)
+	game_state.inc_dwarfs(1)
 	set_animation(Behaviour.IDLE, WalkingDirection.DEFAULT)
 
 func play_animation(animator: AnimatedSprite2D, animation: String) -> void:

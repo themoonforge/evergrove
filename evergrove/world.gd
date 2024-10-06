@@ -289,25 +289,25 @@ func mine_tile(pos: Vector2i, level: int):
 		if resource > 0:
 			match resource_type:
 				TileType.DIRT:
-					game_state.set_dirt(game_state.dirt + resource)
+					game_state.inc_dirt(resource)
 				TileType.STONE:
-					game_state.set_stone(game_state.stone + resource)
+					game_state.inc_stone(resource)
 				TileType.COAL:
-					game_state.set_coal(game_state.coal + resource)
+					game_state.inc_coal(resource)
 				TileType.IRON:
-					game_state.set_iron(game_state.iron + resource)
+					game_state.inc_iron(resource)
 				TileType.COPPER:
-					game_state.set_copper(game_state.copper + resource)
+					game_state.inc_copper(resource)
 				TileType.SILVER:
-					game_state.set_silver(game_state.silver + resource)
+					game_state.inc_silver(resource)
 				TileType.GOLD:
-					game_state.set_gold(game_state.gold + resource)
+					game_state.inc_gold(resource)
 				TileType.GEM:
-					game_state.set_gem(game_state.gem + resource)
+					game_state.inc_gem(resource)
 				TileType.WATER:
-					game_state.set_water(game_state.water + resource)
+					game_state.inc_water(resource)
 				TileType.MICEL:
-					game_state.set_micel(game_state.micel + resource)
+					game_state.inc_micel(resource)
 		if consumed:
 			tile_map.set_cell(0, pos, 0, Vector2i(0, TileType.AIR))
 			update_astarGrid(tile_map, level, pos)
