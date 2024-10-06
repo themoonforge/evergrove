@@ -289,7 +289,7 @@ func connect_adjacent_tiles(pos: Vector2i, level: int):
 		if new_key > 0 && astar.has_point(new_key):
 			astar.connect_points(key, new_key)
 
-func update_astarGrid(tile_map: TileMap, level: int, pos: Vector2i):
+func update_astarGrid(tile_map: DungeonLayer, level: int, pos: Vector2i):
 	var data: TileData = tile_map.get_cell_tile_data(0, pos)
 	if !data:
 		return
@@ -303,10 +303,12 @@ func update_astarGrid(tile_map: TileMap, level: int, pos: Vector2i):
 		if level > 0:
 			create_poit(pos, level - 1, cost)
 			astar.connect_points(get_unique_id(pos, level), get_unique_id(pos, level - 1))
+			tile_map.up_ladder_astar.add_point(get_unique_id(pos, level), pos)
 	if connect_down:
 		if level < LAYERS - 1:
 			create_poit(pos, level + 1, cost)
 			astar.connect_points(get_unique_id(pos, level), get_unique_id(pos, level + 1))
+			tile_map.down_ladder_astar.add_point(get_unique_id(pos, level), pos)
 
 func mine_tile(pos: Vector2i, level: int):
 	var tile_map = tile_maps[level]
@@ -374,3 +376,26 @@ func build_building(building_type: Utils.BuildingType, my_position: Vector2, til
 	var tile_map = tile_maps[level]
 	
 	tile_map.build_building(building_type, my_position, tiles)
+	for tile in tiles.keys():
+		var key = get_unique_id(tile, level)
+		astar.remove_point(key)
+
+func get_nearest_building(type: Utils.BuildingType, pos: Vector2i, level: int = visible_level):
+	var tile_map = tile_maps[level]
+	
+	match type:
+		Utils.BuildingType.FOOD:
+			var key = tile_map.food_astar.get_closest_point(pos)
+			if key < 0:
+				return null
+			return tile_map.food_astar.get_point_position(key)
+		Utils.BuildingType.BEER:
+			var key = tile_map.food_astar.get_closest_point(pos)
+			if key < 0:
+				return null
+			return tile_map.food_astar.get_point_position(key)
+		Utils.BuildingType.ENERGY:
+			var key = tile_map.food_astar.get_closest_point(pos)
+			if key < 0:
+				return null
+			return tile_map.food_astar.get_point_position(key)

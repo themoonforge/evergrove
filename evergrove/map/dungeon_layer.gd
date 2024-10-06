@@ -6,6 +6,7 @@ const Utils = preload("../Utils.gd")
 
 @onready var dwarf_container = $DwarfContainer
 @onready var hub_container = $HubContainer
+@onready var world: World = $"/root/Game/World"
 
 @export var level: int = 0
 
@@ -20,7 +21,19 @@ var ore_noise: FastNoiseLite
 const SCALE = 64.0
 const ORE_SCALE = 32.0
 
+var up_ladder_astar: AStar2D
+var down_ladder_astar: AStar2D
+var energy_astar: AStar2D
+var beer_astar: AStar2D
+var food_astar: AStar2D
+
 func init(my_seed: int, my_level: int):
+	up_ladder_astar = AStar2D.new()
+	down_ladder_astar = AStar2D.new()
+	energy_astar = AStar2D.new()
+	beer_astar = AStar2D.new()
+	food_astar = AStar2D.new()
+
 	terrain_noise = FastNoiseLite.new()
 	terrain_noise.seed = my_seed
 	terrain_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
@@ -74,4 +87,15 @@ func build_building(building_type: Utils.BuildingType, my_position: Vector2, til
 	hub_container.add_child(building)
 	building.position = my_position
 	building.init(building_type, tiles)
+	
+	for tile in tiles.keys():
+		blocked_space[tile] = true
+		var key = world.get_unique_id(tile, level)
+		match building_type:
+			Utils.BuildingType.BEER:
+				beer_astar.add_point(key, tile)
+			Utils.BuildingType.ENERGY:
+				energy_astar.add_point(key, tile)
+			Utils.BuildingType.FOOD:
+				food_astar.add_point(key, tile)
 	
