@@ -6,6 +6,7 @@ const DEFAULT_TYPE: ai_globals.AGENT_TYPE = ai_globals.AGENT_TYPE.DWARF
 # also abused as max energy level for the moment
 const DEFAULT_ENERGY: int = 100
 const MAX_TASKS: int = 5
+const ENERGY_RECHARGE_PER_TICK:int=5
 
 var type: ai_globals.AGENT_TYPE
 var energy: int
@@ -14,6 +15,7 @@ var working_on_task:bool = false
 var accepting_tasks:bool = true
 var registered_as_taskless:bool = false
 var recharge_energy_queued:bool = false
+var zero_energy_mode:bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -55,12 +57,15 @@ func _on_ai_tick():
 			ai_globals.hivemind.add_task(tasks.pop_back())
 		self.tasks.append(task)
 		recharge_energy_queued = true
+		accepting_tasks = false
 		if registered_as_taskless:
 			ai_globals.AGENT_NO_LONGER_TASKLESS.emit(self)
 			registered_as_taskless = false
-	if energy == 0:
+	if energy == 0 and not zero_energy_mode:
 		print(str(self.name) + " energy zero, aborting tasks")
+		zero_energy_mode = true
 		accepting_tasks = false
+		working_on_task = false
 		# hand back unfinished tasks to hivemind
 		while not tasks.is_empty():
 			if tasks.front().type == ai_globals.TASK_TYPE.SLEEP:
@@ -104,7 +109,7 @@ func _on_ai_tick():
 			if task.location.invalid:
 				print("Agent "+str(self)+" unable to do sleep task, target invalid (probably no energy hub exists)")
 				return
-			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) > 1.0 and not working_on_task:
+			if not working_on_task:
 				var movement_target:Vector3i = self.get_parent().walk_to(Vector2(task.location.coordinates.x, task.location.coordinates.y), task.location.layer)
 				task.location.coordinates.x = movement_target.x
 				task.location.coordinates.y = movement_target.y
@@ -112,13 +117,16 @@ func _on_ai_tick():
 				print("Agent "+str(self)+" moving to task location "+str(task.location))
 				working_on_task = true
 			elif Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) < 1.0 and working_on_task:
-				if task.has_callback:
-					task.callback.call()
-				tasks.pop_front()
-				print("Agent "+str(self)+" reached task location")
-				energy = DEFAULT_ENERGY
-				recharge_energy_queued = false
-				# TODO: recharge energy over time and trigger corresponding animation
-				print("Agent "+str(self)+" instant sleep refilled energy")
-				working_on_task = false
-				accepting_tasks = true
+				#print("Agent "+str(self)+" reached task location")
+				if energy < DEFAULT_ENERGY:
+					if energy + ENERGY_RECHARGE_PER_TICK >= DEFAULT_ENERGY:
+						energy = DEFAULT_ENERGY
+						if task.has_callback:
+							task.callback.call()
+						tasks.pop_front()
+						recharge_energy_queued = false
+						working_on_task = false
+						accepting_tasks = true
+						zero_energy_mode = false
+					else:
+						energy += ENERGY_RECHARGE_PER_TICK
