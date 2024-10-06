@@ -94,6 +94,7 @@ layer_0/tile_data = PackedInt32Array(0, 0, 0, 1, 0, 0, 2, 0, 0, 65538, 0, 0, 655
 
 [node name="Hub" parent="World/BuildingCursor" instance=ExtResource("9_0qbd5")]
 modulate = Color(1, 1, 1, 0.498039)
+texture_filter = 0
 
 [node name="Factory" type="Node2D" parent="."]
 script = ExtResource("5_8o8h7")
