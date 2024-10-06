@@ -39,6 +39,8 @@ enum TileType {
 
 @export var point_dicrionary: Dictionary = {}
 
+@export var is_generating_fog_of_war: bool = true
+
 var astar: AStar3D
 
 var sprite_texture = preload("res://cross.png")
@@ -105,6 +107,10 @@ func set_air_around_tile(tile_map: TileMap, pos: Vector2i, skip_center: bool = t
 				continue
 			if tile_map.get_cell_source_id(0, new_pos) == -1:
 				tile_map.set_cell(0, new_pos, 0, Vector2i(0, TileType.AIR))
+
+func generate_fog_of_war(tile_map: DungeonLayer, pos: Vector2i):
+	if is_generating_fog_of_war:
+		tile_map.set_cell(1, pos, 1, Vector2i(0, 0))
 
 func generate_tile(tile_map: DungeonLayer, pos: Vector2i):
 	if tile_map.get_cell_source_id(0, pos) != -1:
@@ -205,6 +211,7 @@ func check_visible_tiles(force: bool = false):
 				for chunk_y in range(-HALF_CHUNK_SIZE, HALF_CHUNK_SIZE):
 					var pos = Vector2i(x * CHUNK_SIZE + chunk_x, y * CHUNK_SIZE + chunk_y)
 					generate_tile(visible_tile_map, pos)
+					generate_fog_of_war(visible_tile_map, pos)
 					update_astarGrid(visible_tile_map, visible_level, pos)
 			#generate_tile(visible_tile_map, Vector2i(x, y))
 

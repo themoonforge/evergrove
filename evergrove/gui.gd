@@ -30,10 +30,11 @@ func _on_spawn_dwarf_button_pressed():
 	var dungeon_layer = world.tile_maps[dungeon_layer_index]
 	var dwarf_container = dungeon_layer.dwarf_container
 	
-	var dwarf = preload("res://dwarf/Dwarf.tscn").instantiate()
+	var dwarf: Dwarf = preload("res://dwarf/Dwarf.tscn").instantiate()
 	dwarf_container.add_child(dwarf)
-	dwarf.position = dungeon_layer.map_to_local(position) # TODO convert to map position
 	dwarf.current_dungeon_layer = dungeon_layer
+	dwarf.set_current_position(position, dungeon_layer_index, true)
+	dwarf.position = dungeon_layer.map_to_local(position) # TODO convert to map position
 
 func _on_spawn_energy_hub_button_pressed():
 	var dungeon_layer_index = 0 # TODO use correct dungeon  layer

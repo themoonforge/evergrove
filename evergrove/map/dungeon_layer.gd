@@ -37,6 +37,8 @@ func init(my_seed: int, my_level: int):
 
 	level = my_level
 
+	add_layer(1)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -56,3 +58,9 @@ func min_distance_to_ladder(pos: Vector2i):
 		if distance < min_distance:
 			min_distance = distance
 	return min_distance
+
+func clear_fow(pos: Vector2i, radius: int):
+	for x in range(-radius, radius):
+		for y in range(-radius, radius):
+			var tile_pos = Vector2i(pos.x + x, pos.y + y)
+			erase_cell(1, tile_pos)

@@ -1,6 +1,7 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://cnwuemdxstgvl"]
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://cnwuemdxstgvl"]
 
 [ext_resource type="Texture2D" uid="uid://bu5d2qrtkhi8l" path="res://tileset.png" id="1_elc6h"]
+[ext_resource type="Texture2D" uid="uid://vk4knf2yjhwc" path="res://fow.png" id="2_e8asl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c0m51"]
 texture = ExtResource("1_elc6h")
@@ -108,6 +109,10 @@ texture = ExtResource("1_elc6h")
 0:12/0/custom_data_8 = true
 0:12/0/custom_data_9 = 0.4
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e65jy"]
+texture = ExtResource("2_e8asl")
+0:0/0 = 0
+
 [resource]
 physics_layer_0/collision_layer = 1
 custom_data_layer_0/name = "walkable"
@@ -131,3 +136,4 @@ custom_data_layer_8/type = 1
 custom_data_layer_9/name = "walking_speed_factor"
 custom_data_layer_9/type = 3
 sources/0 = SubResource("TileSetAtlasSource_c0m51")
+sources/1 = SubResource("TileSetAtlasSource_e65jy")

@@ -13,6 +13,7 @@ class_name Dwarf
 @export var walking_path: PackedVector3Array = []
 @export var current_level = 0
 @export var current_position: Vector2i = Vector2i(0, 0)
+@export var view_range: int = 3
 
 enum WalkingDirection {
 	FRONT,
@@ -20,6 +21,13 @@ enum WalkingDirection {
 	LEFT,
 	RIGHT
 }
+
+func set_current_position(my_position: Vector2i, level: int, force: bool = false) -> void:
+	if !force && current_position == my_position && current_level == level:
+		return
+	current_position = my_position
+	current_level = level
+	current_dungeon_layer.clear_fow(my_position, view_range)
 
 func _ready():
 	# TODO retrieve walking direction and call play on animated sprite
@@ -29,6 +37,7 @@ func _ready():
 	# instantiate AI controller
 	add_child(Agent.create())
 	game_state.selected_dwarf = self
+		
 
 func set_walking_direction(direction: WalkingDirection) -> void:
 	if walking_direction == direction:
@@ -53,14 +62,16 @@ func _process(delta):
 		var target: Vector3i = walking_path[0]
 		if (target.z != current_level):
 			current_dungeon_layer.dwarf_container.remove_child(self)
+			set_current_position(current_position, target.z)
 			current_level = target.z
 			current_dungeon_layer = world.tile_maps[current_level]
 			current_dungeon_layer.dwarf_container.add_child(self)
 			walking_path.remove_at(0)
-			walking = false
-			var animated_sprite = self.get_child(1)
-			animated_sprite.stop()
-			animated_sprite.play("default")
+			if walking_path.size() == 0:
+				walking = false
+				var animated_sprite = self.get_child(1)
+				animated_sprite.stop()
+				animated_sprite.play("default")
 			return
 		var target2D = world.visible_tile_map.map_to_local(Vector2(target.x, target.y))
 
@@ -98,7 +109,7 @@ func _process(delta):
 		position += velocity
 		if (position - target2D).length() < 1.0:
 			position = target2D
-			current_position = Vector2(target.x, target.y)
+			set_current_position(Vector2(target.x, target.y), current_level)
 		
 			walking_path.remove_at(0)
 
