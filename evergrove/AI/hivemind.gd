@@ -4,6 +4,7 @@ class_name Hivemind extends Node
 var task_queue: Array[Task]
 var agents:Array[Agent]
 var taskless_agents:Array[Agent]
+var energyhubs:Array[EnergyHub]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -11,6 +12,7 @@ func _ready() -> void:
 	ai_globals.connect("AGENT_CREATED", _on_agent_created)
 	ai_globals.connect("AGENT_WITHOUT_TASK", _on_agent_without_task)
 	ai_globals.connect("AGENT_NO_LONGER_TASKLESS", _remove_taskless_agent)
+	ai_globals.connect("ENERGY_HUB_SPAWNED", _add_energy_hub)
 	add_child(AI_Timer.new())
 	ai_globals.hivemind = self
 	print("AI hivemind ready")
@@ -19,7 +21,7 @@ func _on_agent_created(agent: Agent):
 	print("Registered agent " + str(agent.name) + " at hivemind")
 	agents.append(agent)
 	# debug: random movement task without layer change
-	task_queue.append(Task.create(ai_globals.TASK_TYPE.MOVE_TO,"Move to random position", 0, Vector3(randf_range(-10,10),randf_range(-10,10), 0)))
+	task_queue.append(Task.create(ai_globals.TASK_TYPE.MOVE_TO,"Move to random position", 0, ai_globals.Location.create(Vector2i(randi_range(-10,10),randi_range(-10,10)), 0)))
 	print("Added random move task to hivemind queue")
 
 # TODO: create registry of unemployed agents
@@ -38,6 +40,12 @@ func _remove_taskless_agent(agent:Agent):
 	assert(agent in taskless_agents, "State mismatch. Agent  not found in taskless array.")
 	taskless_agents.erase(agent)
 	print("Removed "+str(agent)+" from taskless registry")
+
+func _add_energy_hub(hub:EnergyHub):
+	assert(hub not in energyhubs, "State mismatch. Energy hub already known by hivemind.")
+	assert(hub.location != null, "Energy hub is missing a location")
+	energyhubs.append(hub)
+	print("Hivemind registered new energy hub "+str(hub))
 
 func transfer_task_to_agent(task: Task, agent: Agent) -> bool:
 	if not agent.assign_task(task):
@@ -59,4 +67,10 @@ func get_agent_without_task() -> Agent:
 		return taskless_agents.front()
 	return null
 
-# TODO: management of global AI objects
+func get_nearest_energy_hub_location(agent_location:ai_globals.Location)->ai_globals.Location:
+	# if no energy hub exists, return map origin
+	if energyhubs.is_empty():
+		return ai_globals.Location.create(Vector2i.ZERO, 0)
+		
+	# TODO: implement finding the nearest one
+	return energyhubs.front().location

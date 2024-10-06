@@ -43,14 +43,14 @@ func assign_task(task: Task) -> bool:
 	return true
 
 func _on_ai_tick():
-	print(str(self.name) + " received AI tick event")
+	#print(str(self.name) + " received AI tick event")
 	if energy > 0:
 		energy -= 1
 	print(str(self.name) + " energy is now " + str(energy))
 	if energy <= 30 and not recharge_energy_queued:
 		print(str(self.name) + " has low energy, queueing sleep task")
 		# TODO: get closest free bed position from hivemind
-		var task:Task = Task.create(ai_globals.TASK_TYPE.SLEEP, "Sleep to recharge energy", 0, Vector3.ZERO)
+		var task:Task = Task.create(ai_globals.TASK_TYPE.SLEEP, "Sleep to recharge energy", 0, ai_globals.hivemind.get_nearest_energy_hub_location(ai_globals.Location.create(Vector2i(self.get_parent().current_position.x,self.get_parent().current_position.y), self.get_parent().current_level)))
 		# TODO: check if task queue is full, if yes send last task back to hivemind and add new sleep task
 		if tasks.size() == MAX_TASKS:
 			ai_globals.hivemind.add_task(tasks.pop_back())
@@ -69,7 +69,7 @@ func _on_ai_tick():
 			ai_globals.hivemind.add_task(tasks.pop_front())
 		# add sleep task in case we somehow skipped the low energy threshold trigger which normally creates it
 		if not recharge_energy_queued:
-			self.tasks.append(Task.create(ai_globals.TASK_TYPE.SLEEP, "Sleep to recharge energy", 0, Vector3.ZERO))
+			self.tasks.append(Task.create(ai_globals.TASK_TYPE.SLEEP, "Sleep to recharge energy", 0, ai_globals.hivemind.get_nearest_energy_hub_location(ai_globals.Location.create(Vector2i(self.get_parent().current_position.x,self.get_parent().current_position.y), self.get_parent().current_level))))
 			recharge_energy_queued = true
 			if registered_as_taskless:
 				ai_globals.AGENT_NO_LONGER_TASKLESS.emit(self)
@@ -86,9 +86,8 @@ func _on_ai_tick():
 	match tasks.front().type:
 		ai_globals.TASK_TYPE.MOVE_TO:
 			# TODO: do not use Vec3 distance or +- 1 layer might falsely trigger target reached
-			print("Distance to target "+str(Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(tasks.front().location)))
-			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(tasks.front().location) > 1.0 and not working_on_task:
-				self.get_parent().walk_to(Vector2(tasks.front().location.x, tasks.front().location.y), tasks.front().location.z)
+			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y, tasks.front().location.layer)) > 1.0 and not working_on_task:
+				self.get_parent().walk_to(Vector2(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y), tasks.front().location.layer)
 				print("Agent "+str(self)+" moving to task location "+str(tasks.front().location))
 				working_on_task = true
 			else:
@@ -96,8 +95,8 @@ func _on_ai_tick():
 				print("Agent "+str(self)+" reached task location")
 				working_on_task = false
 		ai_globals.TASK_TYPE.SLEEP:
-			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(tasks.front().location) > 1.0 and not working_on_task:
-				self.get_parent().walk_to(Vector2(tasks.front().location.x, tasks.front().location.y), tasks.front().location.z)
+			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y, tasks.front().location.layer)) > 1.0 and not working_on_task:
+				self.get_parent().walk_to(Vector2(tasks.front().location.coordinates.x, tasks.front().location.coordinates.y), tasks.front().location.layer)
 				print("Agent "+str(self)+" moving to task location "+str(tasks.front().location))
 				working_on_task = true
 			else:

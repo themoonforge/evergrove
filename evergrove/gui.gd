@@ -46,6 +46,8 @@ func _on_spawn_energy_hub_button_pressed():
 	var energy_hub = preload("res://hubs/EnergyHub.tscn").instantiate()
 	hub_container.add_child(energy_hub)
 	energy_hub.position = dungeon_layer.map_to_local(position) # TODO convert to map position
+	energy_hub.location = ai_globals.Location.create(Vector2i(position.x,position.y), dungeon_layer.level)
+	energy_hub.register_with_hivemind()
 	#energy_hub.current_dungeon_layer = dungeon_layer
 
 # Setter methods for label members
