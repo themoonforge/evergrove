@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const Utils = preload("./Utils.gd")
+
 @onready var world: World = $/root/Game/World
 @onready var factory = $/root/Game/Factory
 
@@ -74,3 +76,14 @@ func set_label_dwarf(value: String) -> void:
 
 func set_label_current_level(value: String) -> void:
 	level_label.text = "Level: %s" % [value]
+	
+func _on_food_hub_button_pressed():
+	world.set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.FOOD)
+
+
+func _on_beer_hub_button_pressed():
+	world.set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.BEER)
+
+
+func _on_energy_hub_button_pressed():
+	world.set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.ENERGY)

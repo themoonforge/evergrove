@@ -95,14 +95,12 @@ icon = ExtResource("5_outll")
 script = ExtResource("2_8uhg5")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-modulate = Color(0.266575, 0.266575, 0.266575, 1)
-self_modulate = Color(0.310617, 0.310617, 0.310617, 1)
 script = ExtResource("1_bwmuh")
 
 [node name="World" type="Node2D" parent="."]
-modulate = Color(0.75969, 0.742505, 0.772522, 1)
 texture_filter = 1
 script = ExtResource("1_2rb77")
+is_generating_fog_of_war = false
 
 [node name="TileCursor" type="Sprite2D" parent="World"]
 visible = false

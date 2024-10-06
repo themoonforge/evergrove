@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://b5heo41rpqdo0"]
+[gd_scene load_steps=56 format=3 uid="uid://b5heo41rpqdo0"]
 
 [ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
 [ext_resource type="Texture2D" uid="uid://cl6nkkxoir3uu" path="res://dwarf/shadow.png" id="2_jrrhj"]
@@ -42,6 +42,7 @@
 [ext_resource type="Texture2D" uid="uid://damfdrvwgguem" path="res://dwarf/thin/hair/pigtails_base_left2.png" id="48_1k3m5"]
 [ext_resource type="Texture2D" uid="uid://c0obw7pa2kehk" path="res://dwarf/thin/hair/pigtails_base_right1.png" id="49_bv2bn"]
 [ext_resource type="Texture2D" uid="uid://dg4s7vsbkqcbi" path="res://dwarf/thin/hair/pigtails_base_right2.png" id="50_bnb1r"]
+[ext_resource type="Texture2D" uid="uid://h1idmsb2ertm" path="res://dwarf/light.png" id="51_d1oub"]
 [ext_resource type="Texture2D" uid="uid://jp56uc3l0g6q" path="res://dwarf/beer/beer1.png" id="51_epq61"]
 [ext_resource type="Texture2D" uid="uid://dtp6gtdaufklt" path="res://dwarf/beer/beer2.png" id="52_8lj4m"]
 [ext_resource type="Texture2D" uid="uid://b6jkkm4lent4" path="res://dwarf/food/food1.png" id="53_tupv2"]
@@ -483,3 +484,12 @@ z_index = 1
 position = Vector2(0, -27)
 sprite_frames = SubResource("SpriteFrames_cignr")
 animation = &"drinking_effect"
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+physics_interpolation_mode = 1
+modulate = Color(0.552941, 0.552941, 0.552941, 0.341176)
+color = Color(0.362829, 0.362829, 0.362829, 1)
+energy = 0.64
+range_z_min = -1023
+range_z_max = 100
+texture = ExtResource("51_d1oub")
