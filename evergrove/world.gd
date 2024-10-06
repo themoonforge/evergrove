@@ -5,7 +5,6 @@ class_name World
 const TILE_SIZE = 16
 const HALF_CHUNK_SIZE = 64
 const CHUNK_SIZE = HALF_CHUNK_SIZE * 2
-const GLOBAL_SEED = 12345
 const LAYERS = 5
 
 enum TileType {
@@ -24,6 +23,8 @@ enum TileType {
 	MICEL 		= 12,
 }
 
+@export var GLOBAL_SEED = 12345
+
 @onready var camera: Camera2D = $"/root/Game/Camera2D"
 @onready var game_state: GameState = $"/root/Game/GameState"
 @onready var tile_cursor: Sprite2D = $"./TileCursor"
@@ -40,6 +41,7 @@ enum TileType {
 @export var point_dicrionary: Dictionary = {}
 
 @export var is_generating_fog_of_war: bool = true
+@export var is_active_debug_input: bool = true
 
 var astar: AStar3D
 
@@ -227,22 +229,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			elif event.keycode == KEY_E:
 				set_active_level(visible_level + 1)
 
-	# TODO just for testing
-	if event is InputEventMouseButton:
+	if is_active_debug_input && event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var selected_dwarf = game_state.selected_dwarf
 			if selected_dwarf:
 				var target_pos = visible_tile_map.local_to_map(get_global_mouse_position())
-
 				selected_dwarf.walk_to(target_pos, visible_level)
-		
-				#for point in path:
-				#	var sprite = Sprite2D.new()
-				#	sprite.texture = sprite_texture
-				#	add_child(sprite)
-				#	sprite.z_index = 100
-				#	sprite.position = visible_tile_map.map_to_local(Vector2i(point.x, point.y))
-
 			else:
 				var pos = visible_tile_map.local_to_map(get_global_mouse_position())
 				mine_tile(pos, visible_level)
