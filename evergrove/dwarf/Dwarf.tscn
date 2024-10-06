@@ -1,6 +1,7 @@
-[gd_scene load_steps=54 format=3 uid="uid://b5heo41rpqdo0"]
+[gd_scene load_steps=55 format=3 uid="uid://b5heo41rpqdo0"]
 
 [ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
+[ext_resource type="Texture2D" uid="uid://cl6nkkxoir3uu" path="res://dwarf/shadow.png" id="2_jrrhj"]
 [ext_resource type="Texture2D" uid="uid://b8jxq8w84erhi" path="res://dwarf/thin/body/dark/skin_dark_back1.png" id="11_ij5fv"]
 [ext_resource type="Texture2D" uid="uid://dgkess8617lsv" path="res://dwarf/thin/body/dark/skin_dark_back2.png" id="12_gqev8"]
 [ext_resource type="Texture2D" uid="uid://dy0cswxix762c" path="res://dwarf/thin/body/dark/skin_dark_front1.png" id="13_0tbkm"]
@@ -445,6 +446,9 @@ animations = [{
 texture_filter = 1
 script = ExtResource("1_c3sis")
 
+[node name="Shadow" type="Sprite2D" parent="."]
+texture = ExtResource("2_jrrhj")
+
 [node name="ThinBase" type="Node2D" parent="."]
 visible = false
 y_sort_enabled = true
@@ -463,7 +467,6 @@ animation = &"idle"
 [node name="Hair" type="AnimatedSprite2D" parent="ThinBase"]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_gi7fk")
-animation = &"none_right"
 
 [node name="ThiccBase" type="Node2D" parent="."]
 visible = false

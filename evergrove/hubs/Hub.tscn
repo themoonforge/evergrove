@@ -19,7 +19,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
+"speed": 1.0
 }]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_dvxce"]
@@ -33,7 +33,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
+"speed": 1.0
 }]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6edsx"]
@@ -47,10 +47,11 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
+"speed": 1.0
 }]
 
 [node name="Hub" type="Node2D"]
+texture_filter = 1
 script = ExtResource("1_bbg3d")
 
 [node name="Beer" type="AnimatedSprite2D" parent="."]
@@ -64,9 +65,12 @@ visible = false
 z_index = 1
 position = Vector2(24, 22)
 sprite_frames = SubResource("SpriteFrames_dvxce")
+frame_progress = 0.706829
 
 [node name="Food" type="AnimatedSprite2D" parent="."]
 visible = false
 z_index = 1
 position = Vector2(23, 24)
 sprite_frames = SubResource("SpriteFrames_6edsx")
+frame = 1
+frame_progress = 0.419841
