@@ -266,6 +266,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				set_active_level(visible_level + 1)
 			elif event.keycode == KEY_C:
 				set_cursor_type(Utils.CursorType.SELECT)
+			elif event.keycode == KEY_ESCAPE:
+				set_cursor_type(Utils.CursorType.SELECT)
 			#elif event.keycode == KEY_F:
 				#set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.FOOD)
 			#elif event.keycode == KEY_B:

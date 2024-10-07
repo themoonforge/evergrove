@@ -114,9 +114,9 @@ y_sort_enabled = true
 texture = ExtResource("4_0fr7v")
 
 [node name="BuildingCursor" type="Node2D" parent="World"]
-visible = false
 z_index = 1000
 script = ExtResource("7_sp6ne")
+ignore_recource_costs = false
 
 [node name="IndicatorMap" type="TileMap" parent="World/BuildingCursor"]
 tile_set = SubResource("TileSet_orqen")
@@ -126,6 +126,12 @@ layer_0/tile_data = PackedInt32Array(0, 0, 0, 1, 0, 0, 2, 0, 0, 65538, 0, 0, 655
 [node name="Hub" parent="World/BuildingCursor" instance=ExtResource("9_0qbd5")]
 modulate = Color(1, 1, 1, 0.498039)
 texture_filter = 0
+
+[node name="LabelContainer" type="VFlowContainer" parent="World/BuildingCursor"]
+offset_left = 48.0
+offset_top = 1.0
+offset_right = 224.0
+offset_bottom = 224.0
 
 [node name="Factory" type="Node2D" parent="."]
 script = ExtResource("5_8o8h7")

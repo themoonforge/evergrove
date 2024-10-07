@@ -9,6 +9,7 @@ const Utils = preload("./Utils.gd")
 
 @onready var indicator: TileMap = $"./IndicatorMap"
 @onready var hub: Hub = $"./Hub"
+@onready var labelContainer: VFlowContainer = $"./LabelContainer"
 
 @export var building_type: Utils.BuildingType = Utils.BuildingType.BEER
 
@@ -16,27 +17,27 @@ const Utils = preload("./Utils.gd")
 @export var has_resources: bool = false
 @export var can_build: bool = false
 
-@export var energy_cost_dirt = 0
-@export var energy_cost_stone = 5
-@export var energy_cost_iron = 5
+@export var energy_cost_dirt = 10
+@export var energy_cost_stone = 1
+@export var energy_cost_iron = 1
 @export var energy_cost_copper = 0
-@export var energy_cost_water = 5
+@export var energy_cost_water = 0
 @export var energy_cost_micel = 0
 @export var energy_cost_wealth = 0
 
-@export var food_cost_dirt = 0
+@export var food_cost_dirt = 10
 @export var food_cost_stone = 0
 @export var food_cost_iron = 0
 @export var food_cost_copper = 0
 @export var food_cost_water = 0
-@export var food_cost_micel = 10
+@export var food_cost_micel = 1
 @export var food_cost_wealth = 0
 
-@export var beer_cost_dirt = 0
-@export var beer_cost_stone = 0
-@export var beer_cost_iron = 5
+@export var beer_cost_dirt = 10
+@export var beer_cost_stone = 1
+@export var beer_cost_iron = 1
 @export var beer_cost_copper = 0
-@export var beer_cost_water = 5
+@export var beer_cost_water = 0
 @export var beer_cost_micel = 0
 @export var beer_cost_wealth = 0
 
@@ -47,6 +48,48 @@ const Utils = preload("./Utils.gd")
 func set_building_type(type: Utils.BuildingType) -> void:
 	building_type = type
 	hub.init(type, {}, null)
+	eval_cost_labels()
+
+func eval_cost_labels() -> void:
+	for child in labelContainer.get_children():
+		child.queue_free()
+	match building_type:
+		Utils.BuildingType.ENERGY:
+			_create_cost_label("Dirt", energy_cost_dirt, game_state.dirt)
+			_create_cost_label("Stone", energy_cost_stone, game_state.stone)
+			_create_cost_label("Iron", energy_cost_iron, game_state.iron)
+			_create_cost_label("Copper", energy_cost_copper, game_state.copper)
+			_create_cost_label("Water", energy_cost_water, game_state.water)
+			_create_cost_label("Micel", energy_cost_micel, game_state.micel)
+			_create_cost_label("Wealth", energy_cost_wealth, game_state.wealth)
+		Utils.BuildingType.FOOD:
+			_create_cost_label("Dirt", food_cost_dirt, game_state.dirt)
+			_create_cost_label("Stone", food_cost_stone, game_state.stone)
+			_create_cost_label("Iron", food_cost_iron, game_state.iron)
+			_create_cost_label("Copper", food_cost_copper, game_state.copper)
+			_create_cost_label("Water", food_cost_water, game_state.water)
+			_create_cost_label("Micel", food_cost_micel, game_state.micel)
+			_create_cost_label("Wealth", food_cost_wealth, game_state.wealth)
+		Utils.BuildingType.BEER:
+			_create_cost_label("Dirt", beer_cost_dirt, game_state.dirt)
+			_create_cost_label("Stone", beer_cost_stone, game_state.stone)
+			_create_cost_label("Iron", beer_cost_iron, game_state.iron)
+			_create_cost_label("Copper", beer_cost_copper, game_state.copper)
+			_create_cost_label("Water", beer_cost_water, game_state.water)
+			_create_cost_label("Micel", beer_cost_micel, game_state.micel)
+			_create_cost_label("Wealth", beer_cost_wealth, game_state.wealth)
+		_:
+			print("Unknown building type: ", building_type)
+	pass
+
+func _create_cost_label(resource_name: String, cost: int, available: int) -> void:
+	if cost > 0:
+		var label = Label.new()
+		label.text = str(cost) + " " + resource_name
+		if available < cost:
+			label.modulate = Color8(255, 0, 0)
+			
+		labelContainer.add_child(label)
 
 func set_tile(pos: Vector2i) -> void:
 	indicator.clear()
