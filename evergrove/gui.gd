@@ -86,7 +86,6 @@ func set_label_current_level(value: String) -> void:
 func _on_food_hub_button_pressed():
 	world.set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.FOOD)
 
-
 func _on_beer_hub_button_pressed():
 	world.set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.BEER)
 
