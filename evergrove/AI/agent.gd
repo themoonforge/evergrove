@@ -6,46 +6,46 @@ const Utils = preload("res://Utils.gd")
 # defaults
 const DEFAULT_TYPE: ai_globals.AGENT_TYPE = ai_globals.AGENT_TYPE.DWARF
 # also abused as max energy level for the moment
-const DEFAULT_ENERGY: int = 100
-const DEFAULT_FOOD: int = 100
+const DEFAULT_ENERGY: int = 500
+const DEFAULT_FOOD: int = 300
 const DEFAULT_BEER: int = 100
 const MAX_TASKS: int = 5
-const MIN_ENERGY_RECHARGE_PER_TICK:float=10
-const MAX_ENERGY_RECHARGE_PER_TICK:float=20
-const MIN_FOOD_RECHARGE_PER_TICK:float=10
-const MAX_FOOD_RECHARGE_PER_TICK:float=20
-const MIN_BEER_RECHARGE_PER_TICK:float=10
-const MAX_BEER_RECHARGE_PER_TICK:float=20
+const MIN_ENERGY_RECHARGE_PER_TICK: float = 50
+const MAX_ENERGY_RECHARGE_PER_TICK: float = 100
+const MIN_FOOD_RECHARGE_PER_TICK: float = 30
+const MAX_FOOD_RECHARGE_PER_TICK: float = 60
+const MIN_BEER_RECHARGE_PER_TICK: float = 10
+const MAX_BEER_RECHARGE_PER_TICK: float = 20
 
-const MIN_ENERGY_CONSUMTION_PER_TICK:float=0.1
-const MAX_ENERGY_CONSUMTION_PER_TICK:float=1.5
-const MIN_FOOD_CONSUMTION_PER_TICK:float=0.1
-const MAX_FOOD_CONSUMTION_PER_TICK:float=1.5
-const MIN_BEER_CONSUMTION_PER_TICK:float=0.1
-const MAX_BEER_CONSUMTION_PER_TICK:float=1.5
+const MIN_ENERGY_CONSUMTION_PER_TICK: float = 0.1
+const MAX_ENERGY_CONSUMTION_PER_TICK: float = 1.5
+const MIN_FOOD_CONSUMTION_PER_TICK: float = 0.1
+const MAX_FOOD_CONSUMTION_PER_TICK: float = 1.5
+const MIN_BEER_CONSUMTION_PER_TICK: float = 0.1
+const MAX_BEER_CONSUMTION_PER_TICK: float = 1.5
 
-const MINING_CONSUMTION_FACTOR:float=1.5
-const SWIMMING_CONSUMTION_FACTOR:float=1.5
-const BUILDING_CONSUMTION_FACTOR:float=1.5
+const MINING_CONSUMTION_FACTOR: float = 1.5
+const SWIMMING_CONSUMTION_FACTOR: float = 1.5
+const BUILDING_CONSUMTION_FACTOR: float = 1.5
 
-const ENERGY_TRASHOLD:float=30
-const FOOD_TRASHOLD:float=30
-const BEER_TRASHOLD:float=30
+const ENERGY_TRASHOLD: float = 30
+const FOOD_TRASHOLD: float = 30
+const BEER_TRASHOLD: float = 30
 
 var type: ai_globals.AGENT_TYPE
 var energy: float
 var food: float
 var beer: float
 var tasks: Array[Task]
-var working_on_task:bool = false
-var accepting_tasks:bool = true
-var registered_as_taskless:bool = false
-var recharge_energy_queued:bool = false
-var recharge_food_queued:bool = false
-var recharge_beer_queued:bool = false
-var zero_energy_mode:bool = false
-var zero_food_mode:bool = false
-var zero_beer_mode:bool = false
+var working_on_task: bool = false
+var accepting_tasks: bool = true
+var registered_as_taskless: bool = false
+var recharge_energy_queued: bool = false
+var recharge_food_queued: bool = false
+var recharge_beer_queued: bool = false
+var zero_energy_mode: bool = false
+var zero_food_mode: bool = false
+var zero_beer_mode: bool = false
 
 var starving_mode: bool = false
 
@@ -61,30 +61,30 @@ const max_idle_ticks = 5
 
 const random_range = 10
 
-func set_recharge_energy_queued(value:bool) -> void:
+func set_recharge_energy_queued(value: bool) -> void:
 	recharge_energy_queued = value
 	eval_accepting_tasks()
 
-func set_recharge_food_queued(value:bool) -> void:
+func set_recharge_food_queued(value: bool) -> void:
 	recharge_food_queued = value
 	eval_accepting_tasks()
 
-func set_recharge_beer_queued(value:bool) -> void:
+func set_recharge_beer_queued(value: bool) -> void:
 	recharge_beer_queued = value
 	eval_accepting_tasks()
 	
 func eval_accepting_tasks() -> void:
 	accepting_tasks = !(recharge_energy_queued || recharge_food_queued || recharge_beer_queued || starving_mode || tasks.size() >= MAX_TASKS)
 
-func set_zero_energy_mode(value:bool) -> void:
+func set_zero_energy_mode(value: bool) -> void:
 	zero_energy_mode = value
 	eval_starving_mode()
 	
-func set_zero_beer_mode(value:bool) -> void:
+func set_zero_beer_mode(value: bool) -> void:
 	zero_beer_mode = value
 	eval_starving_mode()
 	
-func set_zero_food_mode(value:bool) -> void:
+func set_zero_food_mode(value: bool) -> void:
 	zero_food_mode = value
 	eval_starving_mode()
 
@@ -110,7 +110,7 @@ func _ready() -> void:
 	ai_globals.connect("PROCESS_TICK", _on_ai_tick)
 	ai_globals.AGENT_CREATED.emit(self)
 
-static func create(type: ai_globals.AGENT_TYPE=DEFAULT_TYPE, energy: int = DEFAULT_ENERGY) -> Agent:
+static func create(type: ai_globals.AGENT_TYPE = DEFAULT_TYPE, energy: int = DEFAULT_ENERGY) -> Agent:
 	var agent: Agent = Agent.new()
 	agent.type = type
 	agent.energy = energy
@@ -129,7 +129,7 @@ func assign_task(task: Task) -> bool:
 
 func push_back_last_task() -> void:
 	if tasks.size() >= MAX_TASKS:
-		var size = tasks.size()	- 1
+		var size = tasks.size() - 1
 		for i in range(size, -1):
 			var task = tasks[i]
 			if task.is_interruptable():
@@ -268,7 +268,7 @@ func handle_task_end(task: Task) -> bool:
 		working_on_task = false
 		#print("Agent %s finished task" % [self.name])
 		return true
-	elif !task.waiting_running: 
+	elif !task.waiting_running:
 		task.waiting_running = true
 		task.waining_callback.call(dwarf)
 	else:
@@ -291,7 +291,7 @@ func run_task(task: Task) -> void:
 			#print("Agent %s working on SLEEP %s" % [self.name, working_on_task])
 			if !working_on_task:
 				walk_to(dwarf, task)
-			else: 
+			else:
 				if is_finished_walking(dwarf, task):
 					dwarf.set_sleeping()
 					var recharge = randf_range(MIN_ENERGY_RECHARGE_PER_TICK, MAX_ENERGY_RECHARGE_PER_TICK)
@@ -305,7 +305,7 @@ func run_task(task: Task) -> void:
 			#print("Agent %s working on EAT %s" % [self.name, working_on_task])
 			if !working_on_task:
 				walk_to(dwarf, task)
-			else: 
+			else:
 				if is_finished_walking(dwarf, task):
 					dwarf.set_eating()
 					var recharge = randf_range(MIN_FOOD_RECHARGE_PER_TICK, MAX_FOOD_RECHARGE_PER_TICK)
@@ -319,7 +319,7 @@ func run_task(task: Task) -> void:
 			#print("Agent %s working on DRINK %s" % [self.name, working_on_task])
 			if !working_on_task:
 				walk_to(dwarf, task)
-			else: 
+			else:
 				if is_finished_walking(dwarf, task):
 					dwarf.set_drinking()
 					var recharge = randf_range(MIN_BEER_RECHARGE_PER_TICK, MAX_BEER_RECHARGE_PER_TICK)
@@ -339,7 +339,7 @@ func evaluate_starving_mode() -> bool:
 			ai_globals.disconnect("PROCESS_TICK", _on_ai_tick)
 			ai_globals.AGENT_DIE.emit(self)
 			dwarf.die_dwarf()
-			return true	
+			return true
 	else:
 		ticks_in_starving_mode = 0
 	return false
@@ -382,7 +382,7 @@ func is_on_position(dwarf: Dwarf, task: Task) -> bool:
 	return dwarf.current_level == task.location.level && task.location.coordinates.distance_to(dwarf.current_position) < 0.5
 
 func walk_to(dwarf: Dwarf, task: Task) -> void:
-	var movement_target:Vector3i = dwarf.walk_to(task.location.coordinates, task.location.level)
+	var movement_target: Vector3i = dwarf.walk_to(task.location.coordinates, task.location.level)
 	task.location.coordinates.x = movement_target.x
 	task.location.coordinates.y = movement_target.y
 	task.location.level = movement_target.z
