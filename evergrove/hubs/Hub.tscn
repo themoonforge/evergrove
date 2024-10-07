@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b5dlil4rdalx3"]
+[gd_scene load_steps=14 format=3 uid="uid://b5dlil4rdalx3"]
 
 [ext_resource type="Script" path="res://hubs/hub.gd" id="1_bbg3d"]
 [ext_resource type="Texture2D" uid="uid://btx6pcq8h7lqt" path="res://hubs/beer_hub/beer_hub1.png" id="2_wfrin"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://il6pnwplvdy" path="res://hubs/energy_hub/energy_hub2.png" id="5_a5neh"]
 [ext_resource type="Texture2D" uid="uid://dtnmcje85qhw" path="res://hubs/food_hub/food_hub1.png" id="6_einag"]
 [ext_resource type="Texture2D" uid="uid://d30syauf7qb6t" path="res://hubs/food_hub/food_hub2.png" id="7_3k8af"]
+[ext_resource type="Texture2D" uid="uid://df8fq6pxv4fwu" path="res://spawn/spawn1.png" id="8_2eqwj"]
+[ext_resource type="Texture2D" uid="uid://ng8vbrnwh5ka" path="res://spawn/spawn2.png" id="9_e6enw"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_tryd5"]
 animations = [{
@@ -50,6 +52,20 @@ animations = [{
 "speed": 1.0
 }]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_ypimv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_2eqwj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_e6enw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 1.0
+}]
+
 [node name="Hub" type="Node2D"]
 y_sort_enabled = true
 texture_filter = 1
@@ -74,4 +90,10 @@ position = Vector2(23, 43)
 sprite_frames = SubResource("SpriteFrames_6edsx")
 frame = 1
 frame_progress = 0.419841
+offset = Vector2(0, -19)
+
+[node name="Spawner" type="AnimatedSprite2D" parent="."]
+y_sort_enabled = true
+position = Vector2(6, 21)
+sprite_frames = SubResource("SpriteFrames_ypimv")
 offset = Vector2(0, -19)

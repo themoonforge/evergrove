@@ -58,34 +58,23 @@ func _ready():
 
 	for level in range(LEVELS):		
 		var tile_map : DungeonLayer  = preload("res://map/DungeonLayer.tscn").instantiate()
-		
 		tile_map.init(Globals.seed + 25 * level, level)
-
-		tile_maps[level] = tile_map
-		
+		tile_maps[level] = tile_map		
 		add_child(tile_map)
-		# Generiere initiale Chunks
-		# generate_tile(tile_map, Vector2i(0, 0))
 
 	var start_map = tile_maps[0]
-	set_air_around_tile(start_map, Vector2i(0, 0), false)
+	set_air_around_tile(start_map, Vector2i(0, 0), false, 3)
+
 	set_active_level(0)
 	set_cursor_type(Utils.CursorType.SELECT)
 
-	# 
-	#
-	# var start_key = get_unique_id(Vector2i(20, 20), 0)
-	# var end_key = get_unique_id(Vector2i(-20, -20), 0)
-	
-	# var path = astar.get_point_path(start_key, end_key)
-	
-	# for point in path:
-	# 	var sprite = Sprite2D.new()
-	# 	sprite.texture = sprite_texture
-	# 	add_child(sprite)
-	# 	sprite.z_index = 100
-	# 	sprite.position = visible_tile_map.map_to_local(Vector2i(point.x, point.y))
-		
+	var tiles = {}
+	for x in range(-1, 2):
+		for y in range(-1, 2):
+			var pos = Vector2i(x, y)
+			tiles[pos] = true
+	var sprite_pos = visible_tile_map.to_local(Vector2i(1, 1))
+	build_building(Utils.BuildingType.SPAWNER, sprite_pos, tiles, 0, true)
 	
 func set_active_level(my_level: int):
 	#print("set active level: %d" % [my_level])
@@ -99,9 +88,9 @@ func set_active_level(my_level: int):
 	game_state.set_current_level(my_level)
 	check_visible_tiles(true)
 
-func set_air_around_tile(tile_map: TileMap, pos: Vector2i, skip_center: bool = true):
-	for x in range(-1, 2):
-		for y in range(-1, 2):
+func set_air_around_tile(tile_map: TileMap, pos: Vector2i, skip_center: bool = true, radius: int = 1):
+	for x in range(radius * -1, radius + 1):
+		for y in range(radius * -1, radius + 1):
 			var new_pos = pos + Vector2i(x, y)
 			if (skip_center && new_pos == pos):
 				continue
@@ -393,10 +382,10 @@ func is_free_space(pos: Vector2i, level: int = visible_level) -> bool:
 
 	return free_space && !blocked
 
-func build_building(building_type: Utils.BuildingType, my_position: Vector2, tiles: Dictionary, level: int = visible_level):
+func build_building(building_type: Utils.BuildingType, my_position: Vector2, tiles: Dictionary, level: int = visible_level, skip_build: bool = false):
 	var tile_map = tile_maps[level]
 	
-	tile_map.build_building(building_type, my_position, tiles)
+	tile_map.build_building(building_type, my_position, tiles, skip_build)
 	for tile in tiles.keys():
 		var point = Utils.convert_to_v3_astar(tile, level)
 		var key = get_unique_id_v3(point)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://b5heo41rpqdo0"]
+[gd_scene load_steps=93 format=3 uid="uid://b5heo41rpqdo0"]
 
 [ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
 [ext_resource type="Texture2D" uid="uid://cl6nkkxoir3uu" path="res://dwarf/shadow.png" id="2_jrrhj"]
@@ -81,6 +81,9 @@
 [ext_resource type="Texture2D" uid="uid://3oglnev1bvq8" path="res://dwarf/thicc/body/medium/medium_skin_right2.png" id="66_sfkjb"]
 [ext_resource type="Texture2D" uid="uid://b2uemtns66pq4" path="res://dwarf/hammer/hammer1.png" id="67_d5yhb"]
 [ext_resource type="Texture2D" uid="uid://bxb3gme20r56c" path="res://dwarf/hammer/hammer2.png" id="68_vh2r5"]
+[ext_resource type="Texture2D" uid="uid://cnqcjxvyn1ec4" path="res://spawn/spawn_dust/spawn_dust1.png" id="82_vqfuu"]
+[ext_resource type="Texture2D" uid="uid://7opgm37v6wtw" path="res://spawn/spawn_dust/spawn_dust2.png" id="83_gy6nx"]
+[ext_resource type="Texture2D" uid="uid://t6f1xa5mxk34" path="res://spawn/spawn_dust/spawn_dust3.png" id="84_ij1hx"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_04c1a"]
 animations = [{
@@ -960,10 +963,26 @@ animations = [{
 "loop": true,
 "name": &"sleeping_effect",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("82_vqfuu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_gy6nx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_ij1hx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_hkdl5")
+}],
+"loop": false,
+"name": &"spawn_effect",
+"speed": 5.0
 }]
 
 [node name="Dwarf" type="Node2D"]
-y_sort_enabled = true
 texture_filter = 1
 script = ExtResource("1_c3sis")
 
@@ -1042,5 +1061,37 @@ visible = false
 z_index = 1
 position = Vector2(1, 27)
 sprite_frames = SubResource("SpriteFrames_nmf58")
-animation = &"sleeping_effect"
+animation = &"spawn_effect"
+frame = 2
+frame_progress = 1.0
 offset = Vector2(0, -27)
+
+[node name="EnergyBar" type="ProgressBar" parent="."]
+modulate = Color(0.404948, 1, 0.997705, 1)
+offset_left = -8.0
+offset_top = -35.0
+offset_right = -4.0
+offset_bottom = -23.0
+value = 50.0
+fill_mode = 3
+show_percentage = false
+
+[node name="FoodBar" type="ProgressBar" parent="."]
+modulate = Color(0.729059, 0.398913, 0.666405, 1)
+offset_left = -2.0
+offset_top = -35.0
+offset_right = 2.0
+offset_bottom = -23.0
+value = 50.0
+fill_mode = 3
+show_percentage = false
+
+[node name="BeerBar" type="ProgressBar" parent="."]
+modulate = Color(0.92549, 0.576471, 0, 1)
+offset_left = 4.0
+offset_top = -35.0
+offset_right = 8.0
+offset_bottom = -23.0
+value = 50.0
+fill_mode = 3
+show_percentage = false

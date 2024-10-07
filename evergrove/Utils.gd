@@ -2,6 +2,7 @@ enum BuildingType{
 	BEER,
 	ENERGY,
 	FOOD,
+	SPAWNER,
 }
 
 const TILE_SIZE_HALF = 8

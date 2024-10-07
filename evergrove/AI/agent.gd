@@ -109,12 +109,12 @@ static func create(type: ai_globals.AGENT_TYPE=DEFAULT_TYPE, energy: int = DEFAU
 # true if task assignment was successful
 func assign_task(task: Task) -> bool:
 	if not accepting_tasks:
-		print("Agent %s currently not accepting tasks" % [self.name])
+		#print("Agent %s currently not accepting tasks" % [self.name])
 		return false
 	
 	add_task_back(task)
 	
-	print("Agent %s received task from hivemind" % [self.name])
+	#print("Agent %s received task from hivemind" % [self.name])
 	return true
 
 func push_back_last_task() -> void:
@@ -159,12 +159,12 @@ func add_task_front(new_task: Task) -> void:
 	for i in range(tasks.size()):
 		var task = tasks[i]
 		if task.is_interruptable():
-			print("Agent %s inserting task at %d, %d" % [self.name, i, tasks.size()])
+			#print("Agent %s inserting task at %d, %d" % [self.name, i, tasks.size()])
 			tasks.insert(i, new_task)
-			print("Agent %s inserted task at %d, %d" % [self.name, i, tasks.size()])
+			#print("Agent %s inserted task at %d, %d" % [self.name, i, tasks.size()])
 			return
 	
-	print("Agent %s inserted task at end %d" % [self.name, tasks.size() + 1])
+	#print("Agent %s inserted task at end %d" % [self.name, tasks.size() + 1])
 	tasks.append(new_task)
 
 func evaluate_consumtion() -> void:
@@ -194,16 +194,18 @@ func evaluate_consumtion() -> void:
 	food = max(0, food - food_consumtion)
 	beer = max(0, beer - beer_consumtion)
 
-	print("Agent %s change enegery from %f to %f" % [self.name, old_energy, energy])
-	print("Agent %s change food from %f to %f" % [self.name, old_food, food])
-	print("Agent %s change beer from %f to %f" % [self.name, old_beer, beer])
+	#print("Agent %s change enegery from %f to %f" % [self.name, old_energy, energy])
+	#print("Agent %s change food from %f to %f" % [self.name, old_food, food])
+	#print("Agent %s change beer from %f to %f" % [self.name, old_beer, beer])
+
+	dwarf.update_bars(energy, food, beer)
 
 #return Task or null
 func generate_private_task(building_type: Utils.BuildingType):
 	var location = ai_globals.Location.create_from_dwarf(dwarf)
 	var target_location = ai_globals.hivemind.get_nearest_hub_location(building_type, location)
 	if target_location.invalid:
-		print("Agent %s unable to create private task, target invalid (probably no hub exists)" % [self.name])
+		#print("Agent %s unable to create private task, target invalid (probably no hub exists)" % [self.name])
 		return null
 	match building_type:
 		Utils.BuildingType.ENERGY:
@@ -214,31 +216,31 @@ func generate_private_task(building_type: Utils.BuildingType):
 			return Task.create(ai_globals.TASK_TYPE.DRINK, "Move to nearest beer hub", 0, target_location)
 
 func evaluate_private_needs():
-	print("Agent %s private needs %s, %s, %s , %s, %s, %f, %f, %f" % [self.name, starving_mode, accepting_tasks, recharge_energy_queued, recharge_food_queued, recharge_beer_queued, energy, food, beer])
+	#print("Agent %s private needs %s, %s, %s , %s, %s, %f, %f, %f" % [self.name, starving_mode, accepting_tasks, recharge_energy_queued, recharge_food_queued, recharge_beer_queued, energy, food, beer])
 	if energy <= ENERGY_TRASHOLD && !recharge_energy_queued:
 		var task = generate_private_task(Utils.BuildingType.ENERGY)
 		if task:
 			add_task_front(task)
 			set_recharge_energy_queued(true)
-			print("%s has low energy, queueing energy task" % [self.name]) 
-		else:
-			print("%s unable to create energy task" % [self.name])
+			#print("%s has low energy, queueing energy task" % [self.name]) 
+		#else:
+			#print("%s unable to create energy task" % [self.name])
 	if food <= FOOD_TRASHOLD && !recharge_food_queued:
 		var task = generate_private_task(Utils.BuildingType.FOOD)
 		if task:
 			add_task_front(task)
 			set_recharge_food_queued(true)
-			print("%s has low food, queueing food task" % [self.name]) 
-		else:
-			print("%s unable to create food task" % [self.name])
+			#print("%s has low food, queueing food task" % [self.name]) 
+		#else:
+			#print("%s unable to create food task" % [self.name])
 	if beer <= BEER_TRASHOLD && !recharge_beer_queued:
 		var task = generate_private_task(Utils.BuildingType.BEER)
 		if task:
 			add_task_front(task)
 			set_recharge_beer_queued(true)
-			print("%s has low beer, queueing beer task" % [self.name]) 
-		else:
-			print("%s unable to create beer task" % [self.name])
+			#print("%s has low beer, queueing beer task" % [self.name]) 
+		#else:
+			#print("%s unable to create beer task" % [self.name])
 
 func evaluate_zero_modes():
 	set_zero_energy_mode(energy == 0)
@@ -247,14 +249,14 @@ func evaluate_zero_modes():
 
 # return true if task is finished
 func handle_task_end(task: Task) -> bool:
-	if !is_on_position(dwarf, task):
-		print("woops not on possition -> debug needed")
+	#if !is_on_position(dwarf, task):
+		#print("woops not on possition -> debug needed")
 	if task.waiting_time <= 0:
 		if task.has_callback:
 			task.callback.call(dwarf)
 		tasks.pop_front()
 		working_on_task = false
-		print("Agent %s finished task" % [self.name])
+		#print("Agent %s finished task" % [self.name])
 		return true
 	elif !task.waiting_running: 
 		task.waiting_running = true
@@ -266,17 +268,17 @@ func handle_task_end(task: Task) -> bool:
 func run_task(task: Task) -> void:
 	match task.type:
 		ai_globals.TASK_TYPE.MOVE_TO:
-			print("Agent %s working on MOVE %s" % [self.name, working_on_task])
+			#print("Agent %s working on MOVE %s" % [self.name, working_on_task])
 			if !working_on_task:
 				walk_to(dwarf, task)
 			else:
 				if is_finished_walking(dwarf, task):
 					if handle_task_end(task):
 						eval_accepting_tasks()
-				else:
-					print("Agent %s still on task" % [self.name])
+				#else:
+					#print("Agent %s still on task" % [self.name])
 		ai_globals.TASK_TYPE.SLEEP:
-			print("Agent %s working on SLEEP %s" % [self.name, working_on_task])
+			#print("Agent %s working on SLEEP %s" % [self.name, working_on_task])
 			if !working_on_task:
 				walk_to(dwarf, task)
 			else: 
@@ -290,7 +292,7 @@ func run_task(task: Task) -> void:
 							set_recharge_energy_queued(false)
 							set_zero_energy_mode(false)
 		ai_globals.TASK_TYPE.EAT:
-			print("Agent %s working on EAT %s" % [self.name, working_on_task])
+			#print("Agent %s working on EAT %s" % [self.name, working_on_task])
 			if !working_on_task:
 				walk_to(dwarf, task)
 			else: 
@@ -304,7 +306,7 @@ func run_task(task: Task) -> void:
 							set_recharge_food_queued(false)
 							set_zero_food_mode(false)
 		ai_globals.TASK_TYPE.DRINK:
-			print("Agent %s working on DRINK %s" % [self.name, working_on_task])
+			#print("Agent %s working on DRINK %s" % [self.name, working_on_task])
 			if !working_on_task:
 				walk_to(dwarf, task)
 			else: 
@@ -319,7 +321,7 @@ func run_task(task: Task) -> void:
 							set_zero_beer_mode(false)
 
 func _on_ai_tick():
-	print("Agent %s processing tick" % [self.name])
+	#print("Agent %s processing tick" % [self.name])
 	evaluate_consumtion()
 	evaluate_private_needs()
 	evaluate_zero_modes()
@@ -342,7 +344,7 @@ func walk_to(dwarf: Dwarf, task: Task) -> void:
 	task.location.coordinates.x = movement_target.x
 	task.location.coordinates.y = movement_target.y
 	task.location.level = movement_target.z
-	print("Agent %s moving to task location %v, %d" % [self.name, task.location.coordinates, task.location.level])
+	#print("Agent %s moving to task location %v, %d" % [self.name, task.location.coordinates, task.location.level])
 	working_on_task = true
 	
 func is_finished_walking(dwarf: Dwarf, task: Task) -> bool:

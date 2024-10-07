@@ -9,6 +9,10 @@ const Utils = preload("../Utils.gd")
 @onready var effect_animator: AnimatedSprite2D = $"./EffectAnimator"
 @onready var action_effect_animator: AnimatedSprite2D = $"./ActionEffectAnimator"
 
+@onready var energy_bar: ProgressBar = $"./EnergyBar"
+@onready var food_bar: ProgressBar = $"./FoodBar"
+@onready var beer_bar: ProgressBar = $"./BeerBar"
+
 var body_animator: AnimatedSprite2D
 var clothing_animator: AnimatedSprite2D
 var hair_animator: AnimatedSprite2D
@@ -54,6 +58,8 @@ const drinking_effect = "drinking_effect"
 const sleeping_effect = "sleeping_effect"
 const building_effect = "building_effect"
 
+const spawn_effect = "spawn_effect"
+
 @export var type: DwarfType
 @export var skin: DwarfSkin
 @export var hair: DwarfHair
@@ -77,6 +83,16 @@ enum DwarfHair {
 }
 
 @export var action_effect_animator_position: Vector2
+
+func show_bars(value: bool) -> void:
+	energy_bar.visible = value
+	food_bar.visible = value
+	beer_bar.visible = value
+
+func update_bars(energy: float, food: float, beer: float) -> void:
+	energy_bar.value = energy
+	food_bar.value = food
+	beer_bar.value = beer
 
 func set_current_position(my_position: Vector2i, level: int, force: bool = false) -> void:
 	if !force && current_position == my_position && current_level == level:
@@ -143,6 +159,8 @@ func _ready():
 		
 	clothing_animator.modulate = Color8(rng.randi_range(80, 140), 	rng.randi_range(80, 140), 	rng.randi_range(80, 140))
 
+	set_normal()
+
 	# TODO retrieve walking direction and call play on animated sprite
 	# this is just an example how to call animations
 	# instantiate AI controller
@@ -150,8 +168,11 @@ func _ready():
 		add_child(Agent.create())
 		game_state.selected_dwarf = self
 		game_state.inc_dwarfs(1)
+		action_effect_animator.position = action_effect_animator_position + Vector2(0, -Utils.TILE_SIZE_HALF)
+		play_animation(action_effect_animator, spawn_effect)
+	else:
+		show_bars(false)
 
-	set_normal()
 	print("finish dwarf")
 
 func play_animation(animator: AnimatedSprite2D, animation: String) -> void:
@@ -211,9 +232,9 @@ func play_character_animation(animation: String) -> void:
 	play_animation(hair_animator, hair_animation_name)
 
 func set_animation(my_behaviour: Utils.Behaviour, my_walking_direction: Utils.WalkingDirection) -> void:
-	print("set_animation")
+	#print("set_animation")
 	if behaviour == my_behaviour && walking_direction == my_walking_direction:
-		print("skip set_animation")
+		#print("skip set_animation")
 		return	
 
 	behaviour = my_behaviour

@@ -7,6 +7,7 @@ const Utils = preload("../Utils.gd")
 @onready var beer: AnimatedSprite2D = $"./Beer"
 @onready var energy: AnimatedSprite2D = $"./Energy"
 @onready var food: AnimatedSprite2D = $"./Food"
+@onready var spawner: AnimatedSprite2D = $"./Spawner"
 
 @export var type: Utils.BuildingType
 
@@ -34,7 +35,7 @@ func set_is_build(my_is_build: bool) -> void:
 	else:
 		self.modulate.a = 0.35
 
-func init(my_type: Utils.BuildingType, my_tiles: Dictionary, my_tile_map): 
+func init(my_type: Utils.BuildingType, my_tiles: Dictionary, my_tile_map, skip_build: bool = false) -> void: 
 	type = my_type
 	tiles = my_tiles
 	match type:
@@ -42,27 +43,42 @@ func init(my_type: Utils.BuildingType, my_tiles: Dictionary, my_tile_map):
 			beer.visible = true
 			energy.visible = false
 			food.visible = false
+			spawner.visible = false
 			beer.play("default")
 			energy.stop()
 			food.stop()
+			spawner.stop()
 		Utils.BuildingType.ENERGY:
 			beer.visible = false
 			energy.visible = true
 			food.visible = false
+			spawner.visible = false
 			beer.stop()
 			energy.play("default")
 			food.stop()
+			spawner.stop()
 		Utils.BuildingType.FOOD:
 			beer.visible = false
 			energy.visible = false
 			food.visible = true
+			spawner.visible = false
 			beer.stop()
 			energy.stop()
 			food.play("default")
+			spawner.stop()
+		Utils.BuildingType.SPAWNER:
+			beer.visible = false
+			energy.visible = false
+			food.visible = false
+			spawner.visible = true
+			beer.stop()
+			energy.stop()
+			food.stop()
+			spawner.play("default")
 	
 	tile_map = my_tile_map
 	
-	if tile_map:
+	if tile_map && !skip_build:
 		set_is_build(false)
 
 # Called when the node enters the scene tree for the first time.

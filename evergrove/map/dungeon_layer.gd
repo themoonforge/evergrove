@@ -82,7 +82,7 @@ func clear_fow(pos: Vector2i, radius: int):
 			var tile_pos = Vector2i(pos.x + x, pos.y + y)
 			erase_cell(1, tile_pos)
 
-func build_building(building_type: Utils.BuildingType, my_position: Vector2, tiles: Dictionary):
+func build_building(building_type: Utils.BuildingType, my_position: Vector2, tiles: Dictionary, skip_build: bool = false):
 	var building: Hub = preload("res://hubs/Hub.tscn").instantiate()
 	hub_container.add_child(building)
 	building.position = my_position
@@ -91,13 +91,16 @@ func build_building(building_type: Utils.BuildingType, my_position: Vector2, til
 	for tile in tiles.keys():
 		blocked_space[tile] = true
 	
-	var build_callback: Callable = func (dwarf):
-		print("callback!!!!")
+	if !skip_build:
+		var build_callback: Callable = func (dwarf):
+			print("callback!!!!")
+			building.set_is_build(true)
+			dwarf.set_normal()
+
+		var waiting_callback: Callable = func (dwarf):
+			dwarf.set_building()
+
+		var task: Task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "", 0, ai_globals.Location.create(tiles.keys()[4], level), build_callback, waiting_callback, 4)
+		ai_globals.hivemind.add_task(task, true)
+	else:
 		building.set_is_build(true)
-		dwarf.set_normal()
-
-	var waiting_callback: Callable = func (dwarf):
-		dwarf.set_building()
-
-	var task: Task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "", 0, ai_globals.Location.create(tiles.keys()[4], level), build_callback, waiting_callback, 4)
-	ai_globals.hivemind.add_task(task, true)

@@ -28,6 +28,7 @@ script = ExtResource("1_acbsa")
 [node name="GUI" type="CanvasLayer" parent="."]
 process_priority = 1
 script = ExtResource("2_n34sk")
+spawn_position = Vector2i(0, 2)
 
 [node name="VFlowContainer" type="VFlowContainer" parent="GUI"]
 offset_left = 17.0
@@ -97,6 +98,7 @@ script = ExtResource("2_8uhg5")
 [node name="Camera2D" type="Camera2D" parent="."]
 modulate = Color(0.266575, 0.266575, 0.266575, 1)
 self_modulate = Color(0.310617, 0.310617, 0.310617, 1)
+zoom = Vector2(5, 5)
 script = ExtResource("1_bwmuh")
 
 [node name="World" type="Node2D" parent="."]
