@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=3 uid="uid://b5heo41rpqdo0"]
+[gd_scene load_steps=90 format=3 uid="uid://b5heo41rpqdo0"]
 
 [ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
 [ext_resource type="Texture2D" uid="uid://cl6nkkxoir3uu" path="res://dwarf/shadow.png" id="2_jrrhj"]
@@ -79,6 +79,8 @@
 [ext_resource type="Texture2D" uid="uid://bgqhjp6crh355" path="res://dwarf/thicc/body/medium/medium_skin_left2.png" id="64_03r85"]
 [ext_resource type="Texture2D" uid="uid://j18mejkb7pdw" path="res://dwarf/thicc/body/medium/medium_skin_right1.png" id="65_pkj4e"]
 [ext_resource type="Texture2D" uid="uid://3oglnev1bvq8" path="res://dwarf/thicc/body/medium/medium_skin_right2.png" id="66_sfkjb"]
+[ext_resource type="Texture2D" uid="uid://b2uemtns66pq4" path="res://dwarf/hammer/hammer1.png" id="67_d5yhb"]
+[ext_resource type="Texture2D" uid="uid://bxb3gme20r56c" path="res://dwarf/hammer/hammer2.png" id="68_vh2r5"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_04c1a"]
 animations = [{
@@ -877,10 +879,10 @@ animations = [{
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("55_qm2om")
+"texture": ExtResource("67_d5yhb")
 }, {
 "duration": 1.0,
-"texture": ExtResource("56_rfcbn")
+"texture": ExtResource("68_vh2r5")
 }],
 "loop": true,
 "name": &"building_effect",
@@ -1011,7 +1013,7 @@ offset = Vector2(0, -9)
 y_sort_enabled = true
 position = Vector2(0, 9)
 sprite_frames = SubResource("SpriteFrames_gi7fk")
-animation = &"hair_base_right"
+animation = &"hair_base_idle"
 offset = Vector2(0, -9)
 
 [node name="ThiccBase" type="Node2D" parent="."]
@@ -1027,13 +1029,13 @@ animation = &"idle"
 
 [node name="Hair" type="AnimatedSprite2D" parent="ThiccBase"]
 sprite_frames = SubResource("SpriteFrames_ei4od")
-animation = &"hair_base_left"
+animation = &"hair_base_idle"
 
 [node name="EffectAnimator" type="AnimatedSprite2D" parent="."]
 visible = false
 z_index = 2
 sprite_frames = SubResource("SpriteFrames_cignr")
-animation = &"sleeping_effect"
+animation = &"building_effect"
 offset = Vector2(0, -27)
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
