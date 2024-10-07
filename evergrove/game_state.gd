@@ -29,6 +29,8 @@ class_name GameState
 
 @export var wealth_spend: int = 0
 
+@export var dwarf_spawn_cost: int = 0
+
 # Setter methods
 func _set_dirt(value: int) -> void:
 	dirt = value
@@ -79,7 +81,10 @@ func set_current_level(value: int) -> void:
 
 func _set_dwarfs(value: int) -> void:
 	dwarfs = value
-	gui.set_label_dwarf(str(dwarfs))
+	if dwarfs < 3:
+		set_spawn_dwarf_cost(0)
+	else:
+		set_spawn_dwarf_cost(max(value - 3, 0) * 10)
 
 # Increment and Decrement methods
 func inc_dirt(amount: int) -> void:
@@ -162,3 +167,7 @@ func _process(delta: float) -> void:
 
 func calc_wealth() -> int:
 	return silver * silver_factor + gold * gold_factor + gem * gem_factor - wealth_spend
+
+func set_spawn_dwarf_cost(cost: int) -> void:
+	dwarf_spawn_cost = cost
+	gui.set_spawn_cost(dwarf_spawn_cost)

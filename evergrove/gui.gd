@@ -2,6 +2,7 @@ extends CanvasLayer
 
 const Utils = preload("./Utils.gd")
 
+@onready var game_state: GameState = $/root/Game/GameState
 @onready var world: World = $/root/Game/World
 @onready var factory = $/root/Game/Factory
 
@@ -17,6 +18,8 @@ const Utils = preload("./Utils.gd")
 @onready var water_label: Label = $"./VFlowContainer/WaterLabel"
 @onready var dwarf_label: Label = $"./VFlowContainer/DwarfLabel"
 
+@onready var spawn_dwarf_button: Button = $"./VFlowContainer/SpawnDwarfButton"
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -26,6 +29,9 @@ func _process(delta):
 	pass
 
 func _on_spawn_dwarf_button_pressed():
+	if game_state.wealth < game_state.dwarf_spawn_cost:
+		return
+	
 	var dungeon_layer_index = 0 # TODO use correct dungeon  layer
 	var position = spawn_position # TODO use correct position
 	
@@ -84,6 +90,11 @@ func _on_food_hub_button_pressed():
 func _on_beer_hub_button_pressed():
 	world.set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.BEER)
 
-
 func _on_energy_hub_button_pressed():
 	world.set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.ENERGY)
+
+func set_spawn_cost(value: int) -> void:
+	if value > 0:
+		spawn_dwarf_button.text = "Spawn Dwarf (" + str(value) + " $)"	
+	else:
+		spawn_dwarf_button.text = "Spawn Dwarf (free)"
