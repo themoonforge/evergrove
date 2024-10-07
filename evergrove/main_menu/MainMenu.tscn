@@ -103,13 +103,17 @@ position = Vector2(343, 15)
 scale = Vector2(10, 10)
 
 [node name="Dwarf2" parent="MainMenu/DwarfContainer" instance=ExtResource("4_xwuuu")]
-position = Vector2(12, 130)
+position = Vector2(-86, 206)
+scale = Vector2(10, 10)
+
+[node name="Dwarf6" parent="MainMenu/DwarfContainer" instance=ExtResource("4_xwuuu")]
+position = Vector2(238, 260)
 scale = Vector2(10, 10)
 
 [node name="Title" type="Sprite2D" parent="MainMenu"]
 texture_filter = 1
-position = Vector2(594, 210)
-scale = Vector2(2.3125, 2.35088)
+position = Vector2(632, 259)
+scale = Vector2(5, 5.082)
 texture = ExtResource("2_unogd")
 
 [node name="Food2" type="AnimatedSprite2D" parent="MainMenu"]
@@ -127,10 +131,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -52.0
-offset_top = -64.0
-offset_right = 43.0
-offset_bottom = 231.0
+offset_left = -56.0
+offset_top = 31.0
+offset_right = 72.0
+offset_bottom = 326.0
 grow_horizontal = 2
 grow_vertical = 2
 
