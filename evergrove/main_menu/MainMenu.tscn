@@ -1,0 +1,153 @@
+[gd_scene load_steps=13 format=3 uid="uid://cl0bgdas4fo3x"]
+
+[ext_resource type="Texture2D" uid="uid://cymqf6bavcytl" path="res://main_menu/dice.png" id="1_fn6vo"]
+[ext_resource type="Script" path="res://main_menu/main_menu.gd" id="1_ia0xr"]
+[ext_resource type="TileSet" uid="uid://cnwuemdxstgvl" path="res://tile_set.tres" id="2_e0a6s"]
+[ext_resource type="Texture2D" uid="uid://7ew87cjoci7u" path="res://main_menu/evergrove.png" id="2_unogd"]
+[ext_resource type="Texture2D" uid="uid://dtnmcje85qhw" path="res://hubs/food_hub/food_hub1.png" id="2_xyegr"]
+[ext_resource type="Texture2D" uid="uid://d30syauf7qb6t" path="res://hubs/food_hub/food_hub2.png" id="3_5fdnx"]
+[ext_resource type="Texture2D" uid="uid://btx6pcq8h7lqt" path="res://hubs/beer_hub/beer_hub1.png" id="4_5whxv"]
+[ext_resource type="PackedScene" uid="uid://c7g6a1tfb4nji" path="res://dwarf/Dwarf.tscn" id="4_xwuuu"]
+[ext_resource type="Texture2D" uid="uid://c37wje6ikep2c" path="res://hubs/beer_hub/beer_hub2.png" id="5_8nk00"]
+[ext_resource type="Script" path="res://main_menu/animate_main_menu.gd" id="5_csmtb"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a5nqo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_5whxv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_8nk00")
+}],
+"loop": true,
+"name": &"default",
+"speed": 1.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2t2vh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xyegr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_5fdnx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 1.0
+}]
+
+[node name="Root" type="Node"]
+
+[node name="TileMap" type="TileMap" parent="."]
+texture_filter = 1
+scale = Vector2(10, 10)
+tile_set = ExtResource("2_e0a6s")
+format = 2
+layer_0/tile_data = PackedInt32Array(-131072, 0, 0, -131071, 0, 0, -131070, 0, 0, -131069, 0, 0, -65534, 0, 0, -65535, 0, 0, -65536, 0, 0, 0, 0, 0, -65533, 0, 0, -65532, 0, 0, -131068, 0, 0, -131067, 0, 0, -131066, 0, 0, -131065, 0, 0, -131064, 0, 0, -65528, 0, 0, 7, 0, 0, 6, 0, 0, 5, 0, 0, -65531, 0, 0, -65530, 0, 0, -65529, 0, 0, -65527, 0, 0, 9, 0, 0, 8, 0, 0, 65541, 0, 0, 4, 0, 0, 3, 0, 0, 2, 0, 0, 1, 0, 0, 65535, 0, 0, 65534, 0, 0, 65533, 0, 0, 65532, 0, 0, 65537, 0, 0, 65536, 0, 0, 131071, 0, 0, 131070, 0, 0, 131069, 0, 0, 131068, 0, 0, 65538, 0, 0, 65539, 0, 0, 65540, 0, 0, 65542, 0, 0, 65543, 0, 0, 131076, 0, 0, 131075, 0, 0, 131074, 0, 0, 131073, 0, 0, 131072, 0, 0, 196607, 0, 0, 196606, 0, 0, 131077, 0, 0, 131078, 0, 0, 131079, 0, 0, 131080, 0, 0, 131081, 0, 0, 131082, 0, 0, 262143, 0, 0, 262142, 0, 0, 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 196613, 0, 0, 327678, 0, 0, 327677, 0, 0, 327679, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 0, 0, 262151, 0, 0, 262152, 0, 0, 196616, 0, 0, 65544, 0, 0, -131063, 0, 0, 65545, 0, 0, 196617, 0, 0, 262153, 0, 0, 196614, 0, 0, 196605, 0, 0, 262141, 0, 0, -2, 0, 0, -1, 0, 0, -65537, 0, 0, -65526, 0, 0, 10, 0, 0, 65546, 0, 0, 196618, 0, 0, 393215, 0, 0, 327680, 0, 0, 327681, 0, 0, 327682, 0, 0, 327683, 0, 0, 327684, 0, 0, 327685, 0, 0, 327686, 0, 0, 327687, 0, 0, 327688, 0, 0, 327689, 0, 0, 327690, 0, 0, 262154, 0, 0)
+
+[node name="MainMenu" type="CanvasLayer" parent="."]
+script = ExtResource("1_ia0xr")
+
+[node name="BG" type="Sprite2D" parent="MainMenu"]
+texture_filter = 1
+position = Vector2(318.688, 322.688)
+scale = Vector2(39.9141, 40.4141)
+
+[node name="Beer2" type="AnimatedSprite2D" parent="MainMenu"]
+y_sort_enabled = true
+texture_filter = 1
+position = Vector2(140, 217)
+scale = Vector2(10, 10)
+sprite_frames = SubResource("SpriteFrames_a5nqo")
+offset = Vector2(0, -36)
+script = ExtResource("5_csmtb")
+
+[node name="Food1" type="AnimatedSprite2D" parent="MainMenu"]
+y_sort_enabled = true
+texture_filter = 1
+position = Vector2(1082, 265)
+scale = Vector2(10, 10)
+sprite_frames = SubResource("SpriteFrames_2t2vh")
+offset = Vector2(0, -19)
+script = ExtResource("5_csmtb")
+
+[node name="Beer" type="AnimatedSprite2D" parent="MainMenu"]
+y_sort_enabled = true
+texture_filter = 1
+position = Vector2(1150, 1030)
+scale = Vector2(10, 10)
+sprite_frames = SubResource("SpriteFrames_a5nqo")
+offset = Vector2(0, -36)
+script = ExtResource("5_csmtb")
+
+[node name="DwarfContainer" type="Node2D" parent="MainMenu"]
+position = Vector2(561, 394)
+
+[node name="Dwarf4" parent="MainMenu/DwarfContainer" instance=ExtResource("4_xwuuu")]
+position = Vector2(-206, -141)
+scale = Vector2(10, 10)
+
+[node name="Dwarf1" parent="MainMenu/DwarfContainer" instance=ExtResource("4_xwuuu")]
+position = Vector2(-282, 63)
+scale = Vector2(10, 10)
+
+[node name="Dwarf5" parent="MainMenu/DwarfContainer" instance=ExtResource("4_xwuuu")]
+position = Vector2(222, -114)
+scale = Vector2(10, 10)
+
+[node name="Dwarf3" parent="MainMenu/DwarfContainer" instance=ExtResource("4_xwuuu")]
+position = Vector2(343, 15)
+scale = Vector2(10, 10)
+
+[node name="Dwarf2" parent="MainMenu/DwarfContainer" instance=ExtResource("4_xwuuu")]
+position = Vector2(12, 130)
+scale = Vector2(10, 10)
+
+[node name="Title" type="Sprite2D" parent="MainMenu"]
+texture_filter = 1
+position = Vector2(535, 168)
+scale = Vector2(2.3125, 2.35088)
+texture = ExtResource("2_unogd")
+
+[node name="Food2" type="AnimatedSprite2D" parent="MainMenu"]
+y_sort_enabled = true
+texture_filter = 1
+position = Vector2(-57.9999, 690)
+scale = Vector2(10, 10)
+sprite_frames = SubResource("SpriteFrames_2t2vh")
+offset = Vector2(0, -19)
+script = ExtResource("5_csmtb")
+
+[node name="VFlowContainer" type="VFlowContainer" parent="MainMenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -64.0
+offset_right = 43.0
+offset_bottom = 231.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartButton" type="Button" parent="MainMenu/VFlowContainer"]
+layout_mode = 2
+text = "Start"
+
+[node name="VFlowContainer" type="VFlowContainer" parent="MainMenu/VFlowContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Seed input" type="LineEdit" parent="MainMenu/VFlowContainer/VFlowContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+placeholder_text = "Insert Seed"
+
+[node name="RandomButton" type="Button" parent="MainMenu/VFlowContainer/VFlowContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("1_fn6vo")
