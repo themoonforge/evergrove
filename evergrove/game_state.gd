@@ -139,6 +139,9 @@ func dec_micel(amount: int) -> void:
 func inc_dwarfs(amount: int) -> void:
 	_set_dwarfs(dwarfs + amount)
 
+func dec_dwarfs(amount: int) -> void:
+	_set_dwarfs(dwarfs - amount)
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_set_coal(0)

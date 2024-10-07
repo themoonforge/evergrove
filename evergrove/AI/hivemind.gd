@@ -12,6 +12,7 @@ var taskless_agents:Array[Agent]
 func _ready() -> void:
 	# subscribe to events
 	ai_globals.connect("AGENT_CREATED", _on_agent_created)
+	ai_globals.connect("AGENT_DIE", _on_agent_died)
 	ai_globals.connect("AGENT_WITHOUT_TASK", _on_agent_without_task)
 	ai_globals.connect("AGENT_NO_LONGER_TASKLESS", _remove_taskless_agent)
 	add_child(AI_Timer.new())
@@ -22,8 +23,12 @@ func _on_agent_created(agent: Agent):
 	print("Registered agent " + str(agent.name) + " at hivemind")
 	agents.append(agent)
 	# debug: random movement task without layer change
-	task_queue.append(Task.create(ai_globals.TASK_TYPE.MOVE_TO,"Move to random position", 0, ai_globals.Location.create(Vector2i(randi_range(-10,10),randi_range(-10,10)), 0)))
-	print("Added random move task to hivemind queue")
+	#task_queue.append(Task.create(ai_globals.TASK_TYPE.MOVE_TO,"Move to random position", 0, ai_globals.Location.create(Vector2i(randi_range(-10,10),randi_range(-10,10)), 0)))
+	#print("Added random move task to hivemind queue")
+
+func _on_agent_died(agent: Agent):
+	print("Deregistered agent " + str(agent.name) + " at hivemind")
+	agents.erase(agent)
 
 # TODO: create registry of unemployed agents
 # TODO: create signal and slot for deregistering taskless agents, so they can remove their entry if e.g. they go to bed or do another personal needs task instead

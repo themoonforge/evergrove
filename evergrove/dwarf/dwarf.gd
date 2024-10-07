@@ -59,6 +59,7 @@ const sleeping_effect = "sleeping_effect"
 const building_effect = "building_effect"
 
 const spawn_effect = "spawn_effect"
+const death_effect = "death_effect"
 
 @export var type: DwarfType
 @export var skin: DwarfSkin
@@ -83,6 +84,14 @@ enum DwarfHair {
 }
 
 @export var action_effect_animator_position: Vector2
+
+func die_dwarf() -> void:
+	action_effect_animator.position = action_effect_animator_position + Vector2(0, -Utils.TILE_SIZE_HALF)
+	var callback = func():
+		game_state.dec_dwarfs(1)
+		self.queue_free()
+	action_effect_animator.connect("animation_finished", callback)
+	play_animation(action_effect_animator, death_effect)
 
 func show_bars(value: bool) -> void:
 	energy_bar.visible = value

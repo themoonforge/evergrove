@@ -51,6 +51,10 @@ var starving_mode: bool = false
 
 var dwarf: Dwarf
 
+var ticks_in_starving_mode = 0
+
+const MAX_TICKS_IN_STARVING_MODE = 50
+
 func set_recharge_energy_queued(value:bool) -> void:
 	recharge_energy_queued = value
 	eval_accepting_tasks()
@@ -320,12 +324,26 @@ func run_task(task: Task) -> void:
 							set_recharge_beer_queued(false)
 							set_zero_beer_mode(false)
 
+# return true if dwarf is dieing
+func evaluate_starving_mode() -> bool:
+	if starving_mode:
+		ticks_in_starving_mode += 1
+		if ticks_in_starving_mode >= MAX_TICKS_IN_STARVING_MODE:
+			ai_globals.disconnect("PROCESS_TICK", _on_ai_tick)
+			ai_globals.AGENT_DIE.emit(self)
+			dwarf.die_dwarf()
+			return true	
+	else:
+		ticks_in_starving_mode = 0
+	return false
+
 func _on_ai_tick():
 	#print("Agent %s processing tick" % [self.name])
 	evaluate_consumtion()
 	evaluate_private_needs()
 	evaluate_zero_modes()
-	
+	if evaluate_starving_mode():
+		return
 	# get task if agent queue is empty
 	if tasks.is_empty():
 		#print("Agent "+str(self)+" task queue empty")

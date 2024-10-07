@@ -8,6 +8,7 @@ enum AGENT_TYPE {
 }
 
 signal AGENT_CREATED(agent: Agent)
+signal AGENT_DIE(agent: Agent)
 signal PROCESS_TICK()
 signal AGENT_WITHOUT_TASK(agent:Agent)
 signal AGENT_NO_LONGER_TASKLESS(agent:Agent)
