@@ -24,6 +24,7 @@ enum TileType {
 	MICEL 		= 12,
 }
 
+@onready var gui: GUI = $"/root/Game/GUI"
 @onready var camera: Camera2D = $"/root/Game/Camera2D"
 @onready var game_state: GameState = $"/root/Game/GameState"
 @onready var select_cursor: Sprite2D = $"./TileCursor"
@@ -75,6 +76,8 @@ func _ready():
 			tiles[pos] = true
 	var sprite_pos = visible_tile_map.to_local(Vector2i(1, 1))
 	build_building(Utils.BuildingType.SPAWNER, sprite_pos, tiles, 0, true)
+
+	gui._on_spawn_dwarf_button_pressed()
 	
 func set_active_level(my_level: int):
 	#print("set active level: %d" % [my_level])
@@ -219,10 +222,10 @@ func handle_cursor(event: InputEvent):
 				if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 					var marker = Sprite2D.new()
 					marker.texture = sprite_texture
-					visible_tile_map.add_child(marker)
+					visible_tile_map.marker_container.add_child(marker)
 
-					marker.z_index = 100
 					marker.position = select_cursor.position
+					marker.modulate.a = 0.3
 
 					var remove_callback: Callable = func (dwarf):
 						#print("callback!!!!")
@@ -260,11 +263,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if event is InputEventKey:
 		if event.pressed:
-			if event.keycode == KEY_Q:
-				set_active_level(visible_level - 1)
-			elif event.keycode == KEY_E:
-				set_active_level(visible_level + 1)
-			elif event.keycode == KEY_C:
+			#if event.keycode == KEY_Q:
+			#	set_active_level(visible_level - 1)
+			#elif event.keycode == KEY_E:
+			#	set_active_level(visible_level + 1)
+			if event.keycode == KEY_C:
 				set_cursor_type(Utils.CursorType.SELECT)
 			elif event.keycode == KEY_ESCAPE:
 				set_cursor_type(Utils.CursorType.SELECT)

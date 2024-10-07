@@ -6,6 +6,7 @@ const Utils = preload("../Utils.gd")
 
 @onready var dwarf_container = $DwarfContainer
 @onready var hub_container = $HubContainer
+@onready var marker_container = $MarkerContainer
 @onready var world: World = $"/root/Game/World"
 
 @export var level: int = 0

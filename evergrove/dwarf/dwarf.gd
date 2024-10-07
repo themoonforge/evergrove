@@ -85,6 +85,14 @@ enum DwarfHair {
 
 @export var action_effect_animator_position: Vector2
 
+@export var is_starving: bool = false
+@export var starve_ticks: int = 0
+@export var starve_red: bool = false
+@export var base_character: Node2D
+
+func set_starve(value: bool):
+	is_starving = value
+
 func die_dwarf() -> void:
 	action_effect_animator.position = action_effect_animator_position + Vector2(0, -Utils.TILE_SIZE_HALF)
 	var callback = func():
@@ -109,6 +117,20 @@ func set_current_position(my_position: Vector2i, level: int, force: bool = false
 	current_position = my_position
 	current_level = level
 	current_dungeon_layer.clear_fow(my_position, view_range)
+
+func handle_starve() -> void:
+	if !is_starving:
+		body_animator.modulate = Color8(255, 255, 255)
+		return
+	else:
+		starve_ticks += 1
+		if starve_ticks > 10:
+			starve_red = !starve_red
+			starve_ticks = 0
+		if starve_red:
+			body_animator.modulate = Color8(255, 0, 0)
+		else:
+			body_animator.modulate = Color8(255, 255, 255)		
 
 func _ready():
 	action_effect_animator_position = action_effect_animator.position
@@ -142,15 +164,15 @@ func _ready():
 	match type:
 		DwarfType.THICC:
 			walking_speed = 75.0
-			var base = $"./ThiccBase"
-			base.visible = true
+			base_character = $"./ThiccBase"
+			base_character.visible = true
 			hair_animator = $"./ThiccBase/Hair"
 			body_animator = $"./ThiccBase/Body"
 			clothing_animator = $"./ThiccBase/Clothing"
 		DwarfType.THIN:
 			walking_speed = 100.0
-			var base = $"./ThinBase"
-			base.visible = true
+			base_character = $"./ThinBase"
+			base_character.visible = true
 			hair_animator = $"./ThinBase/Hair"
 			body_animator = $"./ThinBase/Body"
 			clothing_animator = $"./ThinBase/Clothing"
@@ -327,6 +349,7 @@ func set_walking_direction(my_direction: Utils.WalkingDirection) -> void:
 	set_animation(behaviour, my_direction)
 
 func _process(delta):
+	handle_starve()
 	if walking_path.size() > 0:
 		var target: Vector3i = Utils.convert_from_astar(walking_path[0])
 		if (target.z != current_level):

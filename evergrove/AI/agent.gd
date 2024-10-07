@@ -55,6 +55,12 @@ var ticks_in_starving_mode = 0
 
 const MAX_TICKS_IN_STARVING_MODE = 50
 
+var idle_ticks = 0
+
+const max_idle_ticks = 5
+
+const random_range = 10
+
 func set_recharge_energy_queued(value:bool) -> void:
 	recharge_energy_queued = value
 	eval_accepting_tasks()
@@ -326,6 +332,7 @@ func run_task(task: Task) -> void:
 
 # return true if dwarf is dieing
 func evaluate_starving_mode() -> bool:
+	dwarf.set_starve(starving_mode)
 	if starving_mode:
 		ticks_in_starving_mode += 1
 		if ticks_in_starving_mode >= MAX_TICKS_IN_STARVING_MODE:
@@ -337,6 +344,19 @@ func evaluate_starving_mode() -> bool:
 		ticks_in_starving_mode = 0
 	return false
 
+
+func handle_idle():
+	idle_ticks += 1
+	if idle_ticks >= max_idle_ticks:
+		var rand_x = randf_range(-random_range, random_range)
+		var rand_y = randf_range(-random_range, random_range)
+		var location = ai_globals.Location.create(Vector2i(rand_x, rand_y) + dwarf.current_position, dwarf.current_level)
+
+		var random_task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "Move to random position", 0, location)
+
+		add_task_back(random_task)
+	pass
+
 func _on_ai_tick():
 	#print("Agent %s processing tick" % [self.name])
 	evaluate_consumtion()
@@ -344,13 +364,17 @@ func _on_ai_tick():
 	evaluate_zero_modes()
 	if evaluate_starving_mode():
 		return
+
 	# get task if agent queue is empty
 	if tasks.is_empty():
+		handle_idle()
 		#print("Agent "+str(self)+" task queue empty")
 		ai_globals.AGENT_WITHOUT_TASK.emit(self) # check if this is a good idea
 		registered_as_taskless = true
 		return
 	
+	idle_ticks = 0
+
 	var task: Task = tasks.front()
 	run_task(task)
 

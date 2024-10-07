@@ -30,15 +30,25 @@ process_priority = 1
 script = ExtResource("2_n34sk")
 spawn_position = Vector2i(0, 2)
 
+[node name="HSplitContainer" type="VFlowContainer" parent="GUI"]
+offset_left = 5.0
+offset_top = 649.0
+offset_right = 157.0
+offset_bottom = 715.0
+
+[node name="UpButton" type="Button" parent="GUI/HSplitContainer"]
+layout_mode = 2
+text = "Layer Up"
+
+[node name="DownButton" type="Button" parent="GUI/HSplitContainer"]
+layout_mode = 2
+text = "Layer Down"
+
 [node name="VFlowContainer" type="VFlowContainer" parent="GUI"]
 offset_left = 17.0
 offset_top = 12.0
 offset_right = 175.0
 offset_bottom = 341.0
-
-[node name="SpawnDwarfButton" type="Button" parent="GUI/VFlowContainer"]
-layout_mode = 2
-text = "Spawn Dwarf"
 
 [node name="LevelLabel" type="Label" parent="GUI/VFlowContainer"]
 layout_mode = 2
@@ -74,8 +84,12 @@ anchor_right = 1.0
 offset_left = -165.0
 offset_top = 14.0
 offset_right = -13.0
-offset_bottom = 220.0
+offset_bottom = 316.0
 grow_horizontal = 0
+
+[node name="SpawnDwarfButton" type="Button" parent="GUI/VFlowContainer2"]
+layout_mode = 2
+text = "Spawn Dwarf"
 
 [node name="FoodHubButton" type="Button" parent="GUI/VFlowContainer2"]
 layout_mode = 2
@@ -140,7 +154,9 @@ script = ExtResource("5_8o8h7")
 unique_name_in_owner = true
 script = ExtResource("4_g3tpu")
 
-[connection signal="pressed" from="GUI/VFlowContainer/SpawnDwarfButton" to="GUI" method="_on_spawn_dwarf_button_pressed"]
+[connection signal="pressed" from="GUI/HSplitContainer/UpButton" to="GUI" method="_on_up_button_pressed"]
+[connection signal="pressed" from="GUI/HSplitContainer/DownButton" to="GUI" method="_on_down_button_pressed"]
+[connection signal="pressed" from="GUI/VFlowContainer2/SpawnDwarfButton" to="GUI" method="_on_spawn_dwarf_button_pressed"]
 [connection signal="pressed" from="GUI/VFlowContainer2/FoodHubButton" to="GUI" method="_on_food_hub_button_pressed"]
 [connection signal="pressed" from="GUI/VFlowContainer2/BeerHubButton" to="GUI" method="_on_beer_hub_button_pressed"]
 [connection signal="pressed" from="GUI/VFlowContainer2/EnergyHubButton" to="GUI" method="_on_energy_hub_button_pressed"]

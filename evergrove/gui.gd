@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+class_name GUI
+
 const Utils = preload("./Utils.gd")
 
 @onready var game_state: GameState = $/root/Game/GameState
@@ -18,7 +20,9 @@ const Utils = preload("./Utils.gd")
 @onready var water_label: Label = $"./VFlowContainer/WaterLabel"
 @onready var dwarf_label: Label = $"./VFlowContainer/DwarfLabel"
 
-@onready var spawn_dwarf_button: Button = $"./VFlowContainer/SpawnDwarfButton"
+@onready var spawn_dwarf_button: Button = $"./VFlowContainer2/SpawnDwarfButton"
+@onready var up_button: Button = $"./HSplitContainer/UpButton"
+@onready var down_button: Button = $"./HSplitContainer/DownButton"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -81,7 +85,7 @@ func set_label_dwarf(value: String) -> void:
 	dwarf_label.text = "Dwarf: %s" % [value]
 
 func set_label_current_level(value: String) -> void:
-	level_label.text = "Level: %s" % [value]
+	level_label.text = "Layer: %s" % [value]
 	
 func _on_food_hub_button_pressed():
 	world.set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.FOOD)
@@ -97,3 +101,11 @@ func set_spawn_cost(value: int) -> void:
 		spawn_dwarf_button.text = "Spawn Dwarf (" + str(value) + " $)"	
 	else:
 		spawn_dwarf_button.text = "Spawn Dwarf (free)"
+
+
+
+func _on_up_button_pressed() -> void:
+	world.set_active_level(world.visible_level + 1)
+
+func _on_down_button_pressed() -> void:
+	world.set_active_level(world.visible_level - 1)
