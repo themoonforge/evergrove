@@ -107,7 +107,7 @@ func set_spawn_cost(value: int) -> void:
 
 
 func _on_up_button_pressed() -> void:
-	world.set_active_level(world.visible_level + 1)
+	world.set_active_level(world.visible_level - 1)
 
 func _on_down_button_pressed() -> void:
-	world.set_active_level(world.visible_level - 1)
+	world.set_active_level(world.visible_level + 1)
