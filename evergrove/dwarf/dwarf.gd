@@ -146,10 +146,11 @@ func _ready():
 	# TODO retrieve walking direction and call play on animated sprite
 	# this is just an example how to call animations
 	# instantiate AI controller
-	add_child(Agent.create())
-	game_state.selected_dwarf = self
-	game_state.inc_dwarfs(1)
-	set_normal()
+	if game_state != null:
+		add_child(Agent.create())
+		game_state.selected_dwarf = self
+		game_state.inc_dwarfs(1)
+		set_normal()
 
 func play_animation(animator: AnimatedSprite2D, animation: String) -> void:
 	#if !animator.is_playing() || animator.animation != animation || !animator.visible:
