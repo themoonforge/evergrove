@@ -11,10 +11,17 @@ config_version=5
 [application]
 
 config/name="Evergrove"
-run/main_scene="res://world.tscn"
+run/main_scene="res://main_menu/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 ai_globals="*res://AI/ai_globals.gd"
+Globals="*res://Globals.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/resizable=false

@@ -17,8 +17,8 @@ var hair_animator: AnimatedSprite2D
 @onready var world: World = $"/root/Game/World"
 
 @export var walking_speed: float = 75.0
-@export var walking_direction: Utils.WalkingDirection = Utils.WalkingDirection.DEFAULT
-@export var behaviour: Utils.Behaviour = Utils.Behaviour.IDLE
+@export var walking_direction: Utils.WalkingDirection
+@export var behaviour: Utils.Behaviour
 @export var walking_path: PackedVector3Array = []
 @export var current_level: int = 0
 @export var current_position: Vector2i = Vector2i(0, 0)
@@ -150,7 +150,9 @@ func _ready():
 		add_child(Agent.create())
 		game_state.selected_dwarf = self
 		game_state.inc_dwarfs(1)
-		set_normal()
+
+	set_normal()
+	print("finish dwarf")
 
 func play_animation(animator: AnimatedSprite2D, animation: String) -> void:
 	#if !animator.is_playing() || animator.animation != animation || !animator.visible:
@@ -209,7 +211,9 @@ func play_character_animation(animation: String) -> void:
 	play_animation(hair_animator, hair_animation_name)
 
 func set_animation(my_behaviour: Utils.Behaviour, my_walking_direction: Utils.WalkingDirection) -> void:
+	print("set_animation")
 	if behaviour == my_behaviour && walking_direction == my_walking_direction:
+		print("skip set_animation")
 		return	
 
 	behaviour = my_behaviour

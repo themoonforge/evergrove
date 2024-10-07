@@ -1015,7 +1015,7 @@ offset = Vector2(0, -8)
 [node name="Hair" type="AnimatedSprite2D" parent="ThiccBase"]
 position = Vector2(0, 8)
 sprite_frames = SubResource("SpriteFrames_ei4od")
-animation = &"none_right"
+animation = &"pigtails_base_back"
 offset = Vector2(0, -8)
 
 [node name="EffectAnimator" type="AnimatedSprite2D" parent="."]

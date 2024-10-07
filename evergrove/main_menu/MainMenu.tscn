@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dtnmcje85qhw" path="res://hubs/food_hub/food_hub1.png" id="2_xyegr"]
 [ext_resource type="Texture2D" uid="uid://d30syauf7qb6t" path="res://hubs/food_hub/food_hub2.png" id="3_5fdnx"]
 [ext_resource type="Texture2D" uid="uid://btx6pcq8h7lqt" path="res://hubs/beer_hub/beer_hub1.png" id="4_5whxv"]
-[ext_resource type="PackedScene" uid="uid://c7g6a1tfb4nji" path="res://dwarf/Dwarf.tscn" id="4_xwuuu"]
+[ext_resource type="PackedScene" uid="uid://b5heo41rpqdo0" path="res://dwarf/Dwarf.tscn" id="4_xwuuu"]
 [ext_resource type="Texture2D" uid="uid://c37wje6ikep2c" path="res://hubs/beer_hub/beer_hub2.png" id="5_8nk00"]
 [ext_resource type="Script" path="res://main_menu/animate_main_menu.gd" id="5_csmtb"]
 
@@ -108,7 +108,7 @@ scale = Vector2(10, 10)
 
 [node name="Title" type="Sprite2D" parent="MainMenu"]
 texture_filter = 1
-position = Vector2(535, 168)
+position = Vector2(594, 210)
 scale = Vector2(2.3125, 2.35088)
 texture = ExtResource("2_unogd")
 
@@ -142,7 +142,7 @@ text = "Start"
 layout_mode = 2
 alignment = 1
 
-[node name="Seed input" type="LineEdit" parent="MainMenu/VFlowContainer/VFlowContainer"]
+[node name="SeedInput" type="LineEdit" parent="MainMenu/VFlowContainer/VFlowContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 placeholder_text = "Insert Seed"
@@ -151,3 +151,7 @@ placeholder_text = "Insert Seed"
 texture_filter = 1
 layout_mode = 2
 icon = ExtResource("1_fn6vo")
+
+[connection signal="pressed" from="MainMenu/VFlowContainer/StartButton" to="MainMenu" method="_on_start_button_pressed"]
+[connection signal="text_changed" from="MainMenu/VFlowContainer/VFlowContainer/SeedInput" to="MainMenu" method="_on_seed_input_text_changed"]
+[connection signal="pressed" from="MainMenu/VFlowContainer/VFlowContainer/RandomButton" to="MainMenu" method="_on_random_button_pressed"]

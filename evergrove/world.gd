@@ -24,8 +24,6 @@ enum TileType {
 	MICEL 		= 12,
 }
 
-@export var GLOBAL_SEED = 12345
-
 @onready var camera: Camera2D = $"/root/Game/Camera2D"
 @onready var game_state: GameState = $"/root/Game/GameState"
 @onready var select_cursor: Sprite2D = $"./TileCursor"
@@ -61,7 +59,7 @@ func _ready():
 	for level in range(LEVELS):		
 		var tile_map : DungeonLayer  = preload("res://map/DungeonLayer.tscn").instantiate()
 		
-		tile_map.init(GLOBAL_SEED + 25 * level, level)
+		tile_map.init(Globals.seed + 25 * level, level)
 
 		tile_maps[level] = tile_map
 		
