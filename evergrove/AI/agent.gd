@@ -336,7 +336,8 @@ func evaluate_starving_mode() -> bool:
 	if starving_mode:
 		ticks_in_starving_mode += 1
 		if ticks_in_starving_mode >= MAX_TICKS_IN_STARVING_MODE:
-			ai_globals.disconnect("PROCESS_TICK", _on_ai_tick)
+			ticks_in_starving_mode = 0
+			#ai_globals.disconnect("PROCESS_TICK", _on_ai_tick)
 			ai_globals.AGENT_DIE.emit(self)
 			dwarf.die_dwarf()
 			return true
