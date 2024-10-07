@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=3 uid="uid://c7g6a1tfb4nji"]
+[gd_scene load_steps=90 format=3 uid="uid://b5heo41rpqdo0"]
 
 [ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
 [ext_resource type="Texture2D" uid="uid://cl6nkkxoir3uu" path="res://dwarf/shadow.png" id="2_jrrhj"]

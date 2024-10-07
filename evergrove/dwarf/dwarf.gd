@@ -321,7 +321,7 @@ func _process(delta):
 			Utils.WalkingDirection.RIGHT:
 				offset.x = 1
 
-		var next_position = current_position + offset
+		var next_position = Vector2i(target.x, target.y)
 
 		var data = world.get_tile_data(next_position, target.z)
 
@@ -354,14 +354,14 @@ func _process(delta):
 		if position.distance_to(target2D) < 0.5 || direction.distance_to(next_direction) > 0:
 			position = target2D
 			set_current_position(Vector2(target.x, target.y), current_level)
-		
+			
 			walking_path.remove_at(0)
-
+			
 			var data_now = world.get_tile_data(current_position, target.z)
 			var walkable: bool = data_now.get_custom_data("is_walkable")
 			if !walkable:
 				world.mine_tile(current_position, current_level)
-		
+			
 			if walking_path.size() == 0:
 				set_animation(Utils.Behaviour.IDLE, Utils.WalkingDirection.DEFAULT)
 
@@ -369,7 +369,7 @@ func walk_to(target: Vector2i, level: int = current_level) -> Vector3i:
 	print("walk_to")
 	if (walking_path.size() > 0):
 		print("Already walking")
-
+	
 	var pos = Utils.convert_to_v3_astar(target, level)
 	var id = world.astar.get_closest_point(pos)
 	var target_point_astar = world.astar.get_point_position(id);
