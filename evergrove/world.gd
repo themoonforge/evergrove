@@ -6,7 +6,7 @@ const Utils = preload("./Utils.gd")
 
 const HALF_CHUNK_SIZE = 64
 const CHUNK_SIZE = HALF_CHUNK_SIZE * 2
-const LAYERS = 5
+const LEVELS = 5
 
 enum TileType {
 	AIR 		= 0,
@@ -58,12 +58,12 @@ func _ready():
 
 	astar = AStar3D.new()
 
-	for layer in range(LAYERS):		
+	for level in range(LEVELS):		
 		var tile_map : DungeonLayer  = preload("res://map/DungeonLayer.tscn").instantiate()
 		
-		tile_map.init(GLOBAL_SEED + 25 * layer, layer)
+		tile_map.init(GLOBAL_SEED + 25 * level, level)
 
-		tile_maps[layer] = tile_map
+		tile_maps[level] = tile_map
 		
 		add_child(tile_map)
 		# Generiere initiale Chunks
@@ -89,16 +89,16 @@ func _ready():
 	# 	sprite.position = visible_tile_map.map_to_local(Vector2i(point.x, point.y))
 		
 	
-func set_active_level(level: int):
-	print("set active layer: %d" % [level])
-	if (level < 0 or level >= LAYERS):
+func set_active_level(my_level: int):
+	#print("set active level: %d" % [my_level])
+	if (my_level < 0 || my_level >= LEVELS):
 		return
-	visible_tile_map = tile_maps[level]
-	for layer in tile_maps.keys():
-		tile_maps[layer].visible = false
+	visible_tile_map = tile_maps[my_level]
+	for level in tile_maps.keys():
+		tile_maps[level].visible = false
 	visible_tile_map.visible = true
-	visible_level = level
-	game_state.set_current_level(level)
+	visible_level = my_level
+	game_state.set_current_level(my_level)
 	check_visible_tiles(true)
 
 func set_air_around_tile(tile_map: TileMap, pos: Vector2i, skip_center: bool = true):
@@ -129,9 +129,9 @@ func generate_tile(tile_map: DungeonLayer, pos: Vector2i):
 	elif terrain_noise_value < -0.55:
 		tile_type = TileType.AIR
 		if (randf() < 0.05):
-			var curr_layer = tile_map.level
-			if (tile_maps[curr_layer + 1]):
-				var below_map = tile_maps[curr_layer + 1]
+			var curr_level = tile_map.level
+			if (tile_maps[curr_level + 1]):
+				var below_map = tile_maps[curr_level + 1]
 				if (below_map.get_cell_source_id(0, pos) == -1):
 					var distance = tile_map.min_distance_to_ladder(pos)
 					if (distance > 25):
@@ -238,7 +238,7 @@ func handle_cursor(event: InputEvent):
 					marker.position = select_cursor.position
 
 					var remove_callback: Callable = func (dwarf):
-						print("callback!!!!")
+						#print("callback!!!!")
 						marker.queue_free()
 
 					var task: Task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "", 0, ai_globals.Location.create(tile_position, visible_level), remove_callback)
@@ -286,12 +286,15 @@ func _unhandled_input(event: InputEvent) -> void:
 			#lif event.keycode == KEY_P:
 				#set_cursor_type(Utils.CursorType.BUILD, Utils.BuildingType.ENERGY)
 
-func create_poit(pos: Vector2i, level: int, cost: float):
-	var key = get_unique_id(pos, level)
+func create_poit(pos: Vector3i, cost: float) -> int:
+	var key = get_unique_id_v3(pos)
 	if (!astar.has_point(key)):
-		astar.add_point(key, Vector3(pos.x, pos.y, level), cost)
+		astar.add_point(key, pos, cost)
+		#print("add point %v with key %d" % [pos, key])
 	else :
 		astar.set_point_weight_scale(key, cost)
+		#print("update point %v with key %d" % [pos, key])
+	return key
 
 func connect_adjacent_tiles(pos: Vector2i, level: int):
 	var directions = [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]
@@ -310,18 +313,22 @@ func update_astarGrid(tile_map: DungeonLayer, level: int, pos: Vector2i):
 	var cost: float = data.get_custom_data("cost")
 	var connect_up: bool = data.get_custom_data("connect_up")
 	var connect_down: bool = data.get_custom_data("connect_down")
-	create_poit(pos, level, cost)
+
+	var pos_astar = Utils.convert_to_v3_astar(pos, level)
+	var pos_key = create_poit(pos_astar, cost)
 	connect_adjacent_tiles(pos, level)
 	if connect_up:
 		if level > 0:
-			create_poit(pos, level - 1, cost)
-			astar.connect_points(get_unique_id(pos, level), get_unique_id(pos, level - 1))
-			tile_map.up_ladder_astar.add_point(get_unique_id(pos, level), pos)
+			var pos_up_astar = Utils.convert_to_v3_astar(pos, level - 1)
+			var pos_up_key = create_poit(pos_up_astar, cost)
+			astar.connect_points(pos_key, pos_up_key)
+			tile_map.up_ladder_astar.add_point(pos_key, pos)
 	if connect_down:
-		if level < LAYERS - 1:
-			create_poit(pos, level + 1, cost)
-			astar.connect_points(get_unique_id(pos, level), get_unique_id(pos, level + 1))
-			tile_map.down_ladder_astar.add_point(get_unique_id(pos, level), pos)
+		if level < LEVELS - 1:
+			var pos_down_astar = Utils.convert_to_v3_astar(pos, level + 1)
+			var pos_down_key = create_poit(pos_down_astar, cost)
+			astar.connect_points(pos_key, pos_down_key)
+			tile_map.down_ladder_astar.add_point(pos_key, pos)
 
 func mine_tile(pos: Vector2i, level: int):
 	var tile_map = tile_maps[level]
@@ -363,8 +370,7 @@ func mine_tile(pos: Vector2i, level: int):
 			tile_map.set_cell(0, pos, 0, Vector2i(0, TileType.AIR))
 			update_astarGrid(tile_map, level, pos)
 
-func get_unique_id(pos: Vector2i, level: int, read_only: bool = false) -> int:
-	var vector = Vector3i(pos.x, pos.y, level)
+func get_unique_id_v3(vector: Vector3i, read_only: bool = false) -> int:
 	if point_dicrionary.has(vector):
 		return point_dicrionary[vector]
 	if read_only:
@@ -372,6 +378,10 @@ func get_unique_id(pos: Vector2i, level: int, read_only: bool = false) -> int:
 	var id = astar.get_available_point_id()
 	point_dicrionary[vector] = id
 	return id
+
+func get_unique_id(pos: Vector2i, level: int, read_only: bool = false) -> int:
+	var vector: Vector3i = Utils.convert_to_v3_astar(pos, level)
+	return get_unique_id_v3(vector, read_only)
 
 func get_tile_data(pos: Vector2i, level: int = visible_level) -> TileData:
 	var tile_map = tile_maps[level]
@@ -390,12 +400,18 @@ func build_building(building_type: Utils.BuildingType, my_position: Vector2, til
 	
 	tile_map.build_building(building_type, my_position, tiles)
 	for tile in tiles.keys():
-		var key = get_unique_id(tile, level)
+		var point = Utils.convert_to_v3_astar(tile, level)
+		var key = get_unique_id_v3(point)
 		astar.remove_point(key)
+		point_dicrionary.erase(point)
 
 	set_cursor_type(Utils.CursorType.SELECT)
 
+# return Vector3i
 func get_nearest_building(type: Utils.BuildingType, pos: Vector2i, level: int = visible_level):
+	if level < 0 || level >= LEVELS:
+		return null
+
 	var tile_map = tile_maps[level]
 	
 	match type:
@@ -403,14 +419,29 @@ func get_nearest_building(type: Utils.BuildingType, pos: Vector2i, level: int = 
 			var key = tile_map.food_astar.get_closest_point(pos)
 			if key < 0:
 				return null
-			return tile_map.food_astar.get_point_position(key)
+			return Utils.convert_to_v3(tile_map.food_astar.get_point_position(key), level)
 		Utils.BuildingType.BEER:
 			var key = tile_map.beer_astar.get_closest_point(pos)
 			if key < 0:
 				return null
-			return tile_map.beer_astar.get_point_position(key)
+			return Utils.convert_to_v3(tile_map.beer_astar.get_point_position(key), level)
 		Utils.BuildingType.ENERGY:
 			var key = tile_map.energy_astar.get_closest_point(pos)
 			if key < 0:
 				return null
-			return tile_map.energy_astar.get_point_position(key)
+			return Utils.convert_to_v3(tile_map.energy_astar.get_point_position(key), level)
+
+# return Vector3i
+func get_nearest_building_location_retry(type: Utils.BuildingType, pos: Vector2i, level: int = visible_level):
+	var search_pattern = []
+	search_pattern.append(level)
+	for x in range(1, LEVELS):
+		if level - x >= 0:
+			search_pattern.append(level - x)
+		if level + x < LEVELS:
+			search_pattern.append(level + x)
+	
+	for search_level in search_pattern:
+		var location = get_nearest_building(type, pos, search_level)
+		if location:
+			return location

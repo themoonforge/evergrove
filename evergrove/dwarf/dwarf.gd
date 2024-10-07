@@ -293,7 +293,7 @@ func set_walking_direction(my_direction: Utils.WalkingDirection) -> void:
 
 func _process(delta):
 	if walking_path.size() > 0:
-		var target: Vector3i = walking_path[0]
+		var target: Vector3i = Utils.convert_from_astar(walking_path[0])
 		if (target.z != current_level):
 			current_dungeon_layer.dwarf_container.remove_child(self)
 			set_current_position(current_position, target.z)
@@ -347,7 +347,10 @@ func _process(delta):
 		velocity *= walking_speed_factor_next
 
 		position += velocity
-		if (position - target2D).length() < 1.0:
+
+		var next_direction = (target2D - position).normalized()
+
+		if position.distance_to(target2D) < 0.5 || direction.distance_to(next_direction) > 0:
 			position = target2D
 			set_current_position(Vector2(target.x, target.y), current_level)
 		
@@ -366,12 +369,15 @@ func walk_to(target: Vector2i, level: int = current_level) -> Vector3i:
 	if (walking_path.size() > 0):
 		print("Already walking")
 
-	var id = world.astar.get_closest_point(Vector3(target.x, target.y, level))
-	var target_point: Vector3 = world.astar.get_point_position(id)
+	var pos = Utils.convert_to_v3_astar(target, level)
+	var id = world.astar.get_closest_point(pos)
+	var target_point_astar = world.astar.get_point_position(id);
+	var target_point: Vector3i = Utils.convert_from_astar(target_point_astar)
 
 	var current_key = world.get_unique_id(current_position, current_level)
-	var target_key = world.get_unique_id(Vector2(target_point.x, target_point.y), target_point.z)
+	var target_key = world.get_unique_id(Vector2i(target_point.x, target_point.y), target_point.z)
 	var path = world.astar.get_point_path(current_key, target_key)
+
 	walking_path = path
 
-	return Vector3i(target_point.x, target_point.y, target_point.z)
+	return target_point

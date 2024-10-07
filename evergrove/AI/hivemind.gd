@@ -62,15 +62,13 @@ func get_agent_without_task() -> Agent:
 		return taskless_agents.front()
 	return null
 
-func get_nearest_energy_hub_location(agent_location:ai_globals.Location)->ai_globals.Location:
-	var vec2_or_null = world.get_nearest_building(Utils.BuildingType.ENERGY,agent_location.coordinates, agent_location.layer)
+func get_nearest_hub_location(building_type: Utils.BuildingType, agent_location:ai_globals.Location)->ai_globals.Location:
+	var vec3_or_null = world.get_nearest_building_location_retry(building_type, agent_location.coordinates, agent_location.level)
 	
-	# return agent's own location if no energy hub was found as movement target
-	if vec2_or_null == null:
-		print("No energy hub found, returning agent's own location")
+	# return agent's own location if no hub was found as movement target
+	if vec3_or_null == null:
+		print("No hub found, returning agent's own location")
 		return ai_globals.Location.create(Vector2i.ZERO, 0, true)
 		
-	var energyhub_location:ai_globals.Location
-	var vec2:Vector2 = vec2_or_null
-	# TODO: search only queries one layer, extend search to multiple layers
-	return ai_globals.Location.create(vec2, agent_location.layer)
+	var vec3:Vector3i = vec3_or_null
+	return ai_globals.Location.create(Vector2i(vec3.x, vec3.y), vec3.z)

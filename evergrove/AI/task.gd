@@ -8,7 +8,7 @@ var has_callback: bool
 var callback: Callable
 var waiting_time: int
 var waining_callback: Callable
-var running: bool = false
+var waiting_running: bool = false
 
 static var default_callback: Callable = func(dwarf):
 	pass
@@ -25,3 +25,8 @@ static func create(task_type:ai_globals.TASK_TYPE, description:String, energy_co
 	task.waiting_time = waiting_time
 	task.waining_callback = waiting_callback
 	return task
+
+func is_interruptable() -> bool:
+	if type in ai_globals.private_tasks:
+		return false	
+	return !waiting_running

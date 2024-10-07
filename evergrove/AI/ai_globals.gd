@@ -16,16 +16,21 @@ enum TASK_TYPE {
 	MOVE_TO,
 	MINE,
 	EAT,
-	SLEEP
+	SLEEP,
+	DRINK,
 }
+var private_tasks = [TASK_TYPE.EAT, TASK_TYPE.SLEEP, TASK_TYPE.DRINK]
 
 class Location:
 	var coordinates:Vector2i
-	var layer:int
+	var level:int
 	var invalid:bool
 	static func create(coordinates:Vector2i, layer:int, invalid:bool=false) -> Location:
 		var instance = Location.new()
 		instance.coordinates = coordinates
-		instance.layer = layer
+		instance.level = layer
 		instance.invalid = invalid
 		return instance
+
+	static func create_from_dwarf(dwarf: Dwarf) -> Location:
+		return create(dwarf.current_position, dwarf.current_level)
