@@ -347,8 +347,6 @@ func evaluate_starving_mode() -> bool:
 
 
 func handle_idle():
-	if !accepting_tasks:
-		return
 	idle_ticks += 1
 	if idle_ticks >= max_idle_ticks:
 		var rand_x = randf_range(-random_range, random_range)

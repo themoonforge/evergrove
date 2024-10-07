@@ -128,9 +128,9 @@ func handle_starve() -> void:
 			starve_red = !starve_red
 			starve_ticks = 0
 		if starve_red:
-			body_animator.modulate = Color8(255, 0, 0)
+			body_animator.modulate = Color8(255, 200, 200)
 		else:
-			body_animator.modulate = Color8(255, 255, 255)		
+			body_animator.modulate = Color8(255, 255, 255)
 
 func _ready():
 	action_effect_animator_position = action_effect_animator.position
@@ -383,8 +383,8 @@ func _process(delta):
 		var data = world.get_tile_data(next_position, target.z)
 
 		var walking_speed_factor_next: float = data.get_custom_data("walking_speed_factor")
-		var is_walkable_next: float = data.get_custom_data("is_walkable")
-		var is_water_next: float = data.get_custom_data("is_water")
+		var is_walkable_next: bool = data.get_custom_data("is_walkable")
+		var is_water_next: bool = data.get_custom_data("is_water")
 
 		var my_behaviour = Utils.Behaviour.WALKING
 
@@ -416,7 +416,8 @@ func _process(delta):
 			
 			var data_now = world.get_tile_data(current_position, target.z)
 			var walkable: bool = data_now.get_custom_data("is_walkable")
-			if !walkable:
+			var is_water: bool = data_now.get_custom_data("is_water")
+			if !walkable || is_water:
 				world.mine_tile(current_position, current_level)
 			
 			if walking_path.size() == 0:

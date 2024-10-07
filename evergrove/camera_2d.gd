@@ -5,6 +5,9 @@ var move_speed := 200.0
 # Zoomgeschwindigkeit der Kamera
 var zoom_speed := 0.1
 
+var is_dragging = false
+var last_mouse_position = Vector2()
+
 func _process(delta):
 	# Bewegung der Kamera mit WASD
 	var direction : Vector2 = Vector2.ZERO
@@ -24,8 +27,7 @@ func _process(delta):
 		set_my_zoom(zoom.x - zoom_speed)
 		#zoom -= Vector2(zoom_speed, zoom_speed)
 	if Input.is_action_pressed("ui_page_down"):
-		set_my_zoom(zoom.x + zoom_speed)
-		#zoom += Vector2(zoom_speed, zoom_speed)
+		set_my_zoom(zoom.x + zoom_speed)	
 
 func _unhandled_input(event):
 	# Zoomen der Kamera mit dem Mausrad
@@ -42,7 +44,17 @@ func _unhandled_input(event):
 		#zoom += Vector2(event.delta.y * zoom_speed, event.delta.y * zoom_speed)
 		set_my_zoom(zoom.x + (event.delta.y * zoom_speed))
 
-		
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_MIDDLE:
+			is_dragging = event.pressed
+		if is_dragging:
+			last_mouse_position = event.position
+	
+	if event is InputEventMouseMotion and is_dragging:
+		var delta = event.position - last_mouse_position
+		position -= delta
+		last_mouse_position = event.position
+
 func set_my_zoom(my_zoom: float):
 	var curr_zoom = min(max(my_zoom, 0.5), 5.0)
 	zoom = Vector2(curr_zoom, curr_zoom)
