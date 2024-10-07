@@ -142,6 +142,12 @@ grow_vertical = 2
 layout_mode = 2
 text = "Start"
 
+[node name="Label" type="Label" parent="MainMenu/VFlowContainer"]
+layout_mode = 2
+text = "Generate Seed"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="VFlowContainer" type="VFlowContainer" parent="MainMenu/VFlowContainer"]
 layout_mode = 2
 alignment = 1
