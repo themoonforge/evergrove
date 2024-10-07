@@ -28,6 +28,7 @@ func _on_agent_created(agent: Agent):
 
 func _on_agent_died(agent: Agent):
 	print("Deregistered agent " + str(agent.name) + " at hivemind")
+	taskless_agents.erase(agent)
 	agents.erase(agent)
 
 # TODO: create registry of unemployed agents
