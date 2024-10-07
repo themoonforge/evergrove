@@ -213,43 +213,44 @@ func set_cursor_type(type: Utils.CursorType, build_type: Utils.BuildingType = Ut
 	select_cursor.visible = cursor_type == Utils.CursorType.SELECT
 	build_cursor.visible = cursor_type == Utils.CursorType.BUILD
 
+func has_marker(pos: Vector2, level: int):
+	var tile_map = tile_maps[level]
+	for child in tile_map.marker_container.get_children():
+		if child.position == pos:
+			return true
+
+	return false
+
+var is_mouse_pressed = false
+
+func create_marker(tile_position: Vector2i):
+	if !has_marker(select_cursor.position, visible_level):
+		var marker = Sprite2D.new()
+		marker.texture = sprite_texture
+		visible_tile_map.marker_container.add_child(marker)
+
+		marker.position = select_cursor.position
+		marker.modulate.a = 0.3
+
+		var remove_callback: Callable = func (dwarf):
+			#print("callback!!!!")
+			marker.queue_free()
+
+		var task: Task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "", 0, ai_globals.Location.create(tile_position, visible_level), remove_callback)
+		ai_globals.hivemind.add_task(task)
+
 func handle_cursor(event: InputEvent):
 	match cursor_type:
 		Utils.CursorType.SELECT:
 			var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
 			select_cursor.position = visible_tile_map.map_to_local(tile_position)
 			if event is InputEventMouseButton:
-				if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-					var marker = Sprite2D.new()
-					marker.texture = sprite_texture
-					visible_tile_map.marker_container.add_child(marker)
-
-					marker.position = select_cursor.position
-					marker.modulate.a = 0.3
-
-					var remove_callback: Callable = func (dwarf):
-						#print("callback!!!!")
-						marker.queue_free()
-
-					var task: Task = Task.create(ai_globals.TASK_TYPE.MOVE_TO, "", 0, ai_globals.Location.create(tile_position, visible_level), remove_callback)
-					ai_globals.hivemind.add_task(task)
-
-			#if is_active_debug_input && event is InputEventMouseButton:
-			#	if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			#		var selected_dwarf = game_state.selected_dwarf
-			#		if selected_dwarf:
-			#			var target_pos = visible_tile_map.local_to_map(get_global_mouse_position())
-			#			selected_dwarf.walk_to(target_pos, visible_level)
-			#		else:
-			#			var pos = visible_tile_map.local_to_map(get_global_mouse_position())
-			#			mine_tile(pos, visible_level)
-			#if is_active_debug_input && event is InputEventKey:
-			#	if event.pressed:
-			#		if event.keycode == KEY_G:
-			#			var dwarf = game_state.selected_dwarf
-			#			var next_point: Vector2 = get_nearest_building(Utils.BuildingType.FOOD, dwarf.current_position, dwarf.current_level)
-			#			if next_point:
-			#				dwarf.walk_to(Vector2i(next_point.x, next_point.y))
+				if event.button_index == MOUSE_BUTTON_LEFT:
+					is_mouse_pressed = event.pressed
+					if event.pressed:
+						create_marker(tile_position)
+			if event is InputEventMouseMotion and is_mouse_pressed:
+				create_marker(tile_position)
 		Utils.CursorType.BUILD:
 			var tile_position = visible_tile_map.local_to_map(get_global_mouse_position())
 			build_cursor.set_tile(tile_position)
