@@ -32,10 +32,10 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			#zoom -= Vector2(zoom_speed, zoom_speed)
-			set_my_zoom(zoom.x - zoom_speed)
+			set_my_zoom(zoom.x + zoom_speed)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			#zoom += Vector2(zoom_speed, zoom_speed)
-			set_my_zoom(zoom.x + zoom_speed)
+			set_my_zoom(zoom.x - zoom_speed)
 
 	# Zoomen der Kamera mit dem Touchpad (MacOS)
 	if event is InputEventPanGesture:
