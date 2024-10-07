@@ -60,19 +60,20 @@ const building_effect = "building_effect"
 
 enum DwarfType {
 	THICC,
-	THIN
+	THIN,
 }
 
 enum DwarfSkin {
 	LIGHT,
 	MEDIUM,
-	DARK
+	DARK,
 }
 
 enum DwarfHair {
 	NONE,
 	PIGTAILS,
-	#IRO
+	HAIR_BASE,
+	#IRO,
 }
 
 @export var action_effect_animator_position: Vector2
@@ -88,8 +89,7 @@ func _ready():
 	action_effect_animator_position = action_effect_animator.position
 	var rng = RandomNumberGenerator.new()
 	rng.randi_range(0, 1)
-	#var random_type = rng.randi_range(0, 1)
-	var random_type = 1
+	var random_type = rng.randi_range(0, 1)
 	match random_type:
 		0:
 			type = DwarfType.THICC
@@ -105,14 +105,14 @@ func _ready():
 		2:
 			skin = DwarfSkin.DARK	
 	
-	var random_hair = rng.randi_range(0, 1)
+	var random_hair = rng.randi_range(0, 2)
 	match random_hair:
 		0:
 			hair = DwarfHair.NONE
 		1:
 			hair = DwarfHair.PIGTAILS
-		#2:
-		#	hair = DwarfHair.IRO	
+		2:
+			hair = DwarfHair.HAIR_BASE	
 
 	match type:
 		DwarfType.THICC:
@@ -202,6 +202,8 @@ func play_character_animation(animation: String) -> void:
 			hair_animation_name = "none_%s" % [animation]
 		DwarfHair.PIGTAILS:
 			hair_animation_name = "pigtails_base_%s" % [animation]
+		DwarfHair.HAIR_BASE:
+			hair_animation_name = "hair_base_%s" % [animation]
 	
 	play_animation(body_animator, body_animation_name)
 	play_animation(clothing_animator, clothing_animation_name)
@@ -361,7 +363,7 @@ func _process(delta):
 			if walking_path.size() == 0:
 				set_animation(Utils.Behaviour.IDLE, Utils.WalkingDirection.DEFAULT)
 
-func walk_to(target: Vector2, level: int = current_level) -> Vector3i:
+func walk_to(target: Vector2i, level: int = current_level) -> Vector3i:
 	print("walk_to")
 	if (walking_path.size() > 0):
 		print("Already walking")

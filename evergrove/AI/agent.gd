@@ -1,6 +1,8 @@
 # Controller for an individual instance of an AI agent
 class_name Agent extends Node
 
+const Utils = preload("res://Utils.gd")
+
 # defaults
 const DEFAULT_TYPE: ai_globals.AGENT_TYPE = ai_globals.AGENT_TYPE.DWARF
 # also abused as max energy level for the moment
@@ -88,53 +90,63 @@ func _on_ai_tick():
 		return
 	
 	var task: Task = tasks.front()
-	
+	var dwarf: Dwarf = self.get_parent()
+
 	match task.type:
 		ai_globals.TASK_TYPE.MOVE_TO:
 			# TODO: do not use Vec3 distance or +- 1 layer might falsely trigger target reached
-			if Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) > 1.0 and not working_on_task:
-				var movement_target:Vector3i = self.get_parent().walk_to(Vector2(task.location.coordinates.x, task.location.coordinates.y), task.location.layer)
-				task.location.coordinates.x = movement_target.x
-				task.location.coordinates.y = movement_target.y
-				task.location.layer = movement_target.z
-				print("Agent "+str(self)+" moving to task location "+str(task.location))
-				working_on_task = true
-			elif Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) < 1.0 and  working_on_task:
+			if !working_on_task: # && !is_on_position(dwarf, task.location.coordinates, task.location.layer):
+				walk_to(dwarf, task)
+			else:
+				if is_finished_walking(dwarf):
+					if !is_on_position(dwarf, task):
+						print("woops not on possition -> debug needed")
 					if task.waiting_time <= 0:
 						if task.has_callback:
-							task.callback.call(self.get_parent())
+							task.callback.call(dwarf)
 						tasks.pop_front()
 						print("Agent "+str(self)+" reached task location")
 						working_on_task = false
+						accepting_tasks = true
 					elif !task.running: 
 						task.running = true
-						task.waining_callback.call(self.get_parent())
+						task.waining_callback.call(dwarf)
 					else:
 						task.waiting_time -= 1
+				else:
+					print("Agent "+str(self)+" still on task")
 		ai_globals.TASK_TYPE.SLEEP:
 			if task.location.invalid:
 				print("Agent "+str(self)+" unable to do sleep task, target invalid (probably no energy hub exists)")
 				return
-			if not working_on_task:
-				var movement_target:Vector3i = self.get_parent().walk_to(Vector2(task.location.coordinates.x, task.location.coordinates.y), task.location.layer)
-				task.location.coordinates.x = movement_target.x
-				task.location.coordinates.y = movement_target.y
-				task.location.layer = movement_target.z
-				print("Agent "+str(self)+" moving to task location "+str(task.location))
-				working_on_task = true
-			elif Vector3(self.get_parent().current_position.x, self.get_parent().current_position.y, self.get_parent().current_level).distance_to(Vector3(task.location.coordinates.x, task.location.coordinates.y, task.location.layer)) < 1.0 and working_on_task:
-				#print("Agent "+str(self)+" reached task location")
-				if energy < DEFAULT_ENERGY:
-					self.get_parent().set_sleeping()
+			if !working_on_task: # && !is_on_position(dwarf, task.location.coordinates, task.location.layer):
+				walk_to(dwarf, task)
+			else: 
+				if is_finished_walking(dwarf):
+					dwarf.set_sleeping()
 					if energy + ENERGY_RECHARGE_PER_TICK >= DEFAULT_ENERGY:
 						energy = DEFAULT_ENERGY
 						if task.has_callback:
-							task.callback.call(self.get_parent())
+							task.callback.call(dwarf)
 						tasks.pop_front()
 						recharge_energy_queued = false
 						working_on_task = false
 						accepting_tasks = true
 						zero_energy_mode = false
-						self.get_parent().set_normal()
+						dwarf.set_normal()
 					else:
 						energy += ENERGY_RECHARGE_PER_TICK
+
+func is_on_position(dwarf: Dwarf, task: Task) -> bool:
+	return dwarf.current_level == task.location.layer && task.location.coordinates.distance_to(dwarf.current_position) < 1
+
+func walk_to(dwarf: Dwarf, task: Task) -> void:
+	var movement_target:Vector3i = dwarf.walk_to(task.location.coordinates, task.location.layer)
+	task.location.coordinates.x = movement_target.x
+	task.location.coordinates.y = movement_target.y
+	task.location.layer = movement_target.z
+	print("Agent "+str(self)+" moving to task location "+str(task.location))
+	working_on_task = true
+	
+func is_finished_walking(dwarf: Dwarf) -> bool:
+	return dwarf.behaviour == Utils.Behaviour.IDLE || dwarf.walking_path.size() == 0

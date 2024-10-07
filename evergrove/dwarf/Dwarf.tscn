@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://b5heo41rpqdo0"]
+[gd_scene load_steps=88 format=3 uid="uid://b5heo41rpqdo0"]
 
 [ext_resource type="Script" path="res://dwarf/dwarf.gd" id="1_c3sis"]
 [ext_resource type="Texture2D" uid="uid://cl6nkkxoir3uu" path="res://dwarf/shadow.png" id="2_jrrhj"]
@@ -35,26 +35,50 @@
 [ext_resource type="Texture2D" uid="uid://dqikyky8dx0lp" path="res://dwarf/thin/clothing/base_right1.png" id="41_bq5tj"]
 [ext_resource type="Texture2D" uid="uid://damc5e2g33orf" path="res://dwarf/thin/clothing/base_right2.png" id="42_ayiut"]
 [ext_resource type="Texture2D" uid="uid://cos6dorj855xr" path="res://dwarf/thin/hair/pigtails_base_back1.png" id="43_0po0j"]
+[ext_resource type="Texture2D" uid="uid://cdsrbm77idenp" path="res://dwarf/thicc/hair/hair_base_back1.png" id="43_rhq6n"]
+[ext_resource type="Texture2D" uid="uid://cqtnoa5ef6bao" path="res://dwarf/thicc/hair/hair_base_back2.png" id="44_32cl6"]
 [ext_resource type="Texture2D" uid="uid://ykfw7hbqlhpk" path="res://dwarf/thin/hair/pigtails_base_back2.png" id="44_jvku3"]
 [ext_resource type="Texture2D" uid="uid://qwwny1gwq8cu" path="res://dwarf/thin/hair/pigtails_base_front1.png" id="45_ksf8u"]
+[ext_resource type="Texture2D" uid="uid://dnkmbtnw1fys4" path="res://dwarf/thicc/hair/hair_base_front1.png" id="45_vi67o"]
 [ext_resource type="Texture2D" uid="uid://c0daq0nka3pux" path="res://dwarf/thin/hair/pigtails_base_front2.png" id="46_10qqo"]
+[ext_resource type="Texture2D" uid="uid://gfg1dgs524j1" path="res://dwarf/thicc/hair/hair_base_front2.png" id="46_eclmw"]
+[ext_resource type="Texture2D" uid="uid://2chstovrr1oi" path="res://dwarf/thicc/hair/hair_base_left1.png" id="47_326w5"]
 [ext_resource type="Texture2D" uid="uid://bx8qfp8yp56jq" path="res://dwarf/thin/hair/pigtails_base_left1.png" id="47_ne6eh"]
 [ext_resource type="Texture2D" uid="uid://damfdrvwgguem" path="res://dwarf/thin/hair/pigtails_base_left2.png" id="48_1k3m5"]
+[ext_resource type="Texture2D" uid="uid://kg06kjtex3p5" path="res://dwarf/thicc/hair/hair_base_left2.png" id="48_h4jvs"]
 [ext_resource type="Texture2D" uid="uid://c0obw7pa2kehk" path="res://dwarf/thin/hair/pigtails_base_right1.png" id="49_bv2bn"]
+[ext_resource type="Texture2D" uid="uid://bm0gjfjluea8u" path="res://dwarf/thicc/hair/hair_base_right1.png" id="49_j34cu"]
+[ext_resource type="Texture2D" uid="uid://dmncrfxus8kna" path="res://dwarf/thicc/hair/hair_base_right2.png" id="50_4ylsu"]
 [ext_resource type="Texture2D" uid="uid://dg4s7vsbkqcbi" path="res://dwarf/thin/hair/pigtails_base_right2.png" id="50_bnb1r"]
+[ext_resource type="Texture2D" uid="uid://cp3en7jmnsof0" path="res://dwarf/thicc/clothing/base_back1.png" id="51_2lvc8"]
 [ext_resource type="Texture2D" uid="uid://h1idmsb2ertm" path="res://dwarf/light.png" id="51_d1oub"]
 [ext_resource type="Texture2D" uid="uid://jp56uc3l0g6q" path="res://dwarf/beer/beer1.png" id="51_epq61"]
 [ext_resource type="Texture2D" uid="uid://inm3k1w0cnk" path="res://dwarf/dust/dust1.png" id="51_odk3u"]
+[ext_resource type="Texture2D" uid="uid://dkpx0sf18yr8c" path="res://dwarf/thicc/clothing/base_back2.png" id="52_0khjb"]
 [ext_resource type="Texture2D" uid="uid://dtp6gtdaufklt" path="res://dwarf/beer/beer2.png" id="52_8lj4m"]
 [ext_resource type="Texture2D" uid="uid://cvjnd6ve7kkt2" path="res://placeholder.png" id="52_hkdl5"]
 [ext_resource type="Texture2D" uid="uid://bisjwwocnk0ic" path="res://dwarf/dust/dust2.png" id="52_hp4v7"]
 [ext_resource type="Texture2D" uid="uid://b6jkkm4lent4" path="res://dwarf/food/food1.png" id="53_tupv2"]
 [ext_resource type="Texture2D" uid="uid://wlufure3rfcb" path="res://dwarf/dust/dust3.png" id="53_v265o"]
+[ext_resource type="Texture2D" uid="uid://1x068vkshg8l" path="res://dwarf/thicc/clothing/base_front1.png" id="53_yg6tq"]
 [ext_resource type="Texture2D" uid="uid://cocq3eyna4ea7" path="res://dwarf/food/food2.png" id="54_2ggct"]
+[ext_resource type="Texture2D" uid="uid://u2spnixhjkrb" path="res://dwarf/thicc/clothing/base_front2.png" id="54_wmia4"]
+[ext_resource type="Texture2D" uid="uid://cux3ghefcsvg4" path="res://dwarf/thicc/clothing/base_left1.png" id="55_i8jyk"]
 [ext_resource type="Texture2D" uid="uid://bh5ikmwcyi8c7" path="res://dwarf/pickaxe/pickaxe1.png" id="55_qm2om"]
+[ext_resource type="Texture2D" uid="uid://cj1ykh07barmq" path="res://dwarf/thicc/clothing/base_left2.png" id="56_8ekg6"]
 [ext_resource type="Texture2D" uid="uid://qebsctgxrso0" path="res://dwarf/pickaxe/pickaxe2.png" id="56_rfcbn"]
+[ext_resource type="Texture2D" uid="uid://wo3b6nh471fj" path="res://dwarf/thicc/clothing/base_right1.png" id="57_64smk"]
 [ext_resource type="Texture2D" uid="uid://dg7gg5ic02bg8" path="res://dwarf/energy/energy1.png" id="57_vldmd"]
+[ext_resource type="Texture2D" uid="uid://brmkox3mjs3k8" path="res://dwarf/thicc/clothing/base_right2.png" id="58_rdfrv"]
 [ext_resource type="Texture2D" uid="uid://dkm4b0l610pc3" path="res://dwarf/energy/energy2.png" id="58_uco67"]
+[ext_resource type="Texture2D" uid="uid://hcqg7cku1i2p" path="res://dwarf/thicc/body/medium/medium_skin_back1.png" id="59_c2eke"]
+[ext_resource type="Texture2D" uid="uid://joif70hkgfrr" path="res://dwarf/thicc/body/medium/medium_skin_back2.png" id="60_17g4f"]
+[ext_resource type="Texture2D" uid="uid://dx5gjn01dn7lc" path="res://dwarf/thicc/body/medium/medium_skin_front1.png" id="61_f16lb"]
+[ext_resource type="Texture2D" uid="uid://b1pq4uaj03hd" path="res://dwarf/thicc/body/medium/medium_skin_front2.png" id="62_najyw"]
+[ext_resource type="Texture2D" uid="uid://sbgmgirlxyo2" path="res://dwarf/thicc/body/medium/medium_skin_left1.png" id="63_13hbl"]
+[ext_resource type="Texture2D" uid="uid://bgqhjp6crh355" path="res://dwarf/thicc/body/medium/medium_skin_left2.png" id="64_03r85"]
+[ext_resource type="Texture2D" uid="uid://j18mejkb7pdw" path="res://dwarf/thicc/body/medium/medium_skin_right1.png" id="65_pkj4e"]
+[ext_resource type="Texture2D" uid="uid://3oglnev1bvq8" path="res://dwarf/thicc/body/medium/medium_skin_right2.png" id="66_sfkjb"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_04c1a"]
 animations = [{
@@ -289,6 +313,61 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_0po0j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_jvku3")
+}],
+"loop": true,
+"name": &"hair_base_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_ksf8u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_10qqo")
+}],
+"loop": true,
+"name": &"hair_base_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_ksf8u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_10qqo")
+}],
+"loop": true,
+"name": &"hair_base_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_ne6eh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_1k3m5")
+}],
+"loop": true,
+"name": &"hair_base_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_bv2bn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_bnb1r")
+}],
+"loop": true,
+"name": &"hair_base_right",
+"speed": 5.0
+}, {
 "frames": [],
 "loop": true,
 "name": &"iro_ginger",
@@ -397,6 +476,400 @@ animations = [{
 "frames": [],
 "loop": true,
 "name": &"pigtails_grey",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5kv3e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_c2eke")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_17g4f")
+}],
+"loop": true,
+"name": &"dark_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("61_f16lb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_najyw")
+}],
+"loop": true,
+"name": &"dark_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("61_f16lb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_najyw")
+}],
+"loop": true,
+"name": &"dark_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("63_13hbl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_03r85")
+}],
+"loop": true,
+"name": &"dark_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_pkj4e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_sfkjb")
+}],
+"loop": true,
+"name": &"dark_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_c2eke")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_17g4f")
+}],
+"loop": true,
+"name": &"light_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("61_f16lb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_najyw")
+}],
+"loop": true,
+"name": &"light_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("61_f16lb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_najyw")
+}],
+"loop": true,
+"name": &"light_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("63_13hbl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_03r85")
+}],
+"loop": true,
+"name": &"light_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_pkj4e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_sfkjb")
+}],
+"loop": true,
+"name": &"light_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_c2eke")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_17g4f")
+}],
+"loop": true,
+"name": &"medium_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("61_f16lb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_najyw")
+}],
+"loop": true,
+"name": &"medium_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("61_f16lb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_najyw")
+}],
+"loop": true,
+"name": &"medium_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("63_13hbl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_03r85")
+}],
+"loop": true,
+"name": &"medium_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_pkj4e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_sfkjb")
+}],
+"loop": true,
+"name": &"medium_right",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8gid6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_2lvc8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_0khjb")
+}],
+"loop": true,
+"name": &"back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("53_yg6tq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_wmia4")
+}],
+"loop": true,
+"name": &"front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("53_yg6tq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_wmia4")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("55_i8jyk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_8ekg6")
+}],
+"loop": true,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("57_64smk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_rdfrv")
+}],
+"loop": true,
+"name": &"right",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ei4od"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_rhq6n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_32cl6")
+}],
+"loop": true,
+"name": &"hair_base_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_vi67o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_eclmw")
+}],
+"loop": true,
+"name": &"hair_base_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_vi67o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_eclmw")
+}],
+"loop": true,
+"name": &"hair_base_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_326w5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_h4jvs")
+}],
+"loop": true,
+"name": &"hair_base_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_j34cu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_4ylsu")
+}],
+"loop": true,
+"name": &"hair_base_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_rhq6n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_32cl6")
+}],
+"loop": true,
+"name": &"none_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_vi67o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_eclmw")
+}],
+"loop": true,
+"name": &"none_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_vi67o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_eclmw")
+}],
+"loop": true,
+"name": &"none_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_326w5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_h4jvs")
+}],
+"loop": true,
+"name": &"none_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_j34cu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_4ylsu")
+}],
+"loop": true,
+"name": &"none_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_rhq6n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_32cl6")
+}],
+"loop": true,
+"name": &"pigtails_base_back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_vi67o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_eclmw")
+}],
+"loop": true,
+"name": &"pigtails_base_front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_vi67o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_eclmw")
+}],
+"loop": true,
+"name": &"pigtails_base_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_326w5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_h4jvs")
+}],
+"loop": true,
+"name": &"pigtails_base_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_j34cu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_4ylsu")
+}],
+"loop": true,
+"name": &"pigtails_base_right",
 "speed": 5.0
 }]
 
@@ -524,7 +997,7 @@ position = Vector2(0, -9)
 y_sort_enabled = true
 position = Vector2(0, 9)
 sprite_frames = SubResource("SpriteFrames_04c1a")
-animation = &"medium_idle"
+animation = &"dark_idle"
 offset = Vector2(0, -9)
 
 [node name="Clothing" type="AnimatedSprite2D" parent="ThinBase"]
@@ -538,16 +1011,23 @@ offset = Vector2(0, -9)
 y_sort_enabled = true
 position = Vector2(0, 9)
 sprite_frames = SubResource("SpriteFrames_gi7fk")
+animation = &"hair_base_right"
 offset = Vector2(0, -9)
 
 [node name="ThiccBase" type="Node2D" parent="."]
 visible = false
 
-[node name="Hair" type="AnimatedSprite2D" parent="ThiccBase"]
+[node name="Body" type="AnimatedSprite2D" parent="ThiccBase"]
+sprite_frames = SubResource("SpriteFrames_5kv3e")
+animation = &"dark_idle"
 
 [node name="Clothing" type="AnimatedSprite2D" parent="ThiccBase"]
+sprite_frames = SubResource("SpriteFrames_8gid6")
+animation = &"idle"
 
-[node name="Body" type="AnimatedSprite2D" parent="ThiccBase"]
+[node name="Hair" type="AnimatedSprite2D" parent="ThiccBase"]
+sprite_frames = SubResource("SpriteFrames_ei4od")
+animation = &"hair_base_left"
 
 [node name="EffectAnimator" type="AnimatedSprite2D" parent="."]
 visible = false
