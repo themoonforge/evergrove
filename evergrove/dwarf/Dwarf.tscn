@@ -310,11 +310,6 @@ animations = [{
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gi7fk"]
 animations = [{
-"frames": [],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("43_0po0j")
@@ -370,42 +365,42 @@ animations = [{
 "name": &"hair_base_right",
 "speed": 5.0
 }, {
-"frames": [],
-"loop": true,
-"name": &"iro_ginger",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"iro_gold",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"iro_grey",
-"speed": 5.0
-}, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_hkdl5")
+}],
 "loop": true,
 "name": &"none_back",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_hkdl5")
+}],
 "loop": true,
 "name": &"none_front",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_hkdl5")
+}],
 "loop": true,
 "name": &"none_idle",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_hkdl5")
+}],
 "loop": true,
 "name": &"none_left",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_hkdl5")
+}],
 "loop": true,
 "name": &"none_right",
 "speed": 5.0
@@ -463,21 +458,6 @@ animations = [{
 }],
 "loop": true,
 "name": &"pigtails_base_right",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"pigtails_ginger",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"pigtails_gold",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"pigtails_grey",
 "speed": 5.0
 }]
 
@@ -1013,23 +993,30 @@ offset = Vector2(0, -9)
 y_sort_enabled = true
 position = Vector2(0, 9)
 sprite_frames = SubResource("SpriteFrames_gi7fk")
-animation = &"hair_base_idle"
+animation = &"pigtails_base_front"
 offset = Vector2(0, -9)
 
 [node name="ThiccBase" type="Node2D" parent="."]
 visible = false
+position = Vector2(0, -8)
 
 [node name="Body" type="AnimatedSprite2D" parent="ThiccBase"]
+position = Vector2(0, 8)
 sprite_frames = SubResource("SpriteFrames_5kv3e")
 animation = &"dark_idle"
+offset = Vector2(0, -8)
 
 [node name="Clothing" type="AnimatedSprite2D" parent="ThiccBase"]
+position = Vector2(0, 8)
 sprite_frames = SubResource("SpriteFrames_8gid6")
 animation = &"idle"
+offset = Vector2(0, -8)
 
 [node name="Hair" type="AnimatedSprite2D" parent="ThiccBase"]
+position = Vector2(0, 8)
 sprite_frames = SubResource("SpriteFrames_ei4od")
-animation = &"hair_base_idle"
+animation = &"none_right"
+offset = Vector2(0, -8)
 
 [node name="EffectAnimator" type="AnimatedSprite2D" parent="."]
 visible = false
@@ -1040,6 +1027,7 @@ offset = Vector2(0, -27)
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 physics_interpolation_mode = 1
+visible = false
 modulate = Color(0.552941, 0.552941, 0.552941, 0.341176)
 color = Color(0.362829, 0.362829, 0.362829, 1)
 energy = 0.64

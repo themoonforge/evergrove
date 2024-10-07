@@ -143,23 +143,21 @@ func _ready():
 		
 	clothing_animator.modulate = Color8(rng.randi_range(80, 140), 	rng.randi_range(80, 140), 	rng.randi_range(80, 140))
 
-
-
 	# TODO retrieve walking direction and call play on animated sprite
 	# this is just an example how to call animations
 	# instantiate AI controller
 	add_child(Agent.create())
 	game_state.selected_dwarf = self
 	game_state.inc_dwarfs(1)
-	set_animation(Utils.Behaviour.IDLE, Utils.WalkingDirection.DEFAULT)
+	set_normal()
 
 func play_animation(animator: AnimatedSprite2D, animation: String) -> void:
-	if !animator.is_playing() || animator.animation != animation || !animator.visible:
+	#if !animator.is_playing() || animator.animation != animation || !animator.visible:
 		animator.visible = true
 		animator.play(animation)
 
 func stop_animation(animator: AnimatedSprite2D) -> void:
-	if animator.is_playing() || animator.visible:
+	#if animator.is_playing() || animator.visible:
 		animator.stop()
 		animator.visible = false
 
