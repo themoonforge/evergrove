@@ -36,6 +36,8 @@ func _on_spawn_dwarf_button_pressed():
 	if game_state.wealth < game_state.dwarf_spawn_cost:
 		return
 	
+	game_state.dec_wealth(game_state.dwarf_spawn_cost)
+
 	var dungeon_layer_index = 0 # TODO use correct dungeon  layer
 	var position = spawn_position # TODO use correct position
 	
