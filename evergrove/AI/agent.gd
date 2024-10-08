@@ -138,13 +138,14 @@ func push_back_last_task() -> void:
 				return
 
 func push_back_all_task() -> void:
-		var size = tasks.size()
-		var removed = 0
-		for i in range(0, size):
-			var task = tasks[i - removed]
-			if task.is_interruptable():
-				ai_globals.hivemind.add_task(task)
-				tasks.remove_at(i - removed)
+	var size = tasks.size()
+	var removed = 0
+	for i in range(0, size):
+		var task = tasks[i - removed]
+		if task.is_interruptable():
+			removed += 1
+			ai_globals.hivemind.add_task(task)
+			tasks.remove_at(i - removed)
 
 func add_task_back(new_task: Task) -> void:
 	push_back_last_task()
