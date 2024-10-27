@@ -1,5 +1,6 @@
 ## About Evergrove
-🌟 *Evergrove* is our entry for Ludum Dare 56! 🌟 We wanted to take this opportunity to test out some features of the Godot engine that we’re not yet familiar with, particularly regarding pathfinding, AI interactions, and the bustling factor in games. The best part? The game is now available as a browser game on [Ludum Dare](https://ldjam.com/events/ludum-dare/56/evergrove) and [itch.io](https://pumpkinchariot.itch.io/evergrove)!
+
+🌟 *Evergrove* is our entry for ![Ludum Dare](https://img.shields.io/badge/LudumDare-56-f79122?labelColor=ee5533&link=https%3A%2F%2Fldjam.com%2Fevents%2Fludum-dare%2F56)! 🌟 We wanted to take this opportunity to test out some features of the Godot engine that we’re not yet familiar with, particularly regarding pathfinding, AI interactions, and the bustling factor in games. The best part? The game is now available as a browser game on [Ludum Dare](https://ldjam.com/events/ludum-dare/56/evergrove) and [itch.io](https://pumpkinchariot.itch.io/evergrove)!
 
 Please note that our source code is a bit chaotic due to the jam’s constraints. However, we are actively gathering ideas for improvements and are excited to continue developing the game in the future!
 
